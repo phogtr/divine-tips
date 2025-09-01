@@ -1,16 +1,16 @@
 package main
 
 import (
-	"fmt"
+	"log"
 
 	"github.com/phogtr/divine-tips/cmd/api"
 )
 
 func main() {
-	apiServer := api.New(":3000")
+	apiServer := api.New()
 
 	err := apiServer.Start()
 	if err != nil {
-		fmt.Println("failed to start app:", err)
+		log.Fatal("failed to start app:", err)
 	}
 }

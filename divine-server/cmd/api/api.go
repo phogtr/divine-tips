@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+
+	"github.com/phogtr/divine-tips/config"
 )
 
 type ApiServer struct {
@@ -11,9 +13,9 @@ type ApiServer struct {
 	router http.Handler
 }
 
-func New(addr string) *ApiServer {
+func New() *ApiServer {
 	return &ApiServer{
-		addr:   addr,
+		addr:   fmt.Sprintf(":%s", config.Env.ServerPort),
 		router: registerRoutes(),
 	}
 }
