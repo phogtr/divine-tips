@@ -9,24 +9,24 @@ import (
 )
 
 type ApiServer struct {
-	addr   string
 	router http.Handler
 }
 
 func New() *ApiServer {
 	return &ApiServer{
-		addr:   fmt.Sprintf(":%s", config.Env.ServerPort),
 		router: registerRoutes(),
 	}
 }
 
 func (s *ApiServer) Start() error {
+	port := config.Env.ServerPort
+
 	apiServer := &http.Server{
-		Addr:    s.addr,
+		Addr:    fmt.Sprintf(":%s", port),
 		Handler: s.router,
 	}
 
-	log.Println("Listen on port", s.addr)
+	log.Println("Listen on port", port)
 
 	err := apiServer.ListenAndServe()
 	if err != nil {
