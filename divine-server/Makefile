@@ -54,3 +54,14 @@ del_dk_db_v:
 		echo "$(POSTGRES_VOLUME) not exist"; \
 	fi
 
+crt_mgr:
+	@read -p "migration file name: " name; \
+	docker run -it --rm --network host -v $$(pwd)/db:/db migrate/migrate:4 create -ext sql -dir db/migrations $$name
+
+up_mgr:
+	docker run -it --rm --network host -v $$(pwd)/db:/db migrate/migrate:4 -path=/db/migrations -database \
+	postgresql://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@$(POSTGRES_HOST)/$(POSTGRES_DB)?sslmode=disable up
+
+down_mgr:
+	docker run -it --rm --network host -v $$(pwd)/db:/db migrate/migrate:4 -path=/db/migrations -database \
+	postgresql://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@$(POSTGRES_HOST)/$(POSTGRES_DB)?sslmode=disable down	

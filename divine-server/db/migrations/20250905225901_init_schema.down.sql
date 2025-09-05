@@ -1,0 +1,3 @@
+DROP TABLE IF EXISTS system_days;
+DROP TABLE IF EXISTS events;
+DROP TABLE IF EXISTS items;
