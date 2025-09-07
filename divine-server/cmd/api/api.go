@@ -1,6 +1,7 @@
 package api
 
 import (
+	"database/sql"
 	"fmt"
 	"log"
 	"net/http"
@@ -10,20 +11,25 @@ import (
 
 type ApiServer struct {
 	router http.Handler
+	db     *sql.DB
 }
 
-func New() *ApiServer {
-	return &ApiServer{
-		router: registerRoutes(),
+func New(db *sql.DB) *ApiServer {
+	apiServer := &ApiServer{
+		db: db,
 	}
+
+	apiServer.registerRoutes()
+
+	return apiServer
 }
 
-func (s *ApiServer) Start() error {
+func (a *ApiServer) Start() error {
 	port := config.Env.ServerPort
 
 	apiServer := &http.Server{
 		Addr:    fmt.Sprintf(":%s", port),
-		Handler: s.router,
+		Handler: a.router,
 	}
 
 	log.Println("Listen on port", port)

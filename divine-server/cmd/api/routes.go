@@ -10,7 +10,7 @@ import (
 	"github.com/phogtr/divine-tips/services/item"
 )
 
-func registerRoutes() *chi.Mux {
+func (a *ApiServer) registerRoutes() {
 	router := chi.NewRouter()
 
 	router.Use(middleware.Logger)
@@ -20,17 +20,17 @@ func registerRoutes() *chi.Mux {
 		w.Write([]byte("Ok"))
 	})
 
-	router.Mount("/v1", v1Router())
+	router.Mount("/v1", a.v1Router())
 
-	return router
+	a.router = router
 }
 
-func v1Router() http.Handler {
+func (a *ApiServer) v1Router() http.Handler {
 	r := chi.NewRouter()
 
 	r.Route("/day", registerDayRoutes)
 	r.Route("/event", registerEventRoutes)
-	r.Route("/item", registerItemRoutes)
+	r.Route("/item", a.registerItemRoutes)
 
 	return r
 }
@@ -49,8 +49,8 @@ func registerEventRoutes(r chi.Router) {
 	r.Put("/update", eventHandler.Update)
 }
 
-func registerItemRoutes(r chi.Router) {
-	itemHandler := &item.Item{}
+func (a *ApiServer) registerItemRoutes(r chi.Router) {
+	itemHandler := item.New(a.db)
 
 	r.Post("/create", itemHandler.Create)
 	r.Put("/update", itemHandler.Update)

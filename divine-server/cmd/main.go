@@ -15,7 +15,7 @@ func main() {
 	defer db.Close()
 	log.Printf("connected to database")
 
-	apiServer := api.New()
+	apiServer := api.New(db.GetDB())
 
 	err = apiServer.Start()
 	if err != nil {

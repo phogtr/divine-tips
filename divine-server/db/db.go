@@ -34,6 +34,10 @@ func NewPostgresDB() (*Database, error) {
 	return &Database{db: dbConn}, nil
 }
 
+func (d *Database) GetDB() *sql.DB {
+	return d.db
+}
+
 func (d *Database) Close() error {
 	return d.db.Close()
 }
