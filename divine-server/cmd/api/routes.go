@@ -8,7 +8,6 @@ import (
 	"github.com/phogtr/divine-tips/services/day"
 	"github.com/phogtr/divine-tips/services/event"
 	"github.com/phogtr/divine-tips/services/item"
-	"github.com/phogtr/divine-tips/utils"
 )
 
 func (a *ApiServer) registerRoutes() {
@@ -19,16 +18,6 @@ func (a *ApiServer) registerRoutes() {
 	router.Get("/", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte("Ok"))
-	})
-
-	router.Get("/json", func(w http.ResponseWriter, r *http.Request) {
-		var response struct {
-			Message string `json:"message"`
-		}
-		response.Message = "test json"
-		utils.EncodeJson(w, http.StatusOK, response)
-		// utils.WriteJson(w, http.StatusOK, response)
-		// utils.ResponseErrorJson(w, http.StatusBadRequest, "test error")
 	})
 
 	router.Mount("/v1", a.v1Router())
@@ -61,8 +50,10 @@ func registerEventRoutes(r chi.Router) {
 }
 
 func (a *ApiServer) registerItemRoutes(r chi.Router) {
-	itemHandler := item.New(a.db)
+	itemStore := item.NewStore(a.db)
+	itemHandler := item.NewHandler(itemStore)
 
+	r.Get("/", itemHandler.GetAll)
 	r.Post("/create", itemHandler.Create)
 	r.Put("/update", itemHandler.Update)
 }
