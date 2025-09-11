@@ -2,8 +2,10 @@ package item
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 
+	types "github.com/phogtr/divine-tips/types/item"
 	"github.com/phogtr/divine-tips/utils"
 )
 
@@ -26,10 +28,30 @@ func (h *ItemHandler) GetAll(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *ItemHandler) Create(w http.ResponseWriter, r *http.Request) {
-	h.store.Create()
+	var request types.ItemRequest
 
-	utils.WriteJson(w, http.StatusOK, map[string]string{
-		"msg": "create item",
+	err := utils.DecodeJson(w, r, &request)
+	if err != nil {
+		log.Println(err)
+		utils.ResponseErrorJson(w, http.StatusBadRequest, "invalid json request")
+		return
+	}
+
+	payload := types.Item{
+		Name:          request.Name,
+		CurrentPrice:  100,
+		PreviousPrice: 0,
+	}
+
+	err = h.store.Create(payload)
+	if err != nil {
+		log.Println(err)
+		utils.ResponseErrorJson(w, http.StatusInternalServerError, "failed to create item")
+		return
+	}
+
+	utils.EncodeJson(w, http.StatusOK, map[string]string{
+		"message": "item created",
 	})
 }
 
