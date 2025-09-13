@@ -6,6 +6,10 @@ import (
 	"net/http"
 )
 
+type ErrorResponse struct {
+	Error string `json:"error"`
+}
+
 func DecodeJson(w http.ResponseWriter, r *http.Request, data any) error {
 	dec := json.NewDecoder(r.Body)
 	dec.DisallowUnknownFields()
@@ -47,5 +51,7 @@ func WriteJson(w http.ResponseWriter, status int, data any) error {
 }
 
 func ResponseErrorJson(w http.ResponseWriter, status int, message string) {
-	EncodeJson(w, status, map[string]string{"error": message})
+	EncodeJson(w, status, ErrorResponse{
+		Error: message,
+	})
 }

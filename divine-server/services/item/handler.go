@@ -27,9 +27,7 @@ func (h *ItemHandler) GetAll(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	utils.EncodeJson(w, http.StatusOK, map[string][]*types.Item{
-		"items": items,
-	})
+	utils.EncodeJson(w, http.StatusOK, items)
 }
 
 func (h *ItemHandler) Create(w http.ResponseWriter, r *http.Request) {
@@ -55,9 +53,7 @@ func (h *ItemHandler) Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	utils.EncodeJson(w, http.StatusOK, map[string]string{
-		"message": "item created",
-	})
+	utils.EncodeJson(w, http.StatusOK, request.Name)
 }
 
 func (h *ItemHandler) Update(w http.ResponseWriter, r *http.Request) {
