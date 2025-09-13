@@ -3,8 +3,8 @@ package types
 type Item struct {
 	ID            int
 	Name          string
-	CurrentPrice  float32
-	PreviousPrice float32
+	CurrentPrice  float64
+	PreviousPrice float64
 }
 
 type ItemRequest struct {

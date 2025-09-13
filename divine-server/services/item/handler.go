@@ -20,10 +20,15 @@ func NewHandler(store *ItemStore) *ItemHandler {
 }
 
 func (h *ItemHandler) GetAll(w http.ResponseWriter, r *http.Request) {
-	h.store.GetAll()
+	items, err := h.store.GetAll()
+	if err != nil {
+		log.Println(err)
+		utils.ResponseErrorJson(w, http.StatusInternalServerError, "failed to get items")
+		return
+	}
 
-	utils.EncodeJson(w, http.StatusOK, map[string]string{
-		"msg": "all items",
+	utils.EncodeJson(w, http.StatusOK, map[string][]*types.Item{
+		"items": items,
 	})
 }
 

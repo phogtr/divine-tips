@@ -2,7 +2,6 @@ package item
 
 import (
 	"database/sql"
-	"fmt"
 
 	types "github.com/phogtr/divine-tips/types/item"
 )
@@ -17,8 +16,29 @@ func NewStore(db *sql.DB) *ItemStore {
 	}
 }
 
-func (s *ItemStore) GetAll() {
-	fmt.Println("store get all items")
+func (s *ItemStore) GetAll() ([]*types.Item, error) {
+	query := `
+		SELECT id, name, curr_price, prev_price FROM items
+	`
+
+	rows, err := s.db.Query(query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var items []*types.Item
+	for rows.Next() {
+		var item types.Item
+		err := rows.Scan(&item.ID, &item.Name, &item.CurrentPrice, &item.PreviousPrice)
+
+		if err != nil {
+			return nil, err
+		}
+		items = append(items, &item)
+	}
+
+	return items, nil
 }
 
 func (s *ItemStore) Create(payload types.Item) error {
