@@ -2,15 +2,38 @@ package day
 
 import (
 	"fmt"
+	"log"
 	"net/http"
+
+	"github.com/phogtr/divine-tips/utils"
 )
 
-type Day struct{}
+type DayHandler struct {
+	store *DayStore
+}
 
-func (d *Day) Update(w http.ResponseWriter, r *http.Request) {
+func NewHandler(store *DayStore) *DayHandler {
+	return &DayHandler{
+		store: store,
+	}
+}
+
+func (h *DayHandler) Get(w http.ResponseWriter, r *http.Request) {
+	day, err := h.store.GetDay()
+	if err != nil {
+		log.Println(err)
+		utils.ResponseErrorJson(w, http.StatusInternalServerError, "failed to get day")
+		return
+	}
+
+	utils.EncodeJson(w, http.StatusOK, day)
+}
+
+func (h *DayHandler) Update(w http.ResponseWriter, r *http.Request) {
+
 	fmt.Println("update day")
 }
 
-func (d *Day) AdvanceDay(w http.ResponseWriter, r *http.Request) {
+func (h *DayHandler) AdvanceDay(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(("advance day"))
 }
