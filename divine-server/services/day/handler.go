@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 
+	types "github.com/phogtr/divine-tips/types/day"
 	"github.com/phogtr/divine-tips/utils"
 )
 
@@ -18,7 +19,7 @@ func NewHandler(store *DayStore) *DayHandler {
 	}
 }
 
-func (h *DayHandler) Get(w http.ResponseWriter, r *http.Request) {
+func (h *DayHandler) GetDay(w http.ResponseWriter, r *http.Request) {
 	day, err := h.store.GetDay()
 	if err != nil {
 		log.Println(err)
@@ -29,9 +30,24 @@ func (h *DayHandler) Get(w http.ResponseWriter, r *http.Request) {
 	utils.EncodeJson(w, http.StatusOK, day)
 }
 
-func (h *DayHandler) Update(w http.ResponseWriter, r *http.Request) {
+func (h *DayHandler) UpdateDay(w http.ResponseWriter, r *http.Request) {
+	var request types.DayRequest
 
-	fmt.Println("update day")
+	err := utils.DecodeJson(w, r, &request)
+	if err != nil {
+		log.Println(err)
+		utils.ResponseErrorJson(w, http.StatusBadRequest, "invalid json request")
+		return
+	}
+
+	err = h.store.UpdateDay(request.NewDay)
+	if err != nil {
+		log.Println(err)
+		utils.ResponseErrorJson(w, http.StatusInternalServerError, "failed to update day")
+		return
+	}
+
+	utils.EncodeJson(w, http.StatusOK, "day updated")
 }
 
 func (h *DayHandler) AdvanceDay(w http.ResponseWriter, r *http.Request) {

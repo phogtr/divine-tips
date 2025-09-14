@@ -30,3 +30,16 @@ func (s *DayStore) GetDay() (*types.Day, error) {
 
 	return &day, nil
 }
+
+func (s *DayStore) UpdateDay(newDay int) error {
+	query := `
+		UPDATE system_days SET day = $1
+	`
+
+	_, err := s.db.Exec(query, newDay)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

@@ -39,8 +39,8 @@ func (a *ApiServer) registerDayRoutes(r chi.Router) {
 	dayStore := day.NewStore(a.db)
 	dayHandler := day.NewHandler(dayStore)
 
-	r.Get("/", dayHandler.Get)
-	r.Put("/update", dayHandler.Update)
+	r.Get("/", dayHandler.GetDay)
+	r.Put("/update", dayHandler.UpdateDay)
 	r.Post("/advance", dayHandler.AdvanceDay)
 }
 
