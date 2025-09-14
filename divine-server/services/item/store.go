@@ -16,9 +16,9 @@ func NewStore(db *sql.DB) *ItemStore {
 	}
 }
 
-func (s *ItemStore) GetAll() ([]*types.Item, error) {
+func (s *ItemStore) GetAll() ([]*types.ItemResponse, error) {
 	query := `
-		SELECT id, name, curr_price, prev_price FROM items
+		SELECT name, curr_price, prev_price FROM items
 	`
 
 	rows, err := s.db.Query(query)
@@ -27,10 +27,10 @@ func (s *ItemStore) GetAll() ([]*types.Item, error) {
 	}
 	defer rows.Close()
 
-	var items []*types.Item
+	var items []*types.ItemResponse
 	for rows.Next() {
-		var item types.Item
-		err := rows.Scan(&item.ID, &item.Name, &item.CurrentPrice, &item.PreviousPrice)
+		var item types.ItemResponse
+		err := rows.Scan(&item.Name, &item.CurrentPrice, &item.PreviousPrice)
 
 		if err != nil {
 			return nil, err
