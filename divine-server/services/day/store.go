@@ -43,3 +43,16 @@ func (s *DayStore) UpdateDay(newDay int) error {
 
 	return nil
 }
+
+func (s *DayStore) AdvanceDay() error {
+	day, err := s.GetDay()
+	if err != nil {
+		return nil
+	}
+
+	err = s.UpdateDay(day.SystemDay + 1)
+	if err != nil {
+		return err
+	}
+	return nil
+}
