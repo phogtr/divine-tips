@@ -15,6 +15,9 @@ stop:
 	@-pkill -SIGTERM -f "./$(BINARY)"
 	@echo "stopped"
 
+db_run:
+	@docker exec -it $(POSTGRES_DOCKER) psql -U $(POSTGRES_USER) -d ${POSTGRES_DB}
+
 crt_dk_db:
 	docker run -p 5432:5432 -d \
 		--name $(POSTGRES_DOCKER) \
