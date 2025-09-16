@@ -28,30 +28,30 @@ func (a *ApiServer) registerRoutes() {
 func (a *ApiServer) v1Router() http.Handler {
 	r := chi.NewRouter()
 
-	r.Route("/day", a.registerDayRoutes)
-	r.Route("/event", registerEventRoutes)
-	r.Route("/item", a.registerItemRoutes)
+	r.Route("/day", a.dayRoutes)
+	r.Route("/event", eventRoutes)
+	r.Route("/item", a.itemRoutes)
 
 	return r
 }
 
-func (a *ApiServer) registerDayRoutes(r chi.Router) {
+func (a *ApiServer) dayRoutes(r chi.Router) {
 	dayStore := day.NewStore(a.db)
 	dayHandler := day.NewHandler(dayStore)
 
-	r.Get("/", dayHandler.GetDay)
-	r.Put("/update", dayHandler.UpdateDay)
-	r.Post("/advance", dayHandler.AdvanceDay)
+	r.Get("/", dayHandler.Get)
+	r.Put("/update", dayHandler.Update)
+	r.Post("/advance", dayHandler.Advance)
 }
 
-func registerEventRoutes(r chi.Router) {
+func eventRoutes(r chi.Router) {
 	eventHandler := &event.Event{}
 
 	r.Post("/create", eventHandler.Create)
 	r.Put("/update", eventHandler.Update)
 }
 
-func (a *ApiServer) registerItemRoutes(r chi.Router) {
+func (a *ApiServer) itemRoutes(r chi.Router) {
 	itemStore := item.NewStore(a.db)
 	itemHandler := item.NewHandler(itemStore)
 

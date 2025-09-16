@@ -16,7 +16,7 @@ func NewStore(db *sql.DB) *DayStore {
 	}
 }
 
-func (s *DayStore) GetDay() (*types.Day, error) {
+func (s *DayStore) Get() (*types.Day, error) {
 	query := `
 		SELECT day FROM system_days LIMIT 1
 	`
@@ -31,7 +31,7 @@ func (s *DayStore) GetDay() (*types.Day, error) {
 	return &day, nil
 }
 
-func (s *DayStore) UpdateDay(newDay int) error {
+func (s *DayStore) Update(newDay int) error {
 	query := `
 		UPDATE system_days SET day = $1
 	`
@@ -44,13 +44,13 @@ func (s *DayStore) UpdateDay(newDay int) error {
 	return nil
 }
 
-func (s *DayStore) AdvanceDay() error {
-	day, err := s.GetDay()
+func (s *DayStore) Advance() error {
+	day, err := s.Get()
 	if err != nil {
 		return nil
 	}
 
-	err = s.UpdateDay(day.SystemDay + 1)
+	err = s.Update(day.SystemDay + 1)
 	if err != nil {
 		return err
 	}

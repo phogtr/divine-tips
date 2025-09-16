@@ -18,8 +18,8 @@ func NewHandler(store *DayStore) *DayHandler {
 	}
 }
 
-func (h *DayHandler) GetDay(w http.ResponseWriter, r *http.Request) {
-	day, err := h.store.GetDay()
+func (h *DayHandler) Get(w http.ResponseWriter, r *http.Request) {
+	day, err := h.store.Get()
 	if err != nil {
 		log.Println(err)
 		utils.ResponseErrorJson(w, http.StatusInternalServerError, "failed to get day")
@@ -29,7 +29,7 @@ func (h *DayHandler) GetDay(w http.ResponseWriter, r *http.Request) {
 	utils.EncodeJson(w, http.StatusOK, day)
 }
 
-func (h *DayHandler) UpdateDay(w http.ResponseWriter, r *http.Request) {
+func (h *DayHandler) Update(w http.ResponseWriter, r *http.Request) {
 	var request types.DayRequest
 
 	err := utils.DecodeJson(w, r, &request)
@@ -39,7 +39,7 @@ func (h *DayHandler) UpdateDay(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = h.store.UpdateDay(request.NewDay)
+	err = h.store.Update(request.NewDay)
 	if err != nil {
 		log.Println(err)
 		utils.ResponseErrorJson(w, http.StatusInternalServerError, "failed to update day")
@@ -49,8 +49,8 @@ func (h *DayHandler) UpdateDay(w http.ResponseWriter, r *http.Request) {
 	utils.EncodeJson(w, http.StatusOK, "day updated")
 }
 
-func (h *DayHandler) AdvanceDay(w http.ResponseWriter, r *http.Request) {
-	err := h.store.AdvanceDay()
+func (h *DayHandler) Advance(w http.ResponseWriter, r *http.Request) {
+	err := h.store.Advance()
 	if err != nil {
 		log.Println(err)
 		utils.ResponseErrorJson(w, http.StatusInternalServerError, "failed to advance day")
