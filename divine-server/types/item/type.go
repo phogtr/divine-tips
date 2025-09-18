@@ -16,3 +16,8 @@ type ItemResponse struct {
 type ItemRequest struct {
 	Name string `json:"name"`
 }
+
+type EventItem struct {
+	Name string
+	Type int
+}
