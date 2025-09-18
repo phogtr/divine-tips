@@ -7,7 +7,8 @@ import (
 	"net/http"
 	"time"
 
-	types "github.com/phogtr/divine-tips/types/item"
+	eventType "github.com/phogtr/divine-tips/types/event"
+	itemType "github.com/phogtr/divine-tips/types/item"
 	"github.com/phogtr/divine-tips/utils"
 )
 
@@ -39,7 +40,7 @@ func (h *ItemHandler) GetAll(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *ItemHandler) Create(w http.ResponseWriter, r *http.Request) {
-	var request types.ItemRequest
+	var request itemType.ItemRequest
 
 	err := utils.DecodeJson(w, r, &request)
 	if err != nil {
@@ -48,7 +49,7 @@ func (h *ItemHandler) Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	payload := types.Item{
+	payload := itemType.Item{
 		Name:          request.Name,
 		CurrentPrice:  100,
 		PreviousPrice: 0,
@@ -74,7 +75,7 @@ func (h *ItemHandler) Update(w http.ResponseWriter, r *http.Request) {
 
 	rand.New(rand.NewSource(time.Now().UnixNano()))
 
-	itemsCopied := make([]*types.ItemResponse, len(items))
+	itemsCopied := make([]*itemType.ItemResponse, len(items))
 	copy(itemsCopied, items)
 
 	for i := range itemsCopied {
@@ -102,7 +103,7 @@ func (h *ItemHandler) Update(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("###########################################################################")
 
 	count := rand.Intn(eventItemCount) + 1
-	var eventItem []*types.EventItem
+	itemMap := make(map[int][]string)
 	indexMap := make(map[int]bool)
 	fmt.Println("count:", count)
 
@@ -116,18 +117,22 @@ func (h *ItemHandler) Update(w http.ResponseWriter, r *http.Request) {
 		indexMap[index] = true
 
 		item := itemsCopied[index]
-		var ei types.EventItem
-		ei.Name = item.Name
 
 		if item.CurrentPrice < item.PreviousPrice {
-			ei.Type = 0
+			itemMap[0] = append(itemMap[0], item.Name)
 		} else if item.CurrentPrice > item.PreviousPrice {
-			ei.Type = 1
+			itemMap[1] = append(itemMap[1], item.Name)
 		} else {
-			ei.Type = 2
+			itemMap[2] = append(itemMap[2], item.Name)
 		}
+	}
 
+	var eventItem []*eventType.EventItem
+	for k, v := range itemMap {
+		var ei eventType.EventItem
+		ei.Type = k
+		ei.Name = v
+		fmt.Printf("%d: %v\n", ei.Type, ei.Name)
 		eventItem = append(eventItem, &ei)
-		fmt.Printf("%s | %d\n", ei.Name, ei.Type)
 	}
 }
