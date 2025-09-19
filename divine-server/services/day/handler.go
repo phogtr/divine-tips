@@ -75,5 +75,12 @@ func (h *DayHandler) Advance(w http.ResponseWriter, r *http.Request) {
 		fmt.Printf("%s: %.2f | %.2f\n", item.Name, item.CurrentPrice, item.PreviousPrice)
 	}
 
-	utils.EncodeJson(w, http.StatusOK, "day advanced")
+	err = h.itemStore.Update(updatedItem)
+	if err != nil {
+		log.Println(err)
+		utils.ResponseErrorJson(w, http.StatusInternalServerError, "failed to update items")
+		return
+	}
+
+	utils.EncodeJson(w, http.StatusOK, updatedItem)
 }

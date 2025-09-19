@@ -4,7 +4,7 @@ import (
 	"log"
 	"net/http"
 
-	itemType "github.com/phogtr/divine-tips/types/item"
+	types "github.com/phogtr/divine-tips/types/item"
 	"github.com/phogtr/divine-tips/utils"
 )
 
@@ -30,7 +30,7 @@ func (h *ItemHandler) GetAll(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *ItemHandler) Create(w http.ResponseWriter, r *http.Request) {
-	var request itemType.ItemRequest
+	var request types.ItemRequest
 
 	err := utils.DecodeJson(w, r, &request)
 	if err != nil {
@@ -39,7 +39,7 @@ func (h *ItemHandler) Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	payload := itemType.Item{
+	payload := types.Item{
 		Name:          request.Name,
 		CurrentPrice:  100,
 		PreviousPrice: 0,
@@ -54,13 +54,3 @@ func (h *ItemHandler) Create(w http.ResponseWriter, r *http.Request) {
 
 	utils.EncodeJson(w, http.StatusOK, request.Name)
 }
-
-// func (h *ItemHandler) Update(w http.ResponseWriter, r *http.Request) {
-// 	items, err := h.store.GetAll()
-// 	if err != nil {
-// 		log.Println(err)
-// 		utils.ResponseErrorJson(w, http.StatusInternalServerError, "failed to get items")
-// 		return
-// 	}
-
-// }
