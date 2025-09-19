@@ -37,7 +37,8 @@ func (a *ApiServer) v1Router() http.Handler {
 
 func (a *ApiServer) dayRoutes(r chi.Router) {
 	dayStore := day.NewStore(a.db)
-	dayHandler := day.NewHandler(dayStore)
+	itemStore := item.NewStore(a.db)
+	dayHandler := day.NewHandler(dayStore, itemStore)
 
 	r.Get("/", dayHandler.Get)
 	r.Put("/update", dayHandler.Update)
@@ -57,5 +58,4 @@ func (a *ApiServer) itemRoutes(r chi.Router) {
 
 	r.Get("/", itemHandler.GetAll)
 	r.Post("/create", itemHandler.Create)
-	r.Put("/update", itemHandler.Update)
 }

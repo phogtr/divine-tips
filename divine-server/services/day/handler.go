@@ -1,20 +1,24 @@
 package day
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 
+	"github.com/phogtr/divine-tips/services/item"
 	types "github.com/phogtr/divine-tips/types/day"
 	"github.com/phogtr/divine-tips/utils"
 )
 
 type DayHandler struct {
-	store *DayStore
+	store     *DayStore
+	itemStore *item.ItemStore
 }
 
-func NewHandler(store *DayStore) *DayHandler {
+func NewHandler(store *DayStore, itemStore *item.ItemStore) *DayHandler {
 	return &DayHandler{
-		store: store,
+		store:     store,
+		itemStore: itemStore,
 	}
 }
 
@@ -55,6 +59,20 @@ func (h *DayHandler) Advance(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 		utils.ResponseErrorJson(w, http.StatusInternalServerError, "failed to advance day")
 		return
+	}
+
+	items, err := h.itemStore.GetAll()
+	if err != nil {
+		log.Println(err)
+		utils.ResponseErrorJson(w, http.StatusInternalServerError, "failed to get items")
+		return
+	}
+
+	updatedItem := item.Update(items)
+
+	for i := range updatedItem {
+		item := updatedItem[i]
+		fmt.Printf("%s: %.2f | %.2f\n", item.Name, item.CurrentPrice, item.PreviousPrice)
 	}
 
 	utils.EncodeJson(w, http.StatusOK, "day advanced")
