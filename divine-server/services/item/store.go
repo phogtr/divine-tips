@@ -16,7 +16,7 @@ func NewStore(db *sql.DB) *ItemStore {
 	}
 }
 
-func (s *ItemStore) GetAll() ([]*types.ItemResponse, error) {
+func (s *ItemStore) GetAll() ([]*types.Item, error) {
 	query := `
 		SELECT name, curr_price, prev_price FROM items
 	`
@@ -27,9 +27,9 @@ func (s *ItemStore) GetAll() ([]*types.ItemResponse, error) {
 	}
 	defer rows.Close()
 
-	var items []*types.ItemResponse
+	var items []*types.Item
 	for rows.Next() {
-		var item types.ItemResponse
+		var item types.Item
 		err := rows.Scan(&item.Name, &item.CurrentPrice, &item.PreviousPrice)
 
 		if err != nil {

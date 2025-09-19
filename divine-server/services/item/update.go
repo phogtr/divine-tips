@@ -11,8 +11,8 @@ const (
 	minChange = 0.01 // 1%
 )
 
-func Update(items []*types.ItemResponse) []*types.ItemResponse {
-	itemsCopied := make([]*types.ItemResponse, len(items))
+func Update(items []*types.Item) []*types.Item {
+	itemsCopied := make([]*types.Item, len(items))
 	copy(itemsCopied, items)
 
 	for i := range itemsCopied {

@@ -1,16 +1,10 @@
 package types
 
 type Item struct {
-	ID            int
-	Name          string
-	CurrentPrice  float64
-	PreviousPrice float64
-}
-
-type ItemResponse struct {
+	ID            int     `json:"id"`
 	Name          string  `json:"name"`
-	CurrentPrice  float64 `json:"current_price"`
-	PreviousPrice float64 `json:"previous_price"`
+	CurrentPrice  float64 `json:"current"`
+	PreviousPrice float64 `json:"previous"`
 }
 
 type ItemRequest struct {
