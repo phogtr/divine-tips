@@ -1,10 +1,10 @@
 package day
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 
+	"github.com/phogtr/divine-tips/services/event"
 	"github.com/phogtr/divine-tips/services/item"
 	types "github.com/phogtr/divine-tips/types/day"
 	"github.com/phogtr/divine-tips/utils"
@@ -70,11 +70,6 @@ func (h *DayHandler) Advance(w http.ResponseWriter, r *http.Request) {
 
 	updatedItem := item.Update(items)
 
-	for i := range updatedItem {
-		item := updatedItem[i]
-		fmt.Printf("%s: %.2f | %.2f\n", item.Name, item.CurrentPrice, item.PreviousPrice)
-	}
-
 	err = h.itemStore.Update(updatedItem)
 	if err != nil {
 		log.Println(err)
@@ -82,5 +77,7 @@ func (h *DayHandler) Advance(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	utils.EncodeJson(w, http.StatusOK, updatedItem)
+	eventItems := event.PickItem(updatedItem)
+
+	utils.EncodeJson(w, http.StatusOK, eventItems)
 }
