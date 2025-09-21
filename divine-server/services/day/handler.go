@@ -1,6 +1,7 @@
 package day
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 
@@ -43,23 +44,24 @@ func (h *DayHandler) Update(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = h.store.Update(request.NewDay)
+	newDay, err := h.store.Update(request.NewDay)
 	if err != nil {
 		log.Println(err)
 		utils.ResponseErrorJson(w, http.StatusInternalServerError, "failed to update day")
 		return
 	}
 
-	utils.EncodeJson(w, http.StatusOK, "day updated")
+	utils.EncodeJson(w, http.StatusOK, *newDay)
 }
 
 func (h *DayHandler) Advance(w http.ResponseWriter, r *http.Request) {
-	err := h.store.Advance()
+	newDay, err := h.store.Advance()
 	if err != nil {
 		log.Println(err)
 		utils.ResponseErrorJson(w, http.StatusInternalServerError, "failed to advance day")
 		return
 	}
+	fmt.Printf("new day: %d\n", *newDay)
 
 	items, err := h.itemStore.GetAll()
 	if err != nil {

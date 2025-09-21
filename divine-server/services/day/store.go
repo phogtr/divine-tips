@@ -31,28 +31,28 @@ func (s *DayStore) Get() (*types.Day, error) {
 	return &day, nil
 }
 
-func (s *DayStore) Update(newDay int) error {
+func (s *DayStore) Update(newDay int) (*int, error) {
 	query := `
 		UPDATE system_days SET day = $1
 	`
 
 	_, err := s.db.Exec(query, newDay)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	return nil
+	return &newDay, nil
 }
 
-func (s *DayStore) Advance() error {
+func (s *DayStore) Advance() (*int, error) {
 	day, err := s.Get()
 	if err != nil {
-		return nil
+		return nil, err
 	}
 
-	err = s.Update(day.SystemDay + 1)
+	newDay, err := s.Update(day.SystemDay + 1)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+	return newDay, nil
 }
