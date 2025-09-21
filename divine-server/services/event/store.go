@@ -17,7 +17,7 @@ func NewStore(db *sql.DB) *EventStore {
 
 func (s *EventStore) GetAll() ([]*Event, error) {
 	query := `
-		SELECT event_day, data FROM events
+		SELECT id, event_day, data FROM events
 		ORDER BY event_day DESC
 	`
 
@@ -33,7 +33,7 @@ func (s *EventStore) GetAll() ([]*Event, error) {
 			event    Event
 			jsonData []byte
 		)
-		if err := rows.Scan(&event.Day, &jsonData); err != nil {
+		if err := rows.Scan(&event.ID, &event.Day, &jsonData); err != nil {
 			return nil, err
 		}
 
@@ -47,7 +47,30 @@ func (s *EventStore) GetAll() ([]*Event, error) {
 	return events, nil
 }
 
-func (s *EventStore) Create(payload Event) error {
+func (s *EventStore) Get() (*Event, error) {
+	query := `
+		SELECT id, event_day, data FROM events
+		ORDER BY event_day ASC
+		LIMIT 1
+	`
+	var (
+		event    Event
+		jsonData []byte
+	)
+
+	row := s.db.QueryRow(query)
+	if err := row.Scan(&event.ID, &event.Day, &jsonData); err != nil {
+		return nil, err
+	}
+
+	if err := json.Unmarshal(jsonData, &event.Data); err != nil {
+		return nil, err
+	}
+
+	return &event, nil
+}
+
+func (s *EventStore) Create(payload *Event) error {
 	query := `
 		INSERT INTO events (event_day, data)
 		VALUES ($1, $2::jsonb)
@@ -59,6 +82,30 @@ func (s *EventStore) Create(payload Event) error {
 	}
 
 	_, err = s.db.Exec(query, payload.Day, jsonData)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (s *EventStore) Update(payload *Event) error {
+	event, err := s.Get()
+	if err != nil {
+		return err
+	}
+
+	query := `
+		UPDATE events
+		SET event_day = $1, data = $2::jsonb
+		WHERE id = $3
+	`
+
+	jsonData, err := json.Marshal(payload.Data)
+	if err != nil {
+		return err
+	}
+
+	_, err = s.db.Exec(query, payload.Day, jsonData, event.ID)
 	if err != nil {
 		return err
 	}

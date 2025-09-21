@@ -78,15 +78,22 @@ func (h *DayHandler) Advance(w http.ResponseWriter, r *http.Request) {
 	}
 
 	eventItems := event.Create(updatedItem)
-	var newEvent event.Event
-	newEvent.Data = eventItems
-	newEvent.Day = *newDay
+	newEvent := &event.Event{
+		Day:  *newDay,
+		Data: eventItems,
+	}
 
-	if err = h.eventStore.Create(newEvent); err != nil {
+	if err = h.eventStore.Update(newEvent); err != nil {
 		log.Println(err)
 		utils.ResponseErrorJson(w, http.StatusInternalServerError, "something went wrong")
 		return
 	}
+
+	// if err = h.eventStore.Create(newEvent); err != nil {
+	// 	log.Println(err)
+	// 	utils.ResponseErrorJson(w, http.StatusInternalServerError, "something went wrong")
+	// 	return
+	// }
 
 	utils.EncodeJson(w, http.StatusOK, eventItems)
 }
