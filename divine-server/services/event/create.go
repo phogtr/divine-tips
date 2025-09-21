@@ -9,7 +9,25 @@ import (
 
 const eventItemCount = 5 // up to this amount
 
-func PickItem(items []*itemType.Item) []*eventType.EventItem {
+var increaseDesc = [3]string{
+	"likely to grow",
+	"climbing",
+	"may rise",
+}
+
+var decreaseDesc = [3]string{
+	"likely to drop",
+	"falling",
+	"may dip",
+}
+
+var noChangeDesc = [3]string{
+	"likely to stay constant",
+	"holding steady",
+	"may remain stable",
+}
+
+func Create(items []*itemType.Item) []*eventType.EventItem {
 	count := rand.Intn(eventItemCount) + 1
 	itemMap := make(map[int][]string)
 	indexMap := make(map[int]bool)
@@ -23,14 +41,8 @@ func PickItem(items []*itemType.Item) []*eventType.EventItem {
 		indexMap[index] = true
 
 		item := items[index]
-
-		if item.CurrentPrice < item.PreviousPrice {
-			itemMap[0] = append(itemMap[0], item.Name)
-		} else if item.CurrentPrice > item.PreviousPrice {
-			itemMap[1] = append(itemMap[1], item.Name)
-		} else {
-			itemMap[2] = append(itemMap[2], item.Name)
-		}
+		ctype := rand.Intn(3)
+		itemMap[ctype] = append(itemMap[ctype], item.Name)
 	}
 
 	var eventItem []*eventType.EventItem
@@ -38,6 +50,19 @@ func PickItem(items []*itemType.Item) []*eventType.EventItem {
 		var ei eventType.EventItem
 		ei.Type = k
 		ei.Name = v
+
+		switch ei.Type {
+		case 0:
+			idx := rand.Intn(3)
+			ei.TypeDescription = decreaseDesc[idx]
+		case 1:
+			idx := rand.Intn(3)
+			ei.TypeDescription = increaseDesc[idx]
+		case 2:
+			idx := rand.Intn(3)
+			ei.TypeDescription = noChangeDesc[idx]
+		}
+
 		eventItem = append(eventItem, &ei)
 	}
 	return eventItem

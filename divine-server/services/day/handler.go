@@ -77,7 +77,7 @@ func (h *DayHandler) Advance(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	eventItems := event.PickItem(updatedItem)
+	eventItems := event.Create(updatedItem)
 
 	utils.EncodeJson(w, http.StatusOK, eventItems)
 }
