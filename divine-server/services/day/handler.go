@@ -15,6 +15,9 @@ type DayHandler struct {
 	eventStore *event.EventStore
 }
 
+// max amount of events store in db
+const maxEventStore = 3
+
 func NewHandler(store *DayStore, itemStore *item.ItemStore, eventStore *event.EventStore) *DayHandler {
 	return &DayHandler{
 		store:      store,
@@ -69,6 +72,13 @@ func (h *DayHandler) Advance(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	events, err := h.eventStore.GetAll()
+	if err != nil {
+		log.Println(err)
+		utils.ResponseErrorJson(w, http.StatusInternalServerError, "something went wrong")
+		return
+	}
+
 	updatedItem := item.Update(items)
 
 	if err = h.itemStore.Update(updatedItem); err != nil {
@@ -83,17 +93,19 @@ func (h *DayHandler) Advance(w http.ResponseWriter, r *http.Request) {
 		Data: eventItems,
 	}
 
-	if err = h.eventStore.Update(newEvent); err != nil {
-		log.Println(err)
-		utils.ResponseErrorJson(w, http.StatusInternalServerError, "something went wrong")
-		return
+	if len(events) >= maxEventStore {
+		if err = h.eventStore.Update(newEvent); err != nil {
+			log.Println(err)
+			utils.ResponseErrorJson(w, http.StatusInternalServerError, "something went wrong")
+			return
+		}
+	} else {
+		if err = h.eventStore.Create(newEvent); err != nil {
+			log.Println(err)
+			utils.ResponseErrorJson(w, http.StatusInternalServerError, "something went wrong")
+			return
+		}
 	}
-
-	// if err = h.eventStore.Create(newEvent); err != nil {
-	// 	log.Println(err)
-	// 	utils.ResponseErrorJson(w, http.StatusInternalServerError, "something went wrong")
-	// 	return
-	// }
 
 	utils.EncodeJson(w, http.StatusOK, eventItems)
 }
