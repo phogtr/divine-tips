@@ -1,16 +1,29 @@
 package event
 
 import (
-	"fmt"
+	"log"
 	"net/http"
+
+	"github.com/phogtr/divine-tips/utils"
 )
 
-type EventHandler struct{}
-
-func (h *EventHandler) Create(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("create event")
+type EventHandler struct {
+	store *EventStore
 }
 
-func (h *EventHandler) Update(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("update event")
+func NewHandler(store *EventStore) *EventHandler {
+	return &EventHandler{
+		store: store,
+	}
+}
+
+func (h *EventHandler) GetAll(w http.ResponseWriter, r *http.Request) {
+	events, err := h.store.GetAll()
+	if err != nil {
+		log.Println(err)
+		utils.ResponseErrorJson(w, http.StatusInternalServerError, "failed to get events")
+		return
+	}
+
+	utils.EncodeJson(w, http.StatusOK, events)
 }

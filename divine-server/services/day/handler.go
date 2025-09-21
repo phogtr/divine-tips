@@ -10,14 +10,16 @@ import (
 )
 
 type DayHandler struct {
-	store     *DayStore
-	itemStore *item.ItemStore
+	store      *DayStore
+	itemStore  *item.ItemStore
+	eventStore *event.EventStore
 }
 
-func NewHandler(store *DayStore, itemStore *item.ItemStore) *DayHandler {
+func NewHandler(store *DayStore, itemStore *item.ItemStore, eventStore *event.EventStore) *DayHandler {
 	return &DayHandler{
-		store:     store,
-		itemStore: itemStore,
+		store:      store,
+		itemStore:  itemStore,
+		eventStore: eventStore,
 	}
 }
 
@@ -53,30 +55,38 @@ func (h *DayHandler) Update(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *DayHandler) Advance(w http.ResponseWriter, r *http.Request) {
-	_, err := h.store.Advance()
+	newDay, err := h.store.Advance()
 	if err != nil {
 		log.Println(err)
-		utils.ResponseErrorJson(w, http.StatusInternalServerError, "failed to advance day")
+		utils.ResponseErrorJson(w, http.StatusInternalServerError, "something went wrong")
 		return
 	}
 
 	items, err := h.itemStore.GetAll()
 	if err != nil {
 		log.Println(err)
-		utils.ResponseErrorJson(w, http.StatusInternalServerError, "failed to get items")
+		utils.ResponseErrorJson(w, http.StatusInternalServerError, "something went wrong")
 		return
 	}
 
 	updatedItem := item.Update(items)
 
-	err = h.itemStore.Update(updatedItem)
-	if err != nil {
+	if err = h.itemStore.Update(updatedItem); err != nil {
 		log.Println(err)
-		utils.ResponseErrorJson(w, http.StatusInternalServerError, "failed to update items")
+		utils.ResponseErrorJson(w, http.StatusInternalServerError, "something went wrong")
 		return
 	}
 
 	eventItems := event.Create(updatedItem)
+	var newEvent event.Event
+	newEvent.Data = eventItems
+	newEvent.Day = *newDay
+
+	if err = h.eventStore.Create(newEvent); err != nil {
+		log.Println(err)
+		utils.ResponseErrorJson(w, http.StatusInternalServerError, "something went wrong")
+		return
+	}
 
 	utils.EncodeJson(w, http.StatusOK, eventItems)
 }
