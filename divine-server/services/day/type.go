@@ -1,4 +1,4 @@
-package types
+package day
 
 type Day struct {
 	SystemDay int `json:"system_day"`

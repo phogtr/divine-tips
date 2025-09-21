@@ -46,7 +46,7 @@ func (a *ApiServer) dayRoutes(r chi.Router) {
 }
 
 func eventRoutes(r chi.Router) {
-	eventHandler := &event.Event{}
+	eventHandler := &event.EventHandler{}
 
 	r.Post("/create", eventHandler.Create)
 	r.Put("/update", eventHandler.Update)

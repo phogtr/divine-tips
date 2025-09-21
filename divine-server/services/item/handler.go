@@ -4,7 +4,6 @@ import (
 	"log"
 	"net/http"
 
-	types "github.com/phogtr/divine-tips/types/item"
 	"github.com/phogtr/divine-tips/utils"
 )
 
@@ -30,7 +29,7 @@ func (h *ItemHandler) GetAll(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *ItemHandler) Create(w http.ResponseWriter, r *http.Request) {
-	var request types.ItemRequest
+	var request ItemRequest
 
 	err := utils.DecodeJson(w, r, &request)
 	if err != nil {
@@ -39,7 +38,7 @@ func (h *ItemHandler) Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	payload := types.Item{
+	payload := &Item{
 		Name:          request.Name,
 		CurrentPrice:  100,
 		PreviousPrice: 0,

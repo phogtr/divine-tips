@@ -1,4 +1,4 @@
-package types
+package event
 
 type EventItem struct {
 	Name            []string `json:"name"`

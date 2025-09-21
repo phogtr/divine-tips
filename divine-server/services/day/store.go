@@ -2,8 +2,6 @@ package day
 
 import (
 	"database/sql"
-
-	types "github.com/phogtr/divine-tips/types/day"
 )
 
 type DayStore struct {
@@ -16,11 +14,11 @@ func NewStore(db *sql.DB) *DayStore {
 	}
 }
 
-func (s *DayStore) Get() (*types.Day, error) {
+func (s *DayStore) Get() (*Day, error) {
 	query := `
 		SELECT day FROM system_days LIMIT 1
 	`
-	var day types.Day
+	var day Day
 
 	row := s.db.QueryRow(query)
 	err := row.Scan(&day.SystemDay)

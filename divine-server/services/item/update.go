@@ -2,8 +2,6 @@ package item
 
 import (
 	"math/rand"
-
-	types "github.com/phogtr/divine-tips/types/item"
 )
 
 const (
@@ -11,8 +9,8 @@ const (
 	minChange = 0.01 // 1%
 )
 
-func Update(items []*types.Item) []*types.Item {
-	itemsCopied := make([]*types.Item, len(items))
+func Update(items []*Item) []*Item {
+	itemsCopied := make([]*Item, len(items))
 	copy(itemsCopied, items)
 
 	for i := range itemsCopied {

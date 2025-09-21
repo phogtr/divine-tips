@@ -3,8 +3,7 @@ package event
 import (
 	"math/rand"
 
-	eventType "github.com/phogtr/divine-tips/types/event"
-	itemType "github.com/phogtr/divine-tips/types/item"
+	"github.com/phogtr/divine-tips/services/item"
 )
 
 const eventItemCount = 5 // up to this amount
@@ -27,7 +26,7 @@ var noChangeDesc = [3]string{
 	"may remain stable",
 }
 
-func Create(items []*itemType.Item) []*eventType.EventItem {
+func Create(items []*item.Item) []*EventItem {
 	count := rand.Intn(eventItemCount) + 1
 	itemMap := make(map[int][]string)
 	indexMap := make(map[int]bool)
@@ -45,9 +44,9 @@ func Create(items []*itemType.Item) []*eventType.EventItem {
 		itemMap[ctype] = append(itemMap[ctype], item.Name)
 	}
 
-	var eventItem []*eventType.EventItem
+	var eventItem []*EventItem
 	for k, v := range itemMap {
-		var ei eventType.EventItem
+		var ei EventItem
 		ei.Type = k
 		ei.Name = v
 

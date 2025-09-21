@@ -4,8 +4,6 @@ import (
 	"database/sql"
 	"fmt"
 	"strings"
-
-	types "github.com/phogtr/divine-tips/types/item"
 )
 
 type ItemStore struct {
@@ -18,7 +16,7 @@ func NewStore(db *sql.DB) *ItemStore {
 	}
 }
 
-func (s *ItemStore) GetAll() ([]*types.Item, error) {
+func (s *ItemStore) GetAll() ([]*Item, error) {
 	query := `
 		SELECT id, name, curr_price, prev_price FROM items
 	`
@@ -29,9 +27,9 @@ func (s *ItemStore) GetAll() ([]*types.Item, error) {
 	}
 	defer rows.Close()
 
-	var items []*types.Item
+	var items []*Item
 	for rows.Next() {
-		var item types.Item
+		var item Item
 		err := rows.Scan(&item.ID, &item.Name, &item.CurrentPrice, &item.PreviousPrice)
 
 		if err != nil {
@@ -43,7 +41,7 @@ func (s *ItemStore) GetAll() ([]*types.Item, error) {
 	return items, nil
 }
 
-func (s *ItemStore) Create(payload types.Item) error {
+func (s *ItemStore) Create(payload *Item) error {
 	query := `
 		INSERT INTO items (name, curr_price, prev_price)
 		VALUES ($1, $2, $3) returning id
@@ -56,7 +54,7 @@ func (s *ItemStore) Create(payload types.Item) error {
 	return nil
 }
 
-func (s *ItemStore) Update(items []*types.Item) error {
+func (s *ItemStore) Update(items []*Item) error {
 	var queryValues []string
 	var args []any
 	argsPos := 1

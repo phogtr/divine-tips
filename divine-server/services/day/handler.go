@@ -1,13 +1,11 @@
 package day
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 
 	"github.com/phogtr/divine-tips/services/event"
 	"github.com/phogtr/divine-tips/services/item"
-	types "github.com/phogtr/divine-tips/types/day"
 	"github.com/phogtr/divine-tips/utils"
 )
 
@@ -35,7 +33,7 @@ func (h *DayHandler) Get(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *DayHandler) Update(w http.ResponseWriter, r *http.Request) {
-	var request types.DayRequest
+	var request DayRequest
 
 	err := utils.DecodeJson(w, r, &request)
 	if err != nil {
@@ -55,13 +53,12 @@ func (h *DayHandler) Update(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *DayHandler) Advance(w http.ResponseWriter, r *http.Request) {
-	newDay, err := h.store.Advance()
+	_, err := h.store.Advance()
 	if err != nil {
 		log.Println(err)
 		utils.ResponseErrorJson(w, http.StatusInternalServerError, "failed to advance day")
 		return
 	}
-	fmt.Printf("new day: %d\n", *newDay)
 
 	items, err := h.itemStore.GetAll()
 	if err != nil {

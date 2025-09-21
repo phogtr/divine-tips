@@ -5,12 +5,12 @@ import (
 	"net/http"
 )
 
-type Event struct{}
+type EventHandler struct{}
 
-func (e *Event) Create(w http.ResponseWriter, r *http.Request) {
+func (h *EventHandler) Create(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("create event")
 }
 
-func (e *Event) Update(w http.ResponseWriter, r *http.Request) {
+func (h *EventHandler) Update(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("update event")
 }
