@@ -79,7 +79,8 @@ func (h *DayHandler) Advance(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	updatedItem := item.Update(items)
+	eventItemMap := event.NameTypeMap(events[0])
+	updatedItem := item.Update(items, eventItemMap)
 
 	if err = h.itemStore.Update(updatedItem); err != nil {
 		log.Println(err)

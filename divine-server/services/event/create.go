@@ -66,3 +66,18 @@ func Create(items []*item.Item) []*EventItem {
 	}
 	return eventItem
 }
+
+func NameTypeMap(event *Event) map[string]int {
+	out := make(map[string]int)
+
+	for i := range event.Data {
+		eventItem := event.Data[i]
+		names := eventItem.Name
+
+		for _, name := range names {
+			out[name] = eventItem.Type
+		}
+	}
+
+	return out
+}
