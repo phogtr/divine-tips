@@ -2,6 +2,8 @@ package item
 
 import (
 	"math/rand"
+
+	"github.com/phogtr/divine-tips/utils"
 )
 
 const (
@@ -42,7 +44,8 @@ func Update(items []*Item, nameMap map[string]int) []*Item {
 			}
 		}
 
-		item.CurrentPrice = oldPrice * (1 + change)
+		newPrice := oldPrice * (1 + change)
+		item.CurrentPrice = utils.Round(newPrice, 2)
 	}
 	return itemsCopied
 }
