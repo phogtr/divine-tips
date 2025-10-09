@@ -9,16 +9,16 @@ export const Navbar = () => {
         </Link>
       </div>
       <div className="flex gap-5">
-        <Link href={"/"} className="text-lg">
+        <Link href={"/"} className="text-base">
           Market
         </Link>
-        <Link href={"/event"} className="text-lg">
+        <Link href={"/event"} className="text-base">
           Event
         </Link>
-        <Link href={"/info"} className="text-lg">
+        <Link href={"/info"} className="text-base">
           Info
         </Link>
-        <Link href={"/profile"} className="text-lg">
+        <Link href={"/profile"} className="text-base">
           Profile
         </Link>
       </div>
