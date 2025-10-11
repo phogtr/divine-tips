@@ -1,3 +1,4 @@
+import { ItemCard } from "@/components/ItemCard";
 import { SideItems } from "@/components/SideItems";
 
 export default function Home() {
@@ -5,8 +6,8 @@ export default function Home() {
     <div className="h-[calc(100dvh-50px)] flex">
       <SideItems />
 
-      <main>
-        <h1 className="text-2xl">hello world</h1>
+      <main className="w-[calc(100dvw-108px)] overflow-auto">
+        <ItemCard />
       </main>
     </div>
   );
