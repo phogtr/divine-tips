@@ -1,44 +1,8 @@
-"use client";
+interface ItemCardProps {
+  renderMap: Record<string, number>;
+}
 
-import { useState } from "react";
-
-const mockData = [
-  {
-    name: "Charlie",
-  },
-  {
-    name: "Foxtrot",
-  },
-  {
-    name: "Juliett",
-  },
-  {
-    name: "Romeo",
-  },
-  {
-    name: "Tango",
-  },
-  {
-    name: "Oscar",
-  },
-  {
-    name: "Victor",
-  },
-];
-
-interface ItemCardProps {}
-
-export const ItemCard: React.FC<ItemCardProps> = ({}) => {
-  const [renderMap, setRenderMap] = useState<Record<string, number>>(() =>
-    mockData.reduce(
-      (acc, val) => ({
-        ...acc,
-        [val.name]: 1,
-      }),
-      {}
-    )
-  );
-
+export const ItemCard: React.FC<ItemCardProps> = ({ renderMap }) => {
   return (
     <div className="m-6 flex justify-center">
       <div className="flex flex-col gap-4 w-4xl">
