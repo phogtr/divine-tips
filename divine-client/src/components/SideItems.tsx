@@ -24,11 +24,11 @@ const mockData = [
 
 export const SideItems = () => {
   return (
-    <div className="w-27 mt-1 border border-white overflow-y-scroll">
-      <div className="flex flex-col flex-wrap">
+    <div className="w-(--side-item-w) mt-1 border border-white overflow-y-auto overflow-x-hidden">
+      <div className="flex flex-col items-center">
         {mockData.map((o) => (
           <button
-            className="w-18 h-16 border border-white m-2 text-center cursor-pointer"
+            className="w-17 h-16 border border-white my-2 text-center cursor-pointer"
             key={o.name}
           >
             <div>{o.name.at(0)}</div>

@@ -3,6 +3,8 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --navbar-h: 50px;
+  --side-item-w: 100px;
 }
 
 @theme inline {
@@ -10,6 +12,16 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+}
+
+@layer utilities {
+  .page-h {
+    height: calc(100dvh - var(--navbar-h));
+  }
+
+  .home-main-w {
+    width: calc(100dvw - var(--side-item-w));
+  }
 }
 
 @media (prefers-color-scheme: dark) {

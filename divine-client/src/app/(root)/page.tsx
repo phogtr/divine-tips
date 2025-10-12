@@ -3,10 +3,10 @@ import { SideItems } from "@/components/SideItems";
 
 export default function Home() {
   return (
-    <div className="h-[calc(100dvh-50px)] flex">
+    <div className="page-h flex">
       <SideItems />
 
-      <main className="w-[calc(100dvw-108px)] overflow-auto">
+      <main className="home-main-w overflow-auto">
         <ItemCard />
       </main>
     </div>

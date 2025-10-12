@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export const Navbar = () => {
   return (
-    <nav className="flex justify-between items-center h-[50px] px-2 border border-white">
+    <nav className="h-(--navbar-h) flex justify-between items-center px-2 border border-white">
       <div>
         <Link href={"/"}>
           <h2 className="text-xl">Divide Tips</h2>
