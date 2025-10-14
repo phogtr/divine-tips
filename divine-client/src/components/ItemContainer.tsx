@@ -1,58 +1,45 @@
 "use client";
-
 import { useState } from "react";
 
 import { SideItems } from "./SideItems";
 import { ItemCard } from "./ItemCard";
 
-const mockData = [
-  {
-    name: "Charlie",
-  },
-  {
-    name: "Foxtrot",
-  },
-  {
-    name: "Juliett",
-  },
-  {
-    name: "Romeo",
-  },
-  {
-    name: "Tango",
-  },
-  {
-    name: "Oscar",
-  },
-  {
-    name: "Victor",
-  },
-];
+import { ItemApiData } from "@/types/item.type";
 
-export const ItemContainer = ({}) => {
-  const [renderMap, setRenderMap] = useState<Record<string, number>>(() =>
-    mockData.reduce(
+interface ItemContainerProps {
+  itemApiData: ItemApiData[];
+}
+
+export const ItemContainer: React.FC<ItemContainerProps> = ({
+  itemApiData,
+}) => {
+  const [renderMap, setRenderMap] = useState<Record<number, boolean>>(() =>
+    itemApiData.reduce(
       (acc, val) => ({
         ...acc,
-        [val.name]: 0,
+        [val.id]: false,
       }),
       {}
     )
   );
 
-  const onClickToggleItem = (key: string) => {
+  const onClickToggleItem = (id: number) => {
     setRenderMap((prev) => ({
       ...prev,
-      [key]: prev[key] ? 0 : 1,
+      [id]: !prev[id],
     }));
   };
 
   return (
     <>
-      <SideItems renderMap={renderMap} onClickToggleItem={onClickToggleItem} />
+      <SideItems
+        itemApiData={itemApiData}
+        renderMap={renderMap}
+        onClickToggleItem={onClickToggleItem}
+      />
 
       <main className="home-main-w overflow-auto">
-        <ItemCard renderMap={renderMap} />
+        <ItemCard itemApiData={itemApiData} renderMap={renderMap} />
       </main>
     </>
   );
