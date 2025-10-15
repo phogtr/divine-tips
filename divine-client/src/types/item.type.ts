@@ -3,4 +3,6 @@ export interface ItemApiData {
   name: string;
   current: number;
   previous: number;
+  delta: number;
+  deltaPercent: number;
 }

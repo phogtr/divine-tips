@@ -25,7 +25,9 @@ func (h *ItemHandler) GetAll(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	utils.EncodeJson(w, http.StatusOK, items)
+	itemsWithDelta := Delta(items)
+
+	utils.EncodeJson(w, http.StatusOK, itemsWithDelta)
 }
 
 func (h *ItemHandler) Create(w http.ResponseWriter, r *http.Request) {

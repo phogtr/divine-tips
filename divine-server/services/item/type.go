@@ -10,3 +10,9 @@ type Item struct {
 type ItemRequest struct {
 	Name string `json:"name"`
 }
+
+type ItemDelta struct {
+	Item
+	Delta        float64 `json:"delta"`
+	DeltaPercent float64 `json:"deltaPercent"`
+}
