@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { SideItems } from "./SideItems";
 import { ItemCard } from "./ItemCard";
@@ -23,6 +23,8 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
     )
   );
 
+  const [isToggleAll, setIsToggleAll] = useState(false);
+
   const onClickToggleItem = (id: number) => {
     setRenderMap((prev) => ({
       ...prev,
@@ -30,12 +32,34 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
     }));
   };
 
+  const onClickToggleAll = (state: boolean) => {
+    setIsToggleAll(!state);
+
+    setRenderMap((prev) => {
+      const newRenderMap: Record<number, boolean> = {};
+      for (const key in prev) {
+        newRenderMap[Number(key)] = !state;
+      }
+      return newRenderMap;
+    });
+  };
+
+  useEffect(() => {
+    if (Object.values(renderMap).every((v) => v)) {
+      setIsToggleAll(true);
+    } else {
+      setIsToggleAll(false);
+    }
+  }, [renderMap]);
+
   return (
     <>
       <SideItems
         itemApiData={itemApiData}
         renderMap={renderMap}
         onClickToggleItem={onClickToggleItem}
+        isToggleAll={isToggleAll}
+        onClickToggleAll={onClickToggleAll}
       />
 
       <main className="home-main-w overflow-auto">
