@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+import { ThemeToggle } from "./theme/ThemeToggle";
+
 export const Navbar = () => {
   return (
     <nav className="h-(--navbar-h) flex justify-between items-center px-2 border border-white">
@@ -21,6 +23,8 @@ export const Navbar = () => {
         <Link href={"/profile"} className="text-base">
           Profile
         </Link>
+
+        <ThemeToggle />
       </div>
     </nav>
   );
