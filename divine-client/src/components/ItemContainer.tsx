@@ -12,16 +12,26 @@ import {
 import { SideItems } from "./SideItems";
 import { ItemCard } from "./ItemCard";
 
+import { TextStream } from "./TextStream";
+
 import { ItemApiData } from "@/types/item.type";
 
 interface ItemContainerProps {
   itemApiData: ItemApiData[];
 }
 
+const text1 = "Lorem ipsum dolor sit, amet consectetur adipisicing.";
+const text2 =
+  "Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus, debitis.";
+const text3 =
+  "Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur perspiciatis iure cum pariatur cumque itaque explicabo eaque ipsa, soluta magni ullam enim et dignissimos ex placeat, doloribus asperiores, veniam amet!";
+const text4 =
+  "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ea quisquam tempora voluptas optio, voluptates adipisci!";
+
 export const ItemContainer: React.FC<ItemContainerProps> = ({
   itemApiData,
 }) => {
-  const [openDialog, setOpenDialog] = useState(true);
+  const [openDialog, setOpenDialog] = useState(false);
   const [input, setInput] = useState("");
 
   const [renderMap, setRenderMap] = useState<Record<number, boolean>>(() =>
@@ -74,6 +84,13 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
 
       <main className="home-main-w overflow-auto">
         <ItemCard itemApiData={itemApiData} renderMap={renderMap} />
+
+        <div>
+          <TextStream text={text1} />
+          <TextStream text={text2} delay={1000} className="text-red-300" />
+          <TextStream text={text3} delay={2000} className="text-emerald-300" />
+          <TextStream text={text4} delay={3000} className="text-gray-300" />
+        </div>
       </main>
 
       <Dialog open={openDialog} onOpenChange={setOpenDialog}>
