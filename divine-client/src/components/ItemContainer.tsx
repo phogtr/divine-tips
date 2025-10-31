@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 
 import {
   Dialog,
@@ -15,6 +16,7 @@ import { ItemCard } from "./ItemCard";
 import { TextStream } from "./TextStream";
 
 import { ItemApiData } from "@/types/item.type";
+import { EventApiData } from "@/types/event.type";
 
 interface ItemContainerProps {
   itemApiData: ItemApiData[];
@@ -34,6 +36,8 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
   const [openDialog, setOpenDialog] = useState(false);
   const [input, setInput] = useState("");
 
+  const [eventDialog, setEventDialog] = useState(false);
+
   const [renderMap, setRenderMap] = useState<Record<number, boolean>>(() =>
     itemApiData.reduce(
       (acc, val) => ({
@@ -44,6 +48,11 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
     )
   );
   const [isToggleAll, setIsToggleAll] = useState(false);
+
+  const { isPending, data: eventApiData } = useQuery({
+    queryKey: ["event"],
+    queryFn: fetchEventData,
+  });
 
   const onClickToggleItem = (id: number) => {
     setRenderMap((prev) => ({
@@ -72,6 +81,12 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
     }
   }, [renderMap]);
 
+  useEffect(() => {
+    if (!isPending) {
+      setEventDialog(true);
+    }
+  }, [isPending]);
+
   return (
     <>
       <SideItems
@@ -92,6 +107,33 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
           <TextStream text={text4} delay={3000} className="text-gray-300" />
         </div>
       </main>
+
+      <Dialog open={eventDialog} onOpenChange={setEventDialog}>
+        <DialogTrigger />
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle className="text-center">Day ...</DialogTitle>
+          </DialogHeader>
+
+          <div>
+            {eventApiData?.[0].data?.map(({ name, desc, type }) => (
+              <div
+                className="mt-4 pt-1.5 max-w-1/4 max-sm:max-w-[55%] border-t border-gray-700"
+                key={type}
+              >
+                <h3 className="pb-1.5">
+                  <em>{desc}</em>
+                </h3>
+                <ul>
+                  {name.map((n) => (
+                    <li key={n}>{n}</li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </DialogContent>
+      </Dialog>
 
       <Dialog open={openDialog} onOpenChange={setOpenDialog}>
         <DialogTrigger />
@@ -139,4 +181,11 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
       </Dialog>
     </>
   );
+};
+
+const fetchEventData = async (): Promise<EventApiData[]> => {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/event`);
+  if (!res.ok) throw new Error("failed to fetch event data");
+
+  return res.json();
 };
