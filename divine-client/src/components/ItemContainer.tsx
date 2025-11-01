@@ -12,11 +12,11 @@ import {
 
 import { SideItems } from "./SideItems";
 import { ItemCard } from "./ItemCard";
-
+import { EventContent } from "./event/EventContent";
 import { TextStream } from "./TextStream";
 
-import { ItemApiData } from "@/types/item.type";
-import { EventApiData } from "@/types/event.type";
+import type { ItemApiData } from "@/types/item.type";
+import type { EventApiData } from "@/types/event.type";
 
 interface ItemContainerProps {
   itemApiData: ItemApiData[];
@@ -49,7 +49,7 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
   );
   const [isToggleAll, setIsToggleAll] = useState(false);
 
-  const { isPending, data: eventApiData } = useQuery({
+  const { isPending: isEventApiPending, data: eventApiData } = useQuery({
     queryKey: ["event"],
     queryFn: fetchEventData,
   });
@@ -82,10 +82,10 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
   }, [renderMap]);
 
   useEffect(() => {
-    if (!isPending) {
+    if (!isEventApiPending) {
       setEventDialog(true);
     }
-  }, [isPending]);
+  }, [isEventApiPending]);
 
   return (
     <>
@@ -116,20 +116,8 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
           </DialogHeader>
 
           <div>
-            {eventApiData?.[0].data?.map(({ name, desc, type }) => (
-              <div
-                className="mt-4 pt-1.5 max-w-1/4 max-sm:max-w-[55%] border-t border-gray-700"
-                key={type}
-              >
-                <h3 className="pb-1.5">
-                  <em>{desc}</em>
-                </h3>
-                <ul>
-                  {name.map((n) => (
-                    <li key={n}>{n}</li>
-                  ))}
-                </ul>
-              </div>
+            {eventApiData?.[0].data?.map((d) => (
+              <EventContent key={d.type} data={d} />
             ))}
           </div>
         </DialogContent>
