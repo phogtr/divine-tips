@@ -4,14 +4,18 @@ import { useCallback, useEffect, useState } from "react";
 
 interface TextStreamProps {
   text: string;
-  delay?: number;
   className?: string;
+  delay?: number;
+  streamInterval?: number;
+  elem?: "em" | "li";
 }
 
 export const TextStream: React.FC<TextStreamProps> = ({
   text,
-  delay = 0,
   className,
+  delay = 0,
+  streamInterval = 25,
+  elem,
 }) => {
   const [content, setContent] = useState("");
 
@@ -53,7 +57,7 @@ export const TextStream: React.FC<TextStreamProps> = ({
     const timer = setTimeout(() => {
       setContent((prev) => prev + tokens[tokenIdx]);
       setTokenIdx((prev) => prev + 1);
-    }, 25); // Fast interval since streaming smaller chunks
+    }, streamInterval); // Fast interval since streaming smaller chunks
 
     return () => clearTimeout(timer);
   }, [isDelay, tokenIdx, tokens]);
@@ -62,5 +66,17 @@ export const TextStream: React.FC<TextStreamProps> = ({
     return null;
   }
 
-  return <div className={className}>{content}</div>;
+  switch (elem) {
+    case "em": {
+      return <em className={className}>{content}</em>;
+    }
+
+    case "li": {
+      return <li className={className}>{content}</li>;
+    }
+
+    default: {
+      return <div className={className}>{content}</div>;
+    }
+  }
 };

@@ -99,13 +99,6 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
 
       <main className="home-main-w overflow-auto">
         <ItemCard itemApiData={itemApiData} renderMap={renderMap} />
-
-        <div>
-          <TextStream text={text1} />
-          <TextStream text={text2} delay={1000} className="text-red-300" />
-          <TextStream text={text3} delay={2000} className="text-emerald-300" />
-          <TextStream text={text4} delay={3000} className="text-gray-300" />
-        </div>
       </main>
 
       <Dialog open={eventDialog} onOpenChange={setEventDialog}>
@@ -117,7 +110,7 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
 
           <div>
             {eventApiData?.[0].data?.map((d) => (
-              <EventContent key={d.type} data={d} />
+              <EventContent key={d.type} data={d} isTextStream={true} />
             ))}
           </div>
         </DialogContent>
