@@ -13,7 +13,8 @@ import {
 import { SideItems } from "./SideItems";
 import { ItemCard } from "./ItemCard";
 import { EventContent } from "./event/EventContent";
-import { TextStream } from "./TextStream";
+
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 
 import type { ItemApiData } from "@/types/item.type";
 import type { EventApiData } from "@/types/event.type";
@@ -22,18 +23,16 @@ interface ItemContainerProps {
   itemApiData: ItemApiData[];
 }
 
-const text1 = "Lorem ipsum dolor sit, amet consectetur adipisicing.";
-const text2 =
-  "Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus, debitis.";
-const text3 =
-  "Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur perspiciatis iure cum pariatur cumque itaque explicabo eaque ipsa, soluta magni ullam enim et dignissimos ex placeat, doloribus asperiores, veniam amet!";
-const text4 =
-  "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ea quisquam tempora voluptas optio, voluptates adipisci!";
-
 export const ItemContainer: React.FC<ItemContainerProps> = ({
   itemApiData,
 }) => {
-  const [openDialog, setOpenDialog] = useState(false);
+  const {
+    data: isSignUp,
+    setData: setIsSignUp,
+    isHydrated: isSignUpHydrate,
+  } = useLocalStorage<boolean>("sign-up", false);
+
+  const [signUpDialog, setSignUpDialog] = useState(false);
   const [input, setInput] = useState("");
 
   const [eventDialog, setEventDialog] = useState(false);
@@ -73,6 +72,26 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
     });
   };
 
+  const closeSignUpDialog = () => {
+    setSignUpDialog(false);
+
+    if (!isSignUp) {
+      setIsSignUp(true);
+    }
+  };
+
+  useEffect(() => {
+    if (isSignUpHydrate && !isSignUp) {
+      setSignUpDialog(true);
+    }
+  }, [isSignUpHydrate]);
+
+  useEffect(() => {
+    if (!signUpDialog && !isEventApiPending) {
+      setEventDialog(true);
+    }
+  }, [signUpDialog, isEventApiPending]);
+
   useEffect(() => {
     if (Object.values(renderMap).every((v) => v)) {
       setIsToggleAll(true);
@@ -80,12 +99,6 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
       setIsToggleAll(false);
     }
   }, [renderMap]);
-
-  useEffect(() => {
-    if (!isEventApiPending) {
-      setEventDialog(true);
-    }
-  }, [isEventApiPending]);
 
   return (
     <>
@@ -116,7 +129,7 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
         </DialogContent>
       </Dialog>
 
-      <Dialog open={openDialog} onOpenChange={setOpenDialog}>
+      <Dialog open={signUpDialog} onOpenChange={closeSignUpDialog}>
         <DialogTrigger />
         <DialogContent>
           <DialogHeader>
@@ -150,7 +163,7 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
               <button
                 className="border border-white rounded-[5px] w-[80px] h-[40px] cursor-pointer disabled:cursor-not-allowed disabled:border-gray-600"
                 onClick={() => {
-                  setOpenDialog(false);
+                  setSignUpDialog(false);
                 }}
                 disabled={input === ""}
               >
