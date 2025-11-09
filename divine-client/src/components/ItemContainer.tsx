@@ -31,6 +31,11 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
     setData: setIsSignUp,
     isHydrated: isSignUpHydrate,
   } = useLocalStorage<boolean>("sign-up", false);
+  const {
+    data: isReadEvent,
+    setData: setIsReadEvent,
+    isHydrated: isReadEventHydrate,
+  } = useLocalStorage<boolean>("event-read", false);
 
   const [signUpDialog, setSignUpDialog] = useState(false);
   const [input, setInput] = useState("");
@@ -80,6 +85,14 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
     }
   };
 
+  const closeEventDialog = () => {
+    setEventDialog(false);
+
+    if (!isReadEvent) {
+      setIsReadEvent(true);
+    }
+  };
+
   useEffect(() => {
     if (isSignUpHydrate && !isSignUp) {
       setSignUpDialog(true);
@@ -87,10 +100,15 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
   }, [isSignUpHydrate]);
 
   useEffect(() => {
-    if (!signUpDialog && !isEventApiPending) {
+    if (
+      isReadEventHydrate &&
+      !isReadEvent &&
+      !signUpDialog &&
+      !isEventApiPending
+    ) {
       setEventDialog(true);
     }
-  }, [signUpDialog, isEventApiPending]);
+  }, [signUpDialog, isEventApiPending, isReadEventHydrate]);
 
   useEffect(() => {
     if (Object.values(renderMap).every((v) => v)) {
@@ -114,7 +132,7 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
         <ItemCard itemApiData={itemApiData} renderMap={renderMap} />
       </main>
 
-      <Dialog open={eventDialog} onOpenChange={setEventDialog}>
+      <Dialog open={eventDialog} onOpenChange={closeEventDialog}>
         <DialogTrigger />
         <DialogContent>
           <DialogHeader>
