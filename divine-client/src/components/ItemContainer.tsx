@@ -1,4 +1,5 @@
 "use client";
+
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 
@@ -12,6 +13,7 @@ import {
 
 import { SideItems } from "./SideItems";
 import { ItemCard } from "./ItemCard";
+import { SignUpDialog } from "./SignUpDialog";
 import { EventContent } from "./event/EventContent";
 
 import { useLocalStorage } from "@/hooks/useLocalStorage";
@@ -31,6 +33,7 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
     setData: setIsSignUp,
     isHydrated: isSignUpHydrate,
   } = useLocalStorage<boolean>("sign-up", false);
+
   const {
     data: isReadEvent,
     setData: setIsReadEvent,
@@ -38,7 +41,7 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
   } = useLocalStorage<boolean>("event-read", false);
 
   const [signUpDialog, setSignUpDialog] = useState(false);
-  const [input, setInput] = useState("");
+  const [signUpInput, setSignUpInput] = useState("");
 
   const [eventDialog, setEventDialog] = useState(false);
 
@@ -147,50 +150,13 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
         </DialogContent>
       </Dialog>
 
-      <Dialog open={signUpDialog} onOpenChange={closeSignUpDialog}>
-        <DialogTrigger />
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle className="text-center">
-              Welcome to Divine Tips!
-            </DialogTitle>
-          </DialogHeader>
-
-          <div>
-            <p className="text-sm my-2">Let's start by entering username</p>
-
-            <input
-              type="text"
-              placeholder="Username"
-              className="border border-white rounded w-full h-10 p-2 mb-5"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-            />
-
-            <p className="text-sm">
-              Optionally, you can close this and continue without username
-            </p>
-            <p className="text-sm">But some features will be hidden</p>
-            <p className="text-sm mb-3.5">
-              Navigate to <b>Profile</b> at the top to open this again
-            </p>
-
-            <p className="text-sm mb-5">Have fun!</p>
-
-            <div className="text-center">
-              <button
-                className="border border-white rounded-[5px] w-[80px] h-[40px] cursor-pointer disabled:cursor-not-allowed disabled:border-gray-600"
-                onClick={() => {
-                  setSignUpDialog(false);
-                }}
-                disabled={input === ""}
-              >
-                Submit
-              </button>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
+      <SignUpDialog
+        isOpenDialog={signUpDialog}
+        onDialogChange={closeSignUpDialog}
+        signUpInput={signUpInput}
+        onChangeSignUpInput={(e) => setSignUpInput(e.target.value)}
+        onClickSubmitSignUp={() => setSignUpDialog(false)}
+      />
     </>
   );
 };
