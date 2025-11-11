@@ -1,7 +1,9 @@
+import { Profile } from "@/components/profile/Profile";
+
 const Page = () => {
   return (
-    <div>
-      <h3>Profile</h3>
+    <div className="page-h">
+      <Profile />
     </div>
   );
 };

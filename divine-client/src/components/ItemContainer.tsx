@@ -11,10 +11,10 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
-import { SideItems } from "./SideItems";
-import { ItemCard } from "./ItemCard";
-import { SignUpDialog } from "./SignUpDialog";
-import { EventContent } from "./event/EventContent";
+import { SideItems } from "@/components/SideItems";
+import { ItemCard } from "@/components/ItemCard";
+import { SignUpDialog } from "@/components/SignUpDialog";
+import { EventContent } from "@/components/event/EventContent";
 
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 
