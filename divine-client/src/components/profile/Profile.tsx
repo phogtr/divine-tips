@@ -5,15 +5,27 @@ import { useEffect, useState } from "react";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { SignUpDialog } from "@/components/SignUpDialog";
 
+import type { UserData } from "@/types/user.type";
+
 export const Profile = () => {
   const {
     data: userData,
     setData: setUserData,
     isHydrated: isUserDataHydrate,
-  } = useLocalStorage<Record<string, any> | null>("user", null);
+  } = useLocalStorage<UserData | null>("user", null);
 
   const [signUpDialog, setSignUpDialog] = useState(false);
   const [signUpInput, setSignUpInput] = useState("");
+
+  const onClickSubmitSignUp = () => {
+    if (signUpInput !== "") {
+      setUserData({
+        name: signUpInput,
+        balance: 500,
+      });
+    }
+    setSignUpDialog(false);
+  };
 
   let signUpContent = null;
   if (isUserDataHydrate && userData === null) {
@@ -31,8 +43,17 @@ export const Profile = () => {
           onDialogChange={() => setSignUpDialog(false)}
           signUpInput={signUpInput}
           onChangeSignUpInput={(e) => setSignUpInput(e.target.value)}
-          onClickSubmitSignUp={() => setSignUpDialog(false)}
+          onClickSubmitSignUp={onClickSubmitSignUp}
         />
+      </main>
+    );
+  }
+
+  let profileContent = null;
+  if (isUserDataHydrate && userData !== null) {
+    profileContent = (
+      <main>
+        <div>{userData.name}</div>
       </main>
     );
   }
@@ -40,6 +61,7 @@ export const Profile = () => {
   return (
     <>
       <>{signUpContent}</>
+      <>{profileContent}</>
     </>
   );
 };

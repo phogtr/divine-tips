@@ -20,6 +20,7 @@ import { useLocalStorage } from "@/hooks/useLocalStorage";
 
 import type { ItemApiData } from "@/types/item.type";
 import type { EventApiData } from "@/types/event.type";
+import type { UserData } from "@/types/user.type";
 
 interface ItemContainerProps {
   itemApiData: ItemApiData[];
@@ -29,11 +30,18 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
   itemApiData,
 }) => {
   const {
+    data: userData,
+    setData: setUserData,
+    isHydrated: isUserDataHydrate,
+  } = useLocalStorage<UserData | null>("user", null);
+
+  const {
     data: isSignUp,
     setData: setIsSignUp,
     isHydrated: isSignUpHydrate,
   } = useLocalStorage<boolean>("sign-up", false);
 
+  ///////////////////////////////////////////////////////////////////////////
   const {
     data: isReadEvent,
     setData: setIsReadEvent,
@@ -56,11 +64,13 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
   );
   const [isToggleAll, setIsToggleAll] = useState(false);
 
+  ///////////////////////////////////////////////////////////////////////////
   const { isPending: isEventApiPending, data: eventApiData } = useQuery({
     queryKey: ["event"],
     queryFn: fetchEventData,
   });
 
+  ///////////////////////////////////////////////////////////////////////////
   const onClickToggleItem = (id: number) => {
     setRenderMap((prev) => ({
       ...prev,
@@ -80,6 +90,7 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
     });
   };
 
+  ///////////////////////////////////////////////////////////////////////////
   const closeSignUpDialog = () => {
     setSignUpDialog(false);
 
@@ -88,6 +99,17 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
     }
   };
 
+  const onClickSubmitSignUp = () => {
+    if (signUpInput !== "") {
+      setUserData({
+        name: signUpInput,
+        balance: 500,
+      });
+    }
+    setSignUpDialog(false);
+  };
+
+  ///////////////////////////////////////////////////////////////////////////
   const closeEventDialog = () => {
     setEventDialog(false);
 
@@ -96,11 +118,17 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
     }
   };
 
+  ///////////////////////////////////////////////////////////////////////////
   useEffect(() => {
-    if (isSignUpHydrate && !isSignUp) {
+    if (
+      isSignUpHydrate &&
+      isUserDataHydrate &&
+      userData === null &&
+      !isSignUp
+    ) {
       setSignUpDialog(true);
     }
-  }, [isSignUpHydrate]);
+  }, [isSignUpHydrate, isUserDataHydrate]);
 
   useEffect(() => {
     if (
@@ -155,7 +183,7 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
         onDialogChange={closeSignUpDialog}
         signUpInput={signUpInput}
         onChangeSignUpInput={(e) => setSignUpInput(e.target.value)}
-        onClickSubmitSignUp={() => setSignUpDialog(false)}
+        onClickSubmitSignUp={onClickSubmitSignUp}
       />
     </>
   );

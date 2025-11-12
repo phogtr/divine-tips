@@ -42,6 +42,8 @@ export const SignUpDialog: React.FC<SignUpDialogProps> = ({
             className="border border-white rounded w-full h-10 p-2 mb-5"
             value={signUpInput}
             onChange={onChangeSignUpInput}
+            name="username"
+            autoComplete="username"
           />
 
           <p className="text-sm">
