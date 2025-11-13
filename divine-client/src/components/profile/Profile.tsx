@@ -12,6 +12,7 @@ export const Profile = () => {
     data: userData,
     setData: setUserData,
     isHydrated: isUserDataHydrate,
+    clear: clearUserData,
   } = useLocalStorage<UserData | null>("user", null);
 
   const [signUpDialog, setSignUpDialog] = useState(false);
@@ -25,6 +26,10 @@ export const Profile = () => {
       });
     }
     setSignUpDialog(false);
+  };
+
+  const onClickDeleteProfile = () => {
+    clearUserData();
   };
 
   let signUpContent = null;
@@ -52,8 +57,60 @@ export const Profile = () => {
   let profileContent = null;
   if (isUserDataHydrate && userData !== null) {
     profileContent = (
-      <main>
-        <div>{userData.name}</div>
+      <main className="flex flex-col h-full w-3/4 m-auto">
+        <div className="mt-6 p-2 border border-white rounded-lg">
+          <div className="pt-6 flex items-center flex-col">
+            <p className="text-3xl font-bold">Profile</p>
+            <div className="mt-6 border border-gray-700 w-[97%] text-center" />
+          </div>
+
+          <div className="grid grid-cols-[1fr_2fr] py-2">
+            <div className="flex flex-col justify-center items-center border-r border-gray-700">
+              <input
+                type="text"
+                placeholder={userData.name}
+                className="mb-1 text-center hover:border border-gray-700 rounded-lg font-semibold"
+                value={userData.name}
+                onChange={() => {}}
+                name="username"
+                autoComplete="username"
+              />
+              <button
+                className="text-red-500 cursor-pointer hover:text-red-300"
+                onClick={onClickDeleteProfile}
+              >
+                Delete Profile
+              </button>
+            </div>
+
+            <div className="my-6 flex flex-col justify-center items-center">
+              <div className="text-4xl font-bold">${userData.balance}</div>
+
+              <div className="mt-2 grid grid-cols-3">
+                <div className="px-4 flex flex-col items-center border-r border-gray-400">
+                  <div className="font-semibold">0</div>
+                  <p>Unique Assets</p>
+                </div>
+                <div className="px-4 flex flex-col items-center border-r border-gray-400">
+                  <div className="font-semibold">0</div>
+                  <p>Total Assets</p>
+                </div>
+                <div className="px-4 flex flex-col items-center">
+                  <div className="text-emerald-300 font-semibold">
+                    ${userData.balance}
+                  </div>
+                  <p>Current Balance</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="mt-6 p-2 border border-white rounded-lg">
+          <div className="pt-6 flex items-center flex-col">
+            <p className="text-3xl font-bold">Assets</p>
+            <div className="mt-6 border border-gray-700 w-[97%] text-center" />
+          </div>
+        </div>
       </main>
     );
   }
