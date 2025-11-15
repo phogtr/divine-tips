@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 
+import { CircleCheck } from "lucide-react";
+
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { SignUpDialog } from "@/components/SignUpDialog";
 
@@ -18,6 +20,8 @@ export const Profile = () => {
   const [signUpDialog, setSignUpDialog] = useState(false);
   const [signUpInput, setSignUpInput] = useState("");
 
+  const [nameChange, setNameChange] = useState("");
+
   const onClickSubmitSignUp = () => {
     if (signUpInput !== "") {
       setUserData({
@@ -31,6 +35,12 @@ export const Profile = () => {
   const onClickDeleteProfile = () => {
     clearUserData();
   };
+
+  useEffect(() => {
+    if (isUserDataHydrate && userData !== null) {
+      setNameChange(userData.name);
+    }
+  }, [isUserDataHydrate]);
 
   let signUpContent = null;
   if (isUserDataHydrate && userData === null) {
@@ -66,15 +76,31 @@ export const Profile = () => {
 
           <div className="grid grid-cols-[1fr_2fr] py-2">
             <div className="flex flex-col justify-center items-center border-r border-gray-700">
-              <input
-                type="text"
-                placeholder={userData.name}
-                className="mb-1 text-center hover:border border-gray-700 rounded-lg font-semibold"
-                value={userData.name}
-                onChange={() => {}}
-                name="username"
-                autoComplete="username"
-              />
+              <div className="flex relative">
+                <input
+                  type="text"
+                  placeholder={userData.name}
+                  className="mb-1 px-2 text-center hover:border border-gray-700 rounded-lg font-semibold"
+                  value={nameChange}
+                  onChange={(e) => {
+                    setNameChange(e.target.value);
+                  }}
+                  name="username"
+                  autoComplete="username"
+                />
+                {nameChange !== "" && nameChange !== userData.name && (
+                  <CircleCheck
+                    className="absolute right-[-36px] mx-2 text-green-400 cursor-pointer"
+                    onClick={() =>
+                      setUserData({
+                        ...userData,
+                        name: nameChange,
+                      })
+                    }
+                  />
+                )}
+              </div>
+
               <button
                 className="text-red-500 cursor-pointer hover:text-red-300"
                 onClick={onClickDeleteProfile}
