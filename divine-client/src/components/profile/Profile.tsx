@@ -3,9 +3,18 @@
 import { useEffect, useState } from "react";
 
 import { CircleCheck } from "lucide-react";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+
+import { SignUpDialog } from "@/components/SignUpDialog";
 
 import { useLocalStorage } from "@/hooks/useLocalStorage";
-import { SignUpDialog } from "@/components/SignUpDialog";
 
 import type { UserData } from "@/types/user.type";
 
@@ -22,18 +31,17 @@ export const Profile = () => {
 
   const [nameChange, setNameChange] = useState("");
 
+  const [deleteDialog, setDeleteDialog] = useState(false);
+
   const onClickSubmitSignUp = () => {
     if (signUpInput !== "") {
       setUserData({
         name: signUpInput,
         balance: 500,
       });
+      setNameChange(signUpInput);
     }
     setSignUpDialog(false);
-  };
-
-  const onClickDeleteProfile = () => {
-    clearUserData();
   };
 
   useEffect(() => {
@@ -48,7 +56,10 @@ export const Profile = () => {
       <main className="flex h-full justify-center items-center">
         <button
           className="border border-white rounded-[5px] py-3 px-4 cursor-pointer"
-          onClick={() => setSignUpDialog(true)}
+          onClick={() => {
+            setSignUpDialog(true);
+            setDeleteDialog(false);
+          }}
         >
           Create Profile
         </button>
@@ -102,8 +113,8 @@ export const Profile = () => {
               </div>
 
               <button
-                className="text-red-500 cursor-pointer hover:text-red-300"
-                onClick={onClickDeleteProfile}
+                className="text-red-500 hover:text-red-300 cursor-pointer"
+                onClick={() => setDeleteDialog(true)}
               >
                 Delete Profile
               </button>
@@ -137,6 +148,35 @@ export const Profile = () => {
             <div className="mt-6 border border-gray-700 w-[97%] text-center" />
           </div>
         </div>
+
+        <Dialog open={deleteDialog} onOpenChange={setDeleteDialog}>
+          <DialogTrigger />
+          <DialogContent>
+            <VisuallyHidden>
+              <DialogHeader>
+                <DialogTitle>Delete Profile</DialogTitle>
+              </DialogHeader>
+            </VisuallyHidden>
+
+            <p className="text-center">
+              Are you sure you want to delete this profile?
+            </p>
+            <div className="flex justify-center gap-4">
+              <button
+                className="w-1/2 cursor-pointer"
+                onClick={() => clearUserData()}
+              >
+                Delete
+              </button>
+              <button
+                className="w-1/2 cursor-pointer"
+                onClick={() => setDeleteDialog(false)}
+              >
+                Cancel
+              </button>
+            </div>
+          </DialogContent>
+        </Dialog>
       </main>
     );
   }
