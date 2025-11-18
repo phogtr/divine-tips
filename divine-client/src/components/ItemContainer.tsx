@@ -52,6 +52,7 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
   const [signUpInput, setSignUpInput] = useState("");
 
   const [eventDialog, setEventDialog] = useState(false);
+  const [startFetchEvent, setStartFetchEvent] = useState(false);
 
   const [renderMap, setRenderMap] = useState<Record<number, boolean>>(() =>
     itemApiData.reduce(
@@ -68,9 +69,11 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
   const { isPending: isEventApiPending, data: eventApiData } = useQuery({
     queryKey: ["event"],
     queryFn: fetchEventData,
+    enabled: startFetchEvent === true,
   });
 
   ///////////////////////////////////////////////////////////////////////////
+  // item
   const onClickToggleItem = (id: number) => {
     setRenderMap((prev) => ({
       ...prev,
@@ -91,12 +94,15 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
   };
 
   ///////////////////////////////////////////////////////////////////////////
+  // sign up
   const closeSignUpDialog = () => {
     setSignUpDialog(false);
 
     if (!isSignUp) {
       setIsSignUp(true);
     }
+
+    setStartFetchEvent(true);
   };
 
   const onClickSubmitSignUp = () => {
@@ -106,19 +112,26 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
         balance: 500,
       });
     }
-    setSignUpDialog(false);
+
+    closeSignUpDialog();
   };
 
   ///////////////////////////////////////////////////////////////////////////
+  // event
   const closeEventDialog = () => {
     setEventDialog(false);
 
     if (!isReadEvent) {
       setIsReadEvent(true);
     }
+
+    setStartFetchEvent(false);
   };
 
   ///////////////////////////////////////////////////////////////////////////
+
+  ///////////////////////////////////////////////////////////////////////////
+  // useEffect
   useEffect(() => {
     if (
       isSignUpHydrate &&
@@ -149,6 +162,7 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
     }
   }, [renderMap]);
 
+  ///////////////////////////////////////////////////////////////////////////
   return (
     <>
       <SideItems
