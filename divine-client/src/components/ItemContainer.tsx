@@ -42,12 +42,6 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
   } = useLocalStorage<boolean>("sign-up", false);
 
   ///////////////////////////////////////////////////////////////////////////
-  const {
-    data: isReadEvent,
-    setData: setIsReadEvent,
-    isHydrated: isReadEventHydrate,
-  } = useLocalStorage<boolean>("event-read", false);
-
   const [signUpDialog, setSignUpDialog] = useState(false);
   const [signUpInput, setSignUpInput] = useState("");
 
@@ -66,7 +60,7 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
   const [isToggleAll, setIsToggleAll] = useState(false);
 
   ///////////////////////////////////////////////////////////////////////////
-  const { isPending: isEventApiPending, data: eventApiData } = useQuery({
+  const { data: eventApiData } = useQuery({
     queryKey: ["event"],
     queryFn: fetchEventData,
     enabled: startFetchEvent === true,
@@ -97,10 +91,7 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
   // sign up
   const closeSignUpDialog = () => {
     setSignUpDialog(false);
-
-    if (!isSignUp) {
-      setIsSignUp(true);
-    }
+    setIsSignUp(true);
 
     setStartFetchEvent(true);
   };
@@ -120,15 +111,13 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
   // event
   const closeEventDialog = () => {
     setEventDialog(false);
-
-    if (!isReadEvent) {
-      setIsReadEvent(true);
-    }
-
     setStartFetchEvent(false);
   };
 
   ///////////////////////////////////////////////////////////////////////////
+  const onClickEndDay = () => {
+    setStartFetchEvent(true);
+  };
 
   ///////////////////////////////////////////////////////////////////////////
   // useEffect
@@ -144,15 +133,10 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
   }, [isSignUpHydrate, isUserDataHydrate]);
 
   useEffect(() => {
-    if (
-      isReadEventHydrate &&
-      !isReadEvent &&
-      !signUpDialog &&
-      !isEventApiPending
-    ) {
+    if (startFetchEvent) {
       setEventDialog(true);
     }
-  }, [signUpDialog, isEventApiPending, isReadEventHydrate]);
+  }, [startFetchEvent]);
 
   useEffect(() => {
     if (Object.values(renderMap).every((v) => v)) {
@@ -163,6 +147,26 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
   }, [renderMap]);
 
   ///////////////////////////////////////////////////////////////////////////
+  let eventContent = null;
+  if (eventApiData) {
+    eventContent = (
+      <Dialog open={eventDialog} onOpenChange={closeEventDialog}>
+        <DialogTrigger />
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle className="text-center">Tomorrow</DialogTitle>
+          </DialogHeader>
+
+          <div>
+            {eventApiData[0].data.map((d) => (
+              <EventContent key={d.type} data={d} isTextStream={true} />
+            ))}
+          </div>
+        </DialogContent>
+      </Dialog>
+    );
+  }
+
   return (
     <>
       <SideItems
@@ -174,23 +178,18 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
       />
 
       <main className="home-main-w overflow-auto">
+        <div className="fixed right-4 bottom-2">
+          <button
+            className="border border-white rounded-[5px] py-1 px-2 cursor-pointer"
+            onClick={onClickEndDay}
+          >
+            End day
+          </button>
+        </div>
         <ItemCard itemApiData={itemApiData} renderMap={renderMap} />
       </main>
 
-      <Dialog open={eventDialog} onOpenChange={closeEventDialog}>
-        <DialogTrigger />
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle className="text-center">Day ...</DialogTitle>
-          </DialogHeader>
-
-          <div>
-            {eventApiData?.[0].data?.map((d) => (
-              <EventContent key={d.type} data={d} isTextStream={true} />
-            ))}
-          </div>
-        </DialogContent>
-      </Dialog>
+      {eventContent}
 
       <SignUpDialog
         isOpenDialog={signUpDialog}
@@ -203,6 +202,7 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
   );
 };
 
+///////////////////////////////////////////////////////////////////////////
 const fetchEventData = async (): Promise<EventApiData[]> => {
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/event`);
   if (!res.ok) throw new Error("failed to fetch event data");
