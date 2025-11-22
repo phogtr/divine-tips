@@ -19,7 +19,7 @@ import { EventContent } from "@/components/event/EventContent";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 
 import type { ItemApiData } from "@/types/item.type";
-import type { EventApiData } from "@/types/event.type";
+import type { EventApiData, EventItem } from "@/types/event.type";
 import type { UserData } from "@/types/user.type";
 
 interface ItemContainerProps {
@@ -46,7 +46,10 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
   const [signUpInput, setSignUpInput] = useState("");
 
   const [eventDialog, setEventDialog] = useState(false);
-  const [startFetchEvent, setStartFetchEvent] = useState(false);
+  const [startInitialEvent, setStartInitialEvent] = useState(false);
+
+  const [endingDay, setEndingDay] = useState(0); // to invalidate query-cache
+  const [startFetchEndDay, setStartFetchEndDay] = useState(false);
 
   const [renderMap, setRenderMap] = useState<Record<number, boolean>>(() =>
     itemApiData.reduce(
@@ -60,10 +63,17 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
   const [isToggleAll, setIsToggleAll] = useState(false);
 
   ///////////////////////////////////////////////////////////////////////////
-  const { data: eventApiData } = useQuery({
-    queryKey: ["event"],
+  const { data: initEventData } = useQuery({
+    queryKey: ["init-event"],
     queryFn: fetchEventData,
-    enabled: startFetchEvent === true,
+    enabled: startInitialEvent === true,
+    select: (d) => d[0].data,
+  });
+
+  const { data: nextDayEventData } = useQuery({
+    queryKey: ["end-day", endingDay],
+    queryFn: endDayApi,
+    enabled: startFetchEndDay === true,
   });
 
   ///////////////////////////////////////////////////////////////////////////
@@ -93,7 +103,7 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
     setSignUpDialog(false);
     setIsSignUp(true);
 
-    setStartFetchEvent(true);
+    setStartInitialEvent(true);
   };
 
   const onClickSubmitSignUp = () => {
@@ -111,12 +121,14 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
   // event
   const closeEventDialog = () => {
     setEventDialog(false);
-    setStartFetchEvent(false);
+    setStartInitialEvent(false);
+    setStartFetchEndDay(false);
   };
 
   ///////////////////////////////////////////////////////////////////////////
   const onClickEndDay = () => {
-    setStartFetchEvent(true);
+    setEndingDay((prev) => prev + 1);
+    setStartFetchEndDay(true);
   };
 
   ///////////////////////////////////////////////////////////////////////////
@@ -133,10 +145,10 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
   }, [isSignUpHydrate, isUserDataHydrate]);
 
   useEffect(() => {
-    if (startFetchEvent) {
+    if (startInitialEvent || startFetchEndDay) {
       setEventDialog(true);
     }
-  }, [startFetchEvent]);
+  }, [startInitialEvent, startFetchEndDay]);
 
   useEffect(() => {
     if (Object.values(renderMap).every((v) => v)) {
@@ -147,8 +159,16 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
   }, [renderMap]);
 
   ///////////////////////////////////////////////////////////////////////////
+
+  let eventData = null;
+  if (nextDayEventData) {
+    eventData = nextDayEventData;
+  } else if (initEventData) {
+    eventData = initEventData;
+  }
+
   let eventContent = null;
-  if (eventApiData) {
+  if (eventData) {
     eventContent = (
       <Dialog open={eventDialog} onOpenChange={closeEventDialog}>
         <DialogTrigger />
@@ -158,8 +178,13 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
           </DialogHeader>
 
           <div>
-            {eventApiData[0].data.map((d) => (
-              <EventContent key={d.type} data={d} isTextStream={true} />
+            {eventData.map((d) => (
+              <EventContent
+                key={d.type}
+                data={d}
+                isTextStream={true}
+                maxWidth="35%"
+              />
             ))}
           </div>
         </DialogContent>
@@ -206,6 +231,18 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
 const fetchEventData = async (): Promise<EventApiData[]> => {
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/event`);
   if (!res.ok) throw new Error("failed to fetch event data");
+
+  return res.json();
+};
+
+const endDayApi = async (): Promise<EventItem[]> => {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/day/advance`,
+    {
+      method: "POST",
+    }
+  );
+  if (!res.ok) throw new Error("failed to end day");
 
   return res.json();
 };

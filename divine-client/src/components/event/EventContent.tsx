@@ -5,11 +5,13 @@ import type { EventItem } from "@/types/event.type";
 interface EventContentProps {
   data: EventItem;
   isTextStream?: boolean;
+  maxWidth?: string;
 }
 
 export const EventContent: React.FC<EventContentProps> = ({
   data,
   isTextStream = false,
+  maxWidth = "25%",
 }) => {
   const { desc, name, type } = data;
 
@@ -23,7 +25,12 @@ export const EventContent: React.FC<EventContentProps> = ({
   }
 
   return (
-    <div className="mt-4 pt-1.5 max-w-1/4 max-sm:max-w-[55%] border-t border-gray-700">
+    <div
+      className="mt-4 pt-1.5 max-sm:max-w-[55%] border-t border-gray-700"
+      style={{
+        maxWidth: maxWidth,
+      }}
+    >
       <h3 className={`${textColor} pb-1.5`}>{descElem}</h3>
 
       <ul>
