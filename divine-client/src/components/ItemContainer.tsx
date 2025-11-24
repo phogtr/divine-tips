@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 import {
   Dialog,
@@ -29,6 +29,8 @@ interface ItemContainerProps {
 export const ItemContainer: React.FC<ItemContainerProps> = ({
   itemApiData,
 }) => {
+  const queryClient = useQueryClient();
+
   const {
     data: userData,
     setData: setUserData,
@@ -127,6 +129,10 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
 
   ///////////////////////////////////////////////////////////////////////////
   const onClickEndDay = () => {
+    // ensure initEventData is null
+    // else eventData below might flash-render this data, then render next-day data
+    queryClient.removeQueries({ queryKey: ["init-event"] });
+
     setEndingDay((prev) => prev + 1);
     setStartFetchEndDay(true);
   };

@@ -26,6 +26,8 @@ export const Profile = () => {
     clear: clearUserData,
   } = useLocalStorage<UserData | null>("user", null);
 
+  const { setData: setIsSignUp } = useLocalStorage<boolean>("sign-up", false);
+
   const [signUpDialog, setSignUpDialog] = useState(false);
   const [signUpInput, setSignUpInput] = useState("");
 
@@ -164,7 +166,10 @@ export const Profile = () => {
             <div className="flex justify-center gap-4">
               <button
                 className="w-1/2 cursor-pointer"
-                onClick={() => clearUserData()}
+                onClick={() => {
+                  clearUserData();
+                  setIsSignUp(false);
+                }}
               >
                 Delete
               </button>
