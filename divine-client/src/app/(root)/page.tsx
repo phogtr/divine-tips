@@ -2,19 +2,21 @@ import { Suspense } from "react";
 
 import { ItemContainer } from "@/components/ItemContainer";
 
+import { ItemApiData } from "@/types/item.type";
+
 export default async function Home() {
-  let itemApiData = [];
+  let initItemData: ItemApiData[] = [];
   try {
     const res = await fetch(`${process.env.API_URL}/v1/item`);
-    itemApiData = await res.json();
+    initItemData = await res.json();
   } catch (error) {
-    itemApiData = [];
+    initItemData = [];
   }
 
   return (
     <div className="page-h flex">
       <Suspense fallback={<h1>Loading...</h1>}>
-        <ItemContainer itemApiData={itemApiData} />
+        <ItemContainer initItemData={initItemData} />
       </Suspense>
     </div>
   );

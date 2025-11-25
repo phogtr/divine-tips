@@ -1,7 +1,7 @@
 import { ItemApiData } from "@/types/item.type";
 
 interface SideItemsProps {
-  itemApiData: ItemApiData[];
+  items: ItemApiData[];
   renderMap: Record<number, boolean>;
   onClickToggleItem: (id: number) => void;
   isToggleAll: boolean;
@@ -9,7 +9,7 @@ interface SideItemsProps {
 }
 
 export const SideItems: React.FC<SideItemsProps> = ({
-  itemApiData,
+  items,
   renderMap,
   onClickToggleItem,
   isToggleAll,
@@ -34,7 +34,7 @@ export const SideItems: React.FC<SideItemsProps> = ({
           }}
         />
 
-        {itemApiData.map(({ id, name }) => (
+        {items.map(({ id, name }) => (
           <button
             className={`w-17 h-16 border rounded my-2 text-center cursor-pointer ${
               renderMap[id] ? "border-white" : "border-gray-600"

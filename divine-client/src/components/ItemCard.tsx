@@ -1,18 +1,15 @@
 import { ItemApiData } from "@/types/item.type";
 
 interface ItemCardProps {
-  itemApiData: ItemApiData[];
+  items: ItemApiData[];
   renderMap: Record<number, boolean>;
 }
 
-export const ItemCard: React.FC<ItemCardProps> = ({
-  itemApiData,
-  renderMap,
-}) => {
+export const ItemCard: React.FC<ItemCardProps> = ({ items, renderMap }) => {
   return (
     <div className="m-6 flex justify-center">
       <div className="flex flex-col gap-4 w-4xl">
-        {itemApiData.map((i) =>
+        {items.map((i) =>
           renderMap[i.id] ? <ItemContent key={i.id} data={i} /> : null
         )}
       </div>

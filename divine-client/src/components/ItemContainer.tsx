@@ -23,11 +23,11 @@ import type { EventApiData, EventItem } from "@/types/event.type";
 import type { UserData } from "@/types/user.type";
 
 interface ItemContainerProps {
-  itemApiData: ItemApiData[];
+  initItemData: ItemApiData[];
 }
 
 export const ItemContainer: React.FC<ItemContainerProps> = ({
-  itemApiData,
+  initItemData,
 }) => {
   const queryClient = useQueryClient();
 
@@ -53,8 +53,11 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
   const [endingDay, setEndingDay] = useState(0); // to invalidate query-cache
   const [startFetchEndDay, setStartFetchEndDay] = useState(false);
 
+  const [startFetchItem, setStartFetchItem] = useState(false);
+  const [items, setItems] = useState(initItemData);
+
   const [renderMap, setRenderMap] = useState<Record<number, boolean>>(() =>
-    itemApiData.reduce(
+    initItemData.reduce(
       (acc, val) => ({
         ...acc,
         [val.id]: false,
@@ -76,6 +79,12 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
     queryKey: ["end-day", endingDay],
     queryFn: endDayApi,
     enabled: startFetchEndDay === true,
+  });
+
+  const { data: itemData } = useQuery({
+    queryKey: ["items", endingDay],
+    queryFn: getItemsApi,
+    enabled: startFetchItem === true,
   });
 
   ///////////////////////////////////////////////////////////////////////////
@@ -125,9 +134,11 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
     setEventDialog(false);
     setStartInitialEvent(false);
     setStartFetchEndDay(false);
+    setStartFetchItem(false);
   };
 
   ///////////////////////////////////////////////////////////////////////////
+  // end day
   const onClickEndDay = () => {
     // ensure initEventData is null
     // else eventData below might flash-render this data, then render next-day data
@@ -135,6 +146,9 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
 
     setEndingDay((prev) => prev + 1);
     setStartFetchEndDay(true);
+    setTimeout(() => {
+      setStartFetchItem(true);
+    }, 700);
   };
 
   ///////////////////////////////////////////////////////////////////////////
@@ -155,6 +169,12 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
       setEventDialog(true);
     }
   }, [startInitialEvent, startFetchEndDay]);
+
+  useEffect(() => {
+    if (itemData) {
+      setItems(itemData);
+    }
+  }, [itemData]);
 
   useEffect(() => {
     if (Object.values(renderMap).every((v) => v)) {
@@ -201,7 +221,7 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
   return (
     <>
       <SideItems
-        itemApiData={itemApiData}
+        items={initItemData}
         renderMap={renderMap}
         onClickToggleItem={onClickToggleItem}
         isToggleAll={isToggleAll}
@@ -217,7 +237,7 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
             End day
           </button>
         </div>
-        <ItemCard itemApiData={itemApiData} renderMap={renderMap} />
+        <ItemCard items={items} renderMap={renderMap} />
       </main>
 
       {eventContent}
@@ -249,6 +269,13 @@ const endDayApi = async (): Promise<EventItem[]> => {
     }
   );
   if (!res.ok) throw new Error("failed to end day");
+
+  return res.json();
+};
+
+export const getItemsApi = async (): Promise<ItemApiData[]> => {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/item`);
+  if (!res.ok) throw new Error("failed to get items");
 
   return res.json();
 };
