@@ -23,12 +23,10 @@ import type { EventApiData, EventItem } from "@/types/event.type";
 import type { UserData } from "@/types/user.type";
 
 interface ItemContainerProps {
-  initItemData: ItemApiData[];
+  // initItemData: ItemApiData[];
 }
 
-export const ItemContainer: React.FC<ItemContainerProps> = ({
-  initItemData,
-}) => {
+export const ItemContainer: React.FC<ItemContainerProps> = ({}) => {
   const queryClient = useQueryClient();
 
   const {
@@ -53,17 +51,27 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
   const [endingDay, setEndingDay] = useState(0); // to invalidate query-cache
   const [startFetchEndDay, setStartFetchEndDay] = useState(false);
 
-  const [startFetchItem, setStartFetchItem] = useState(false);
-  const [items, setItems] = useState(initItemData);
+  // const [startFetchItem, setStartFetchItem] = useState(false);
+  const [endDayItem, setEndItem] = useState(0); // invalidate item query-cache
+
+  const { data: itemData } = useQuery({
+    queryKey: ["items", endDayItem],
+    queryFn: getItemsApi,
+    // enabled: startFetchItem === true,
+  });
+
+  const [items, setItems] = useState(itemData);
 
   const [renderMap, setRenderMap] = useState<Record<number, boolean>>(() =>
-    initItemData.reduce(
-      (acc, val) => ({
-        ...acc,
-        [val.id]: false,
-      }),
-      {}
-    )
+    itemData
+      ? itemData.reduce(
+          (acc, val) => ({
+            ...acc,
+            [val.id]: false,
+          }),
+          {}
+        )
+      : {}
   );
   const [isToggleAll, setIsToggleAll] = useState(false);
 
@@ -81,11 +89,11 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
     enabled: startFetchEndDay === true,
   });
 
-  const { data: itemData } = useQuery({
-    queryKey: ["items", endingDay],
-    queryFn: getItemsApi,
-    enabled: startFetchItem === true,
-  });
+  // const { data: itemData } = useQuery({
+  //   queryKey: ["items", endingDay],
+  //   queryFn: getItemsApi,
+  //   enabled: startFetchItem === true,
+  // });
 
   ///////////////////////////////////////////////////////////////////////////
   // item
@@ -134,7 +142,7 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
     setEventDialog(false);
     setStartInitialEvent(false);
     setStartFetchEndDay(false);
-    setStartFetchItem(false);
+    // setStartFetchItem(false);
   };
 
   ///////////////////////////////////////////////////////////////////////////
@@ -147,8 +155,12 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
     setEndingDay((prev) => prev + 1);
     setStartFetchEndDay(true);
     setTimeout(() => {
-      setStartFetchItem(true);
-    }, 700);
+      setEndItem((prev) => prev + 1);
+    }, 1000);
+
+    // setTimeout(() => {
+    //   setStartFetchItem(true);
+    // }, 1000);
   };
 
   ///////////////////////////////////////////////////////////////////////////
@@ -177,10 +189,12 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
   }, [itemData]);
 
   useEffect(() => {
-    if (Object.values(renderMap).every((v) => v)) {
-      setIsToggleAll(true);
-    } else {
-      setIsToggleAll(false);
+    if (Object.keys(renderMap).length) {
+      if (Object.values(renderMap).every((v) => v)) {
+        setIsToggleAll(true);
+      } else {
+        setIsToggleAll(false);
+      }
     }
   }, [renderMap]);
 
@@ -221,8 +235,8 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
   return (
     <>
       <SideItems
-        items={initItemData}
-        renderMap={renderMap}
+        items={itemData ?? []}
+        renderMap={renderMap ?? {}}
         onClickToggleItem={onClickToggleItem}
         isToggleAll={isToggleAll}
         onClickToggleAll={onClickToggleAll}
@@ -237,7 +251,7 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
             End day
           </button>
         </div>
-        <ItemCard items={items} renderMap={renderMap} />
+        <ItemCard items={items ?? []} renderMap={renderMap ?? {}} />
       </main>
 
       {eventContent}
