@@ -40,6 +40,7 @@ export const Profile = () => {
       setUserData({
         name: signUpInput,
         balance: 500,
+        assets: null,
       });
       setNameChange(signUpInput);
     }

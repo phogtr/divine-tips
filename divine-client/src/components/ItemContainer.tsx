@@ -122,6 +122,7 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
       setUserData({
         name: signUpInput,
         balance: 500,
+        assets: null,
       });
     }
 

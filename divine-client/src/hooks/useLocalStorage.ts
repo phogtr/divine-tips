@@ -1,34 +1,56 @@
+// https://usehooks-ts.com/react-hook/use-local-storage
+// modified of the original
+
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+
+import type { Dispatch, SetStateAction } from "react";
+
+import { useEventCallback } from "@/hooks/lib/useEventCallback";
+import { useEventListener } from "@/hooks/lib/useEventListener";
+
+declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
+  interface WindowEventMap {
+    "local-storage": CustomEvent;
+  }
+}
 
 export const useLocalStorage = <T>(
   key: string,
   initialValue: T
 ): {
   data: T;
-  setData: (newValue: T) => void;
+  setData: Dispatch<SetStateAction<T>>;
   isHydrated: boolean;
   clear: () => void;
 } => {
   const [data, setData] = useState(initialValue);
   const [isHydrated, setIsHydrated] = useState(false);
 
-  const setDataWrapper = useCallback<(newValue: T) => void>((newValue) => {
-    try {
-      window.localStorage.setItem(key, JSON.stringify(newValue));
+  const setDataWrapper: Dispatch<SetStateAction<T>> = useEventCallback(
+    (newValue) => {
+      try {
+        window.localStorage.setItem(key, JSON.stringify(newValue));
 
-      setData(newValue);
-    } catch (error) {
-      console.error(`error setting localStorage key - ${key}:`, error);
+        setData(newValue);
+
+        // We dispatch a custom event so every similar useLocalStorage hook is notified
+        window.dispatchEvent(new StorageEvent("local-storage", { key }));
+      } catch (error) {
+        console.error(`error setting localStorage key - ${key}:`, error);
+      }
     }
-  }, []);
+  );
 
-  const clear = useCallback(() => {
+  const clear = useEventCallback(() => {
     window.localStorage.removeItem(key);
 
     setData(initialValue);
-  }, []);
+
+    window.dispatchEvent(new StorageEvent("local-storage", { key }));
+  });
 
   const parseJson = useCallback<(value: string) => T>(
     (value) => {
@@ -60,6 +82,23 @@ export const useLocalStorage = <T>(
     setData(read());
     setIsHydrated(true);
   }, [key]);
+
+  const handleStorageChange = useCallback(
+    (event: StorageEvent | CustomEvent) => {
+      if ((event as StorageEvent).key && (event as StorageEvent).key !== key) {
+        return;
+      }
+      setData(read());
+    },
+    [key, read]
+  );
+
+  // this only works for other documents, not the current one
+  useEventListener("storage", handleStorageChange);
+
+  // this is a custom event, triggered in writeValueToLocalStorage
+  // See: useLocalStorage()
+  useEventListener("local-storage", handleStorageChange);
 
   return {
     data,

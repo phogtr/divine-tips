@@ -1,3 +1,5 @@
+import { BuySellButton } from "@/components/item/BuySellButton";
+
 import { ItemApiData } from "@/types/item.type";
 
 interface ItemCardProps {
@@ -71,37 +73,7 @@ const ItemContent: React.FC<ItemContentProps> = ({ data }) => {
           </div>
         )}
 
-        <div className="mt-6 flex w-full justify-around gap-4">
-          <div className="flex items-center text-emerald-300">
-            <button className="w-[18px] border border-emerald-300 cursor-pointer invisible">
-              {"-"}
-            </button>
-            <button
-              className="p-2 border border-emerald-300 cursor-pointer text-lg"
-              onClick={() => {}}
-            >
-              BUY 2
-            </button>
-            <button className="w-[18px] border border-emerald-300 cursor-pointer invisible">
-              {"+"}
-            </button>
-          </div>
-
-          <div className="flex items-center text-red-300">
-            <button className="w-[18px] border border-red-300 cursor-pointer invisible">
-              {"-"}
-            </button>
-            <button
-              className="p-2 border text-red-300 cursor-pointer text-lg"
-              onClick={() => {}}
-            >
-              SELL 2
-            </button>
-            <button className="w-[18px] border border-red-300 cursor-pointer invisible">
-              {"+"}
-            </button>
-          </div>
-        </div>
+        <BuySellButton itemName={name} />
       </div>
     </>
   );
