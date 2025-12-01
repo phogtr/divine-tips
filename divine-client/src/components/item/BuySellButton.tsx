@@ -39,6 +39,33 @@ export const BuySellButton: React.FC<BuySellButtonProps> = ({ itemName }) => {
     }
   };
 
+  const onClickSell = () => {
+    if (isUserDataHydrate && userData) {
+      let newCount = buyCount;
+      const curr = userData.assets?.[itemName];
+      if (curr) {
+        newCount = curr - buyCount;
+
+        if (newCount === 0) {
+          const newAssets = { ...userData.assets };
+          delete newAssets[itemName];
+          setUserData({
+            ...userData,
+            assets: newAssets,
+          });
+        } else {
+          setUserData({
+            ...userData,
+            assets: {
+              ...userData.assets,
+              [itemName]: newCount,
+            },
+          });
+        }
+      }
+    }
+  };
+
   let content = null;
   if (isUserDataHydrate && userData !== null) {
     content = (
@@ -49,7 +76,7 @@ export const BuySellButton: React.FC<BuySellButtonProps> = ({ itemName }) => {
           </button>
           <button
             className="p-2 border border-emerald-300 cursor-pointer text-lg"
-            onClick={() => onClickBuy()}
+            onClick={onClickBuy}
           >
             BUY {buyCount > 1 && buyCount}
           </button>
@@ -64,7 +91,7 @@ export const BuySellButton: React.FC<BuySellButtonProps> = ({ itemName }) => {
           </button>
           <button
             className="p-2 border text-red-300 cursor-pointer text-lg"
-            onClick={() => {}}
+            onClick={onClickSell}
           >
             SELL {sellCount > 1 && sellCount}
           </button>
