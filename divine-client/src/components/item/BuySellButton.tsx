@@ -70,8 +70,8 @@ export const BuySellButton: React.FC<BuySellButtonProps> = ({ itemName }) => {
   if (isUserDataHydrate && userData !== null) {
     content = (
       <div className="mt-6 flex w-full justify-around gap-4">
-        <div className="flex items-center text-emerald-300">
-          <button className="w-[18px] border border-emerald-300 cursor-pointer invisible">
+        <div className="group flex items-center text-emerald-300">
+          <button className="w-[18px] border border-emerald-300 cursor-pointer invisible group-has-[:hover]:visible">
             {"-"}
           </button>
           <button
@@ -80,13 +80,13 @@ export const BuySellButton: React.FC<BuySellButtonProps> = ({ itemName }) => {
           >
             BUY {buyCount > 1 && buyCount}
           </button>
-          <button className="w-[18px] border border-emerald-300 cursor-pointer invisible">
+          <button className="w-[18px] border border-emerald-300 cursor-pointer invisible group-has-[:hover]:visible">
             {"+"}
           </button>
         </div>
 
-        <div className="flex items-center text-red-300">
-          <button className="w-[18px] border border-red-300 cursor-pointer invisible">
+        <div className="group flex items-center text-red-300">
+          <button className="w-[18px] border border-red-300 cursor-pointer invisible group-has-[:hover]:visible">
             {"-"}
           </button>
           <button
@@ -95,7 +95,7 @@ export const BuySellButton: React.FC<BuySellButtonProps> = ({ itemName }) => {
           >
             SELL {sellCount > 1 && sellCount}
           </button>
-          <button className="w-[18px] border border-red-300 cursor-pointer invisible">
+          <button className="w-[18px] border border-red-300 cursor-pointer invisible group-has-[:hover]:visible">
             {"+"}
           </button>
         </div>
