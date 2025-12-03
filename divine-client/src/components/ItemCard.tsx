@@ -32,7 +32,7 @@ const ItemContent: React.FC<ItemContentProps> = ({ data }) => {
     <>
       <div
         key={id}
-        className="w-64 px-2 pt-2 pb-4 flex flex-col items-center border border-white rounded-sm"
+        className="w-78 px-2 pt-2 pb-4 flex flex-col items-center border border-white rounded-sm"
       >
         <div className="p-2 w-full border-b border-gray-700">
           <span className="float-start">3</span>
@@ -51,7 +51,7 @@ const ItemContent: React.FC<ItemContentProps> = ({ data }) => {
             <div>-</div>
           </div>
         ) : (
-          <div className="grid grid-cols-2">
+          <div className="px-4 grid grid-cols-2 w-full">
             <div>
               <div className="flex items-center gap-2">
                 <div className={`${textLabel}`}>NOW</div>
