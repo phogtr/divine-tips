@@ -1,4 +1,5 @@
 import { BuySellButton } from "@/components/item/BuySellButton";
+import { OwnedItemCount } from "./item/OwnedItemCount";
 
 import { ItemApiData } from "@/types/item.type";
 
@@ -34,8 +35,9 @@ const ItemContent: React.FC<ItemContentProps> = ({ data }) => {
         key={id}
         className="w-78 px-2 pt-2 pb-4 flex flex-col items-center border border-white rounded-sm"
       >
-        <div className="p-2 w-full border-b border-gray-700">
-          <span className="float-start">3</span>
+        <div className="relative p-2 w-full border-b border-gray-700">
+          <OwnedItemCount name={name} />
+
           <div className="flex justify-center items-center">
             <div className="w-17 h-16 border rounded border-white"></div>
           </div>
