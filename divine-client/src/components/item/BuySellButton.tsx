@@ -53,6 +53,8 @@ export const BuySellButton: React.FC<BuySellButtonProps> = ({ itemName }) => {
             ...userData,
             assets: newAssets,
           });
+
+          setSellCount(1);
         } else {
           setUserData({
             ...userData,
@@ -61,6 +63,10 @@ export const BuySellButton: React.FC<BuySellButtonProps> = ({ itemName }) => {
               [itemName]: newCount,
             },
           });
+
+          if (newCount < sellCount) {
+            setSellCount(newCount);
+          }
         }
       }
     }
@@ -75,9 +81,7 @@ export const BuySellButton: React.FC<BuySellButtonProps> = ({ itemName }) => {
         break;
 
       case "sell":
-        if (sellCount <= 9) {
-          setSellCount((prev) => prev + 1);
-        }
+        setSellCount((prev) => prev + 1);
         break;
 
       default:
@@ -103,6 +107,26 @@ export const BuySellButton: React.FC<BuySellButtonProps> = ({ itemName }) => {
         return;
     }
   };
+
+  let isSellDecHidden = true;
+  if (
+    isUserDataHydrate &&
+    userData &&
+    userData.assets?.[itemName] &&
+    sellCount > 1
+  ) {
+    isSellDecHidden = false;
+  }
+
+  let isSellIncHidden = true;
+  if (
+    isUserDataHydrate &&
+    userData &&
+    userData.assets?.[itemName] &&
+    sellCount < userData.assets[itemName]
+  ) {
+    isSellIncHidden = false;
+  }
 
   let content = null;
   if (isUserDataHydrate && userData !== null) {
@@ -133,6 +157,7 @@ export const BuySellButton: React.FC<BuySellButtonProps> = ({ itemName }) => {
           <button
             className="w-[22px] border border-red-300 cursor-pointer invisible group-has-[:hover]:visible"
             onClick={() => onClickDecrement("sell")}
+            style={isSellDecHidden ? { visibility: "hidden" } : {}}
           >
             {"-"}
           </button>
@@ -145,6 +170,13 @@ export const BuySellButton: React.FC<BuySellButtonProps> = ({ itemName }) => {
           <button
             className="w-[22px] border border-red-300 cursor-pointer invisible group-has-[:hover]:visible"
             onClick={() => onClickIncrement("sell")}
+            style={
+              isSellIncHidden
+                ? {
+                    visibility: "hidden",
+                  }
+                : {}
+            }
           >
             {"+"}
           </button>
