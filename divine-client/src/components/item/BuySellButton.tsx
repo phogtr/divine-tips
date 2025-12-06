@@ -75,9 +75,7 @@ export const BuySellButton: React.FC<BuySellButtonProps> = ({ itemName }) => {
   const onClickIncrement = (type: "buy" | "sell") => {
     switch (type) {
       case "buy":
-        if (buyCount <= 9) {
-          setBuyCount((prev) => prev + 1);
-        }
+        setBuyCount((prev) => prev + 1);
         break;
 
       case "sell":
@@ -136,6 +134,7 @@ export const BuySellButton: React.FC<BuySellButtonProps> = ({ itemName }) => {
           <button
             className="w-[22px] border border-emerald-300 cursor-pointer invisible group-has-[:hover]:visible"
             onClick={() => onClickDecrement("buy")}
+            style={buyCount < 2 ? { visibility: "hidden" } : {}}
           >
             {"-"}
           </button>
@@ -148,6 +147,7 @@ export const BuySellButton: React.FC<BuySellButtonProps> = ({ itemName }) => {
           <button
             className="w-[22px] border border-emerald-300 cursor-pointer invisible group-has-[:hover]:visible"
             onClick={() => onClickIncrement("buy")}
+            style={buyCount > 9 ? { visibility: "hidden" } : {}}
           >
             {"+"}
           </button>
