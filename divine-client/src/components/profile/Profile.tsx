@@ -16,6 +16,8 @@ import { SignUpDialog } from "@/components/SignUpDialog";
 
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 
+import { USER_INITIAL_BALANCE } from "@/const/index.const";
+
 import type { UserData } from "@/types/user.type";
 
 export const Profile = () => {
@@ -39,7 +41,7 @@ export const Profile = () => {
     if (signUpInput !== "") {
       setUserData({
         name: signUpInput,
-        balance: 500,
+        balance: USER_INITIAL_BALANCE,
         assets: null,
       });
       setNameChange(signUpInput);

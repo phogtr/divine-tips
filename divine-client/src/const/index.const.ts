@@ -1,0 +1,1 @@
+export const USER_INITIAL_BALANCE = 100000;

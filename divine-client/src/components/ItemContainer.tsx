@@ -18,6 +18,8 @@ import { EventContent } from "@/components/event/EventContent";
 
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 
+import { USER_INITIAL_BALANCE } from "@/const/index.const";
+
 import type { ItemApiData } from "@/types/item.type";
 import type { EventApiData, EventItem } from "@/types/event.type";
 import type { UserData } from "@/types/user.type";
@@ -121,7 +123,7 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
     if (signUpInput !== "") {
       setUserData({
         name: signUpInput,
-        balance: 500,
+        balance: USER_INITIAL_BALANCE,
         assets: null,
       });
     }
