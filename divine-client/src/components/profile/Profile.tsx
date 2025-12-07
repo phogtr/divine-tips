@@ -16,6 +16,8 @@ import { SignUpDialog } from "@/components/SignUpDialog";
 
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 
+import { currencyStr } from "@/utils/currency.utils";
+
 import { USER_INITIAL_BALANCE } from "@/const/index.const";
 
 import type { UserData } from "@/types/user.type";
@@ -126,7 +128,9 @@ export const Profile = () => {
             </div>
 
             <div className="my-6 flex flex-col justify-center items-center">
-              <div className="text-4xl font-bold">${userData.balance}</div>
+              <div className="text-4xl font-bold">
+                ${currencyStr(userData.balance)}
+              </div>
 
               <div className="mt-2 grid grid-cols-3">
                 <div className="px-4 flex flex-col items-center border-r border-gray-400">
@@ -139,7 +143,7 @@ export const Profile = () => {
                 </div>
                 <div className="px-4 flex flex-col items-center">
                   <div className="text-emerald-300 font-semibold">
-                    ${userData.balance}
+                    ${currencyStr(userData.balance)}
                   </div>
                   <p>Current Balance</p>
                 </div>

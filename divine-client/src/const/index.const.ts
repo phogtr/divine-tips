@@ -1,1 +1,1 @@
-export const USER_INITIAL_BALANCE = 100000;
+export const USER_INITIAL_BALANCE = 3000;
