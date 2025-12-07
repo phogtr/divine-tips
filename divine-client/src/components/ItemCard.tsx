@@ -1,6 +1,8 @@
 import { BuySellButton } from "@/components/item/BuySellButton";
 import { OwnedItemCount } from "./item/OwnedItemCount";
 
+import { currencyStr } from "@/utils/currency.utils";
+
 import { ItemApiData } from "@/types/item.type";
 
 interface ItemCardProps {
@@ -49,7 +51,7 @@ const ItemContent: React.FC<ItemContentProps> = ({ data }) => {
 
         {current === previous ? (
           <div className="px-4 flex w-full h-full items-center justify-between">
-            <div className="text-lg">${current}</div>
+            <div className="text-lg">${currencyStr(current)}</div>
             <div>-</div>
           </div>
         ) : (
@@ -57,25 +59,31 @@ const ItemContent: React.FC<ItemContentProps> = ({ data }) => {
             <div>
               <div className="flex items-center gap-2">
                 <div className={`${textLabel}`}>NOW</div>
-                <div className={`text-lg ${textColor}`}>${current}</div>
+                <div className={`text-lg ${textColor}`}>
+                  ${currencyStr(current)}
+                </div>
               </div>
 
               <div className="flex items-center gap-2">
                 <div className={`${textLabel}`}>PAST</div>
-                <div className={`text-lg ${textColor}`}>${previous}</div>
+                <div className={`text-lg ${textColor}`}>
+                  ${currencyStr(previous)}
+                </div>
               </div>
             </div>
 
             <div className="flex flex-col items-end justify-center">
-              <div className={`${textColor}`}>{delta ? "$" + delta : "-"}</div>
-              <div className={`text-sm ${textColor}`}>
+              <div className={`${textColor}`}>
+                {delta ? "$" + currencyStr(delta) : "-"}
+              </div>
+              <div className={`${textColor}`}>
                 {deltaPercent ? deltaPercent + "%" : "-"}
               </div>
             </div>
           </div>
         )}
 
-        <BuySellButton itemName={name} />
+        <BuySellButton itemName={name} price={current} />
       </div>
     </>
   );

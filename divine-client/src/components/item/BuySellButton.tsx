@@ -4,13 +4,19 @@ import { useState } from "react";
 
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 
+import { rounding } from "@/utils/round.utils";
+
 import { UserData } from "@/types/user.type";
 
 interface BuySellButtonProps {
   itemName: string;
+  price: number;
 }
 
-export const BuySellButton: React.FC<BuySellButtonProps> = ({ itemName }) => {
+export const BuySellButton: React.FC<BuySellButtonProps> = ({
+  itemName,
+  price,
+}) => {
   const {
     data: userData,
     setData: setUserData,
@@ -24,6 +30,13 @@ export const BuySellButton: React.FC<BuySellButtonProps> = ({ itemName }) => {
   const onClickBuy = () => {
     if (isUserDataHydrate && userData) {
       let newCount = buyCount;
+
+      const cost = newCount * price;
+      if (cost > userData.balance) {
+        return;
+      }
+      const newBalance = rounding(userData.balance - cost);
+
       const curr = userData.assets?.[itemName];
       if (curr) {
         newCount = curr + buyCount;
@@ -31,6 +44,7 @@ export const BuySellButton: React.FC<BuySellButtonProps> = ({ itemName }) => {
 
       setUserData({
         ...userData,
+        balance: newBalance,
         assets: {
           ...userData.assets,
           [itemName]: newCount,
@@ -41,16 +55,19 @@ export const BuySellButton: React.FC<BuySellButtonProps> = ({ itemName }) => {
 
   const onClickSell = () => {
     if (isUserDataHydrate && userData) {
-      let newCount = buyCount;
+      let newCount = sellCount;
       const curr = userData.assets?.[itemName];
       if (curr) {
         newCount = curr - sellCount;
+
+        const newBalance = rounding(sellCount * price + userData.balance);
 
         if (newCount === 0) {
           const newAssets = { ...userData.assets };
           delete newAssets[itemName];
           setUserData({
             ...userData,
+            balance: newBalance,
             assets: newAssets,
           });
 
@@ -58,6 +75,7 @@ export const BuySellButton: React.FC<BuySellButtonProps> = ({ itemName }) => {
         } else {
           setUserData({
             ...userData,
+            balance: newBalance,
             assets: {
               ...userData.assets,
               [itemName]: newCount,
