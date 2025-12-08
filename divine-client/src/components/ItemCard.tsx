@@ -12,7 +12,7 @@ interface ItemCardProps {
 
 export const ItemCard: React.FC<ItemCardProps> = ({ items, renderMap }) => {
   return (
-    <div className="mx-8 mt-14 mb-14 flex justify-center">
+    <div className="mx-8 mt-22 mb-14 flex justify-center">
       <div className="flex flex-wrap gap-8">
         {items.map((i) =>
           renderMap[i.id] ? <ItemContent key={i.id} data={i} /> : null

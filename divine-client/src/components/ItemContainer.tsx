@@ -18,7 +18,7 @@ import { EventContent } from "@/components/event/EventContent";
 
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 
-import { USER_INITIAL_BALANCE } from "@/const/index.const";
+import { BUY_TAX, SELL_TAX, USER_INITIAL_BALANCE } from "@/const/index.const";
 
 import type { ItemApiData } from "@/types/item.type";
 import type { EventApiData, EventItem } from "@/types/event.type";
@@ -232,6 +232,10 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
       />
 
       <main className="home-main-w overflow-auto">
+        <div className="fixed p-2 border border-l-0 border-t-0 border-white">
+          <p className="text-xl">Buy Tax: {(BUY_TAX * 100).toFixed(1)}%</p>
+          <p className="text-xl">Sell Tax: {(SELL_TAX * 100).toFixed(1)}%</p>
+        </div>
         <div className="fixed right-4 bottom-2">
           <button
             className="border border-white rounded-[5px] py-1 px-2 cursor-pointer"
@@ -276,7 +280,7 @@ const endDayApi = async (): Promise<EventItem[]> => {
   return res.json();
 };
 
-export const getItemsApi = async (): Promise<ItemApiData[]> => {
+const getItemsApi = async (): Promise<ItemApiData[]> => {
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/item`);
   if (!res.ok) throw new Error("failed to get items");
 

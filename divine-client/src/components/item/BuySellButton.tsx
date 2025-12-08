@@ -6,6 +6,8 @@ import { useLocalStorage } from "@/hooks/useLocalStorage";
 
 import { rounding } from "@/utils/round.utils";
 
+import { BUY_TAX, SELL_TAX } from "@/const/index.const";
+
 import { UserData } from "@/types/user.type";
 
 interface BuySellButtonProps {
@@ -29,9 +31,9 @@ export const BuySellButton: React.FC<BuySellButtonProps> = ({
 
   const onClickBuy = () => {
     if (isUserDataHydrate && userData) {
-      let newCount = buyCount;
+      let newItemCount = buyCount;
 
-      const cost = newCount * price;
+      const cost = transaction("buy", price, buyCount);
       if (cost > userData.balance) {
         return;
       }
@@ -39,7 +41,7 @@ export const BuySellButton: React.FC<BuySellButtonProps> = ({
 
       const curr = userData.assets?.[itemName];
       if (curr) {
-        newCount = curr + buyCount;
+        newItemCount = curr + buyCount;
       }
 
       setUserData({
@@ -47,7 +49,7 @@ export const BuySellButton: React.FC<BuySellButtonProps> = ({
         balance: newBalance,
         assets: {
           ...userData.assets,
-          [itemName]: newCount,
+          [itemName]: newItemCount,
         },
       });
     }
@@ -55,14 +57,14 @@ export const BuySellButton: React.FC<BuySellButtonProps> = ({
 
   const onClickSell = () => {
     if (isUserDataHydrate && userData) {
-      let newCount = sellCount;
       const curr = userData.assets?.[itemName];
       if (curr) {
-        newCount = curr - sellCount;
+        const newItemCount = curr - sellCount;
 
-        const newBalance = rounding(sellCount * price + userData.balance);
+        const transc = transaction("sell", price, sellCount);
+        const newBalance = rounding(transc + userData.balance);
 
-        if (newCount === 0) {
+        if (newItemCount === 0) {
           const newAssets = { ...userData.assets };
           delete newAssets[itemName];
           setUserData({
@@ -78,12 +80,12 @@ export const BuySellButton: React.FC<BuySellButtonProps> = ({
             balance: newBalance,
             assets: {
               ...userData.assets,
-              [itemName]: newCount,
+              [itemName]: newItemCount,
             },
           });
 
-          if (newCount < sellCount) {
-            setSellCount(newCount);
+          if (newItemCount < sellCount) {
+            setSellCount(newItemCount);
           }
         }
       }
@@ -204,4 +206,19 @@ export const BuySellButton: React.FC<BuySellButtonProps> = ({
   }
 
   return <>{content}</>;
+};
+
+// base tax = 4.5%
+// price = 100
+// count = 10
+// total tax = 4.5% * 10 = 45%
+// tax = 1000 * 45% = 1000 * 0.45 = 450
+// return 1000 + 450 = 1450
+const transaction = (type: "buy" | "sell", price: number, count: number) => {
+  const baseTax = type === "sell" ? SELL_TAX : BUY_TAX;
+  const amount = price * count;
+  const totalTax = baseTax * count;
+  const tax = amount * totalTax;
+
+  return type === "buy" ? amount + tax : amount - tax;
 };
