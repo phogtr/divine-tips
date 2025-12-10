@@ -55,7 +55,6 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
   const [endingDay, setEndingDay] = useState(0); // to invalidate query-cache
   const [startFetchEndDay, setStartFetchEndDay] = useState(false);
 
-  const [startFetchItem, setStartFetchItem] = useState(false);
   const [items, setItems] = useState(initItemData);
 
   const [renderMap, setRenderMap] = useState<Record<number, boolean>>(() =>
@@ -84,9 +83,9 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
   });
 
   const { data: itemData } = useQuery({
-    queryKey: ["items", endingDay],
+    queryKey: ["items"],
     queryFn: getItemsApi,
-    enabled: startFetchItem === true,
+    enabled: !!nextDayEventData,
   });
 
   ///////////////////////////////////////////////////////////////////////////
@@ -137,7 +136,6 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
     setEventDialog(false);
     setStartInitialEvent(false);
     setStartFetchEndDay(false);
-    setStartFetchItem(false);
   };
 
   ///////////////////////////////////////////////////////////////////////////
@@ -147,11 +145,10 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
     // else eventData below might flash-render this data, then render next-day data
     queryClient.removeQueries({ queryKey: ["init-event"] });
 
+    queryClient.removeQueries({ queryKey: ["items"] });
+
     setEndingDay((prev) => prev + 1);
     setStartFetchEndDay(true);
-    setTimeout(() => {
-      setStartFetchItem(true);
-    }, 700);
   };
 
   ///////////////////////////////////////////////////////////////////////////
