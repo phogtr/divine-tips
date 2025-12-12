@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 
 import { CircleCheck } from "lucide-react";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
@@ -13,6 +14,8 @@ import {
 } from "@/components/ui/dialog";
 
 import { SignUpDialog } from "@/components/SignUpDialog";
+
+import { getItemsApi } from "@/api/item.api";
 
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 
@@ -32,12 +35,29 @@ export const Profile = () => {
 
   const { setData: setIsSignUp } = useLocalStorage<boolean>("sign-up", false);
 
+  const { data: itemData } = useQuery({
+    queryKey: ["items"],
+    queryFn: getItemsApi,
+  });
+
   const [signUpDialog, setSignUpDialog] = useState(false);
   const [signUpInput, setSignUpInput] = useState("");
 
   const [nameChange, setNameChange] = useState("");
 
   const [deleteDialog, setDeleteDialog] = useState(false);
+
+  const itemPriceMap = useMemo(() => {
+    const map: Record<string, number> = {};
+    if (itemData) {
+      itemData.forEach((i) => {
+        const name = i.name;
+        const price = i.current;
+        map[name] = price;
+      });
+    }
+    return map;
+  }, [itemData]);
 
   const onClickSubmitSignUp = () => {
     if (signUpInput !== "") {
@@ -83,7 +103,18 @@ export const Profile = () => {
   }
 
   let profileContent = null;
-  if (isUserDataHydrate && userData !== null) {
+  if (isUserDataHydrate && userData !== null && itemData) {
+    let net = 0;
+    let unique = 0;
+    let totalAssets = 0;
+    for (const item in userData.assets) {
+      const count = userData.assets[item];
+      net += itemPriceMap[item] * count;
+      totalAssets += count;
+      unique++;
+    }
+    net += userData.balance;
+
     profileContent = (
       <main className="flex flex-col h-full w-3/4 m-auto">
         <div className="mt-6 p-2 border border-white rounded-lg">
@@ -128,17 +159,15 @@ export const Profile = () => {
             </div>
 
             <div className="my-6 flex flex-col justify-center items-center">
-              <div className="text-4xl font-bold">
-                ${currencyStr(userData.balance)}
-              </div>
+              <div className="text-4xl font-bold">${currencyStr(net)}</div>
 
               <div className="mt-2 grid grid-cols-3">
                 <div className="px-4 flex flex-col items-center border-r border-gray-400">
-                  <div className="font-semibold">0</div>
+                  <div className="font-semibold">{unique}</div>
                   <p>Unique Assets</p>
                 </div>
                 <div className="px-4 flex flex-col items-center border-r border-gray-400">
-                  <div className="font-semibold">0</div>
+                  <div className="font-semibold">{totalAssets}</div>
                   <p>Total Assets</p>
                 </div>
                 <div className="px-4 flex flex-col items-center">

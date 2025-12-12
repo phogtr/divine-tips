@@ -16,6 +16,8 @@ import { ItemCard } from "@/components/ItemCard";
 import { SignUpDialog } from "@/components/SignUpDialog";
 import { EventContent } from "@/components/event/EventContent";
 
+import { getItemsApi } from "@/api/item.api";
+
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 
 import { BUY_TAX, SELL_TAX, USER_INITIAL_BALANCE } from "@/const/index.const";
@@ -273,13 +275,6 @@ const endDayApi = async (): Promise<EventItem[]> => {
     }
   );
   if (!res.ok) throw new Error("failed to end day");
-
-  return res.json();
-};
-
-const getItemsApi = async (): Promise<ItemApiData[]> => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/item`);
-  if (!res.ok) throw new Error("failed to get items");
 
   return res.json();
 };
