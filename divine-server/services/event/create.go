@@ -9,21 +9,21 @@ import (
 const eventItemCount = 5 // up to this amount
 
 var increaseDesc = [3]string{
-	"likely to grow",
-	"climbing",
-	"may rise",
+	"Likely to grow",
+	"Climbing",
+	"May rise",
 }
 
 var decreaseDesc = [3]string{
-	"likely to drop",
-	"falling",
-	"may dip",
+	"Likely to drop",
+	"Falling",
+	"May dip",
 }
 
 var noChangeDesc = [3]string{
-	"likely to stay constant",
-	"holding steady",
-	"may remain stable",
+	"Likely to stay constant",
+	"Holding steady",
+	"May remain stable",
 }
 
 func Create(items []*item.Item) []*EventItem {
