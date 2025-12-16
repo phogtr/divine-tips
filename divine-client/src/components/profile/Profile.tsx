@@ -24,6 +24,7 @@ import { currencyStr } from "@/utils/currency.utils";
 import { USER_INITIAL_BALANCE } from "@/const/index.const";
 
 import type { UserData } from "@/types/user.type";
+import type { ItemApiData } from "@/types/item.type";
 
 export const Profile = () => {
   const {
@@ -48,12 +49,11 @@ export const Profile = () => {
   const [deleteDialog, setDeleteDialog] = useState(false);
 
   const itemPriceMap = useMemo(() => {
-    const map: Record<string, number> = {};
+    const map: Record<string, ItemApiData> = {};
     if (itemData) {
       itemData.forEach((i) => {
         const name = i.name;
-        const price = i.current;
-        map[name] = price;
+        map[name] = i;
       });
     }
     return map;
@@ -109,7 +109,7 @@ export const Profile = () => {
     let totalAssets = 0;
     for (const item in userData.assets) {
       const count = userData.assets[item];
-      net += itemPriceMap[item] * count;
+      net += itemPriceMap[item].current * count;
       totalAssets += count;
       unique++;
     }
@@ -117,10 +117,10 @@ export const Profile = () => {
 
     profileContent = (
       <main className="flex flex-col h-full w-3/4 m-auto">
-        <div className="mt-6 p-2 border border-white rounded-lg">
+        <div className="mt-6 py-2 px-4 border border-white rounded-lg">
           <div className="pt-6 flex items-center flex-col">
             <p className="text-3xl font-bold">Profile</p>
-            <div className="mt-6 border border-gray-700 w-[97%] text-center" />
+            <div className="mt-6 w-full border border-gray-700 text-center" />
           </div>
 
           <div className="grid grid-cols-[1fr_2fr] py-2">
@@ -180,10 +180,64 @@ export const Profile = () => {
             </div>
           </div>
         </div>
-        <div className="mt-6 p-2 border border-white rounded-lg">
+        <div className="mt-6 py-2 px-4 border border-white rounded-lg">
           <div className="pt-6 flex items-center flex-col">
             <p className="text-3xl font-bold">Assets</p>
-            <div className="mt-6 border border-gray-700 w-[97%] text-center" />
+            <div className="mt-6 w-full border border-gray-700 text-center" />
+
+            {userData.assets === null ||
+              (Object.keys(userData.assets).length === 0 ? (
+                <></>
+              ) : (
+                <div className="w-full">
+                  <div className="py-2 flex w-full border-b border-gray-700">
+                    <div className="mx-2 w-24"></div>
+                    <div className="w-20 text-center text-lg">Owns</div>
+                    <div className="flex-1 text-center text-lg">Now</div>
+                    <div className="flex-1 text-center text-lg">Past</div>
+                    <div className="flex-1 text-center"></div>
+                    <div></div>
+                  </div>
+
+                  {Object.entries(userData.assets).map(([k, v]) => {
+                    const { current, previous, delta, deltaPercent } =
+                      itemPriceMap[k];
+
+                    let textColor = "text-[#fff]";
+                    if (current > previous) textColor = "text-emerald-300";
+                    else if (current < previous) textColor = "text-red-300";
+
+                    return (
+                      <div
+                        key={k}
+                        className="flex w-full my-4 pb-2 items-center border-b border-gray-700"
+                      >
+                        <div className="mx-2 w-24 flex flex-col items-center gap-1">
+                          <div className="w-17 h-16 border rounded border-white"></div>
+                          <div>{k}</div>
+                        </div>
+                        <div className="w-20 text-center text-2xl">{v}</div>
+                        <div
+                          className={`flex-1 text-center text-2xl ${textColor}`}
+                        >
+                          ${currencyStr(current)}
+                        </div>
+                        <div
+                          className={`flex-1 text-center text-2xl ${textColor}`}
+                        >
+                          ${currencyStr(previous)}
+                        </div>
+                        <div
+                          className={`flex flex-1 flex-col text-lg ${textColor}`}
+                        >
+                          <div>{delta ? "$" + currencyStr(delta) : "-"} </div>
+                          <div>{deltaPercent ? deltaPercent + "%" : "-"}</div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              ))}
           </div>
         </div>
 
