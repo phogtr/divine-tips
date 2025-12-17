@@ -72,13 +72,11 @@ const ItemContent: React.FC<ItemContentProps> = ({ data }) => {
               </div>
             </div>
 
-            <div className="flex flex-col items-end justify-center">
-              <div className={`${textColor}`}>
-                {delta ? "$" + currencyStr(delta) : "-"}
-              </div>
-              <div className={`${textColor}`}>
-                {deltaPercent ? deltaPercent + "%" : "-"}
-              </div>
+            <div
+              className={`flex flex-col items-end justify-center ${textColor}`}
+            >
+              <div>{delta ? "$" + currencyStr(delta) : "-"}</div>
+              <div>{deltaPercent ? deltaPercent + "%" : "-"}</div>
             </div>
           </div>
         )}

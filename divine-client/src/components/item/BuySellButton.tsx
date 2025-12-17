@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 
+import { cn } from "@/lib/utils";
+
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 
 import { rounding } from "@/utils/round.utils";
@@ -152,20 +154,34 @@ export const BuySellButton: React.FC<BuySellButtonProps> = ({
       <div className="mt-6 flex w-full justify-around gap-4">
         <div className="group flex items-center text-emerald-300">
           <button
-            className="w-[22px] border border-emerald-300 cursor-pointer invisible group-has-[:hover]:visible"
+            className={cn(
+              "sub-btn scale-feedback",
+              "border border-emerald-300",
+              "invisible group-has-[:hover]:visible",
+              "group-has-[:hover]:transition-all duration-200 ease-out",
+              "left-[12px]",
+              "group-has-[:hover]:translate-x-[-13px]"
+            )}
             onClick={() => onClickDecrement("buy")}
             style={buyCount < 2 ? { visibility: "hidden" } : {}}
           >
             {"-"}
           </button>
           <button
-            className="w-[88px] p-2 border border-emerald-300 cursor-pointer text-lg"
+            className="transaction-btn scale-feedback border border-emerald-300"
             onClick={onClickBuy}
           >
             BUY {buyCount > 1 && buyCount}
           </button>
           <button
-            className="w-[22px] border border-emerald-300 cursor-pointer invisible group-has-[:hover]:visible"
+            className={cn(
+              "sub-btn scale-feedback",
+              "border border-emerald-300",
+              "invisible group-has-[:hover]:visible",
+              "group-has-[:hover]:transition-all duration-200 ease-out",
+              "left-[-12px]",
+              "group-has-[:hover]:translate-x-[13px]"
+            )}
             onClick={() => onClickIncrement("buy")}
             style={buyCount > 9 ? { visibility: "hidden" } : {}}
           >
@@ -175,20 +191,34 @@ export const BuySellButton: React.FC<BuySellButtonProps> = ({
 
         <div className="group flex items-center text-red-300">
           <button
-            className="w-[22px] border border-red-300 cursor-pointer invisible group-has-[:hover]:visible"
+            className={cn(
+              "sub-btn scale-feedback",
+              "border border-red-300",
+              "invisible group-has-[:hover]:visible",
+              "group-has-[:hover]:transition-all duration-200 ease-out",
+              "left-[12px]",
+              "group-has-[:hover]:translate-x-[-13px]"
+            )}
             onClick={() => onClickDecrement("sell")}
             style={isSellDecHidden ? { visibility: "hidden" } : {}}
           >
             {"-"}
           </button>
           <button
-            className="w-[88px] p-2 border text-red-300 cursor-pointer text-lg"
+            className="transaction-btn scale-feedback border border-red-300"
             onClick={onClickSell}
           >
             SELL {sellCount > 1 && sellCount}
           </button>
           <button
-            className="w-[22px] border border-red-300 cursor-pointer invisible group-has-[:hover]:visible"
+            className={cn(
+              "sub-btn scale-feedback",
+              "border border-red-300",
+              "invisible group-has-[:hover]:visible",
+              "group-has-[:hover]:transition-all duration-200 ease-out",
+              "left-[-12px]",
+              "group-has-[:hover]:translate-x-[13px]"
+            )}
             onClick={() => onClickIncrement("sell")}
             style={
               isSellIncHidden
