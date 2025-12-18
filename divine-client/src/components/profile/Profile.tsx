@@ -116,163 +116,165 @@ export const Profile = () => {
     net += userData.balance;
 
     profileContent = (
-      <main className="flex flex-col h-full w-3/4 m-auto">
-        <div className="mt-6 py-2 px-4 border border-white rounded-lg">
-          <div className="pt-6 flex items-center flex-col">
-            <p className="text-3xl font-bold">Profile</p>
-            <div className="mt-6 w-full border border-gray-700 text-center" />
-          </div>
+      <div className="h-full overflow-auto">
+        <main className="my-6 flex flex-col w-3/4 m-auto">
+          <div className="py-2 px-4 border border-white rounded-lg">
+            <div className="pt-6 flex items-center flex-col">
+              <p className="text-3xl font-bold">Profile</p>
+              <div className="mt-6 w-full border border-gray-700 text-center" />
+            </div>
 
-          <div className="grid grid-cols-[1fr_2fr] py-2">
-            <div className="flex flex-col justify-center items-center border-r border-gray-700">
-              <div className="flex relative">
-                <input
-                  type="text"
-                  placeholder={userData.name}
-                  className="mb-1 px-2 text-center hover:border border-gray-700 rounded-lg font-semibold"
-                  value={nameChange}
-                  onChange={(e) => {
-                    setNameChange(e.target.value);
-                  }}
-                  name="username"
-                  autoComplete="username"
-                />
-                {nameChange !== "" && nameChange !== userData.name && (
-                  <CircleCheck
-                    className="absolute right-[-36px] mx-2 text-green-400 cursor-pointer"
-                    onClick={() =>
-                      setUserData({
-                        ...userData,
-                        name: nameChange,
-                      })
-                    }
+            <div className="grid grid-cols-[1fr_2fr] py-2">
+              <div className="flex flex-col justify-center items-center border-r border-gray-700">
+                <div className="flex relative">
+                  <input
+                    type="text"
+                    placeholder={userData.name}
+                    className="mb-1 px-2 text-center hover:border border-gray-700 rounded-lg font-semibold"
+                    value={nameChange}
+                    onChange={(e) => {
+                      setNameChange(e.target.value);
+                    }}
+                    name="username"
+                    autoComplete="username"
                   />
-                )}
+                  {nameChange !== "" && nameChange !== userData.name && (
+                    <CircleCheck
+                      className="absolute right-[-36px] mx-2 text-green-400 cursor-pointer"
+                      onClick={() =>
+                        setUserData({
+                          ...userData,
+                          name: nameChange,
+                        })
+                      }
+                    />
+                  )}
+                </div>
+
+                <button
+                  className="text-red-500 hover:text-red-300 cursor-pointer"
+                  onClick={() => setDeleteDialog(true)}
+                >
+                  Delete Profile
+                </button>
               </div>
 
-              <button
-                className="text-red-500 hover:text-red-300 cursor-pointer"
-                onClick={() => setDeleteDialog(true)}
-              >
-                Delete Profile
-              </button>
-            </div>
+              <div className="my-6 flex flex-col justify-center items-center">
+                <div className="text-4xl font-bold">${currencyStr(net)}</div>
 
-            <div className="my-6 flex flex-col justify-center items-center">
-              <div className="text-4xl font-bold">${currencyStr(net)}</div>
-
-              <div className="mt-2 grid grid-cols-3">
-                <div className="px-4 flex flex-col items-center border-r border-gray-400">
-                  <div className="font-semibold">{unique}</div>
-                  <p>Unique Assets</p>
-                </div>
-                <div className="px-4 flex flex-col items-center border-r border-gray-400">
-                  <div className="font-semibold">{totalAssets}</div>
-                  <p>Total Assets</p>
-                </div>
-                <div className="px-4 flex flex-col items-center">
-                  <div className="text-emerald-300 font-semibold">
-                    ${currencyStr(userData.balance)}
+                <div className="mt-2 grid grid-cols-3">
+                  <div className="px-4 flex flex-col items-center border-r border-gray-400">
+                    <div className="font-semibold">{unique}</div>
+                    <p>Unique Assets</p>
                   </div>
-                  <p>Current Balance</p>
+                  <div className="px-4 flex flex-col items-center border-r border-gray-400">
+                    <div className="font-semibold">{totalAssets}</div>
+                    <p>Total Assets</p>
+                  </div>
+                  <div className="px-4 flex flex-col items-center">
+                    <div className="text-emerald-300 font-semibold">
+                      ${currencyStr(userData.balance)}
+                    </div>
+                    <p>Current Balance</p>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-        <div className="mt-6 py-2 px-4 border border-white rounded-lg">
-          <div className="pt-6 flex items-center flex-col">
-            <p className="text-3xl font-bold">Assets</p>
-            <div className="mt-6 w-full border border-gray-700 text-center" />
+          <div className="mt-6 py-2 px-4 border border-white rounded-lg">
+            <div className="pt-6 flex items-center flex-col">
+              <p className="text-3xl font-bold">Assets</p>
+              <div className="mt-6 w-full border border-gray-700 text-center" />
 
-            {userData.assets === null ||
-              (Object.keys(userData.assets).length === 0 ? (
-                <></>
-              ) : (
-                <div className="w-full">
-                  <div className="py-2 flex w-full border-b border-gray-700">
-                    <div className="mx-2 w-24"></div>
-                    <div className="w-20 text-center text-lg">Owns</div>
-                    <div className="flex-1 text-center text-lg">Now</div>
-                    <div className="flex-1 text-center text-lg">Past</div>
-                    <div className="flex-1 text-center"></div>
-                    <div></div>
+              {userData.assets === null ||
+                (Object.keys(userData.assets).length === 0 ? (
+                  <></>
+                ) : (
+                  <div className="w-full">
+                    <div className="py-2 flex w-full border-b border-gray-700">
+                      <div className="mx-2 w-24"></div>
+                      <div className="w-20 text-center text-lg">Owns</div>
+                      <div className="flex-1 text-center text-lg">Now</div>
+                      <div className="flex-1 text-center text-lg">Past</div>
+                      <div className="flex-1 text-center"></div>
+                      <div></div>
+                    </div>
+
+                    {Object.entries(userData.assets).map(([k, v]) => {
+                      const { current, previous, delta, deltaPercent } =
+                        itemPriceMap[k];
+
+                      let textColor = "text-[#fff]";
+                      if (current > previous) textColor = "text-emerald-300";
+                      else if (current < previous) textColor = "text-red-300";
+
+                      return (
+                        <div
+                          key={k}
+                          className="flex w-full my-4 pb-2 items-center border-b border-gray-700"
+                        >
+                          <div className="mx-2 w-24 flex flex-col items-center gap-1">
+                            <div className="w-17 h-16 border rounded border-white"></div>
+                            <div>{k}</div>
+                          </div>
+                          <div className="w-20 text-center text-2xl">{v}</div>
+                          <div
+                            className={`flex-1 text-center text-2xl ${textColor}`}
+                          >
+                            ${currencyStr(current)}
+                          </div>
+                          <div
+                            className={`flex-1 text-center text-2xl ${textColor}`}
+                          >
+                            ${currencyStr(previous)}
+                          </div>
+                          <div
+                            className={`flex flex-1 flex-col text-lg ${textColor}`}
+                          >
+                            <div>{delta ? "$" + currencyStr(delta) : "-"} </div>
+                            <div>{deltaPercent ? deltaPercent + "%" : "-"}</div>
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
-
-                  {Object.entries(userData.assets).map(([k, v]) => {
-                    const { current, previous, delta, deltaPercent } =
-                      itemPriceMap[k];
-
-                    let textColor = "text-[#fff]";
-                    if (current > previous) textColor = "text-emerald-300";
-                    else if (current < previous) textColor = "text-red-300";
-
-                    return (
-                      <div
-                        key={k}
-                        className="flex w-full my-4 pb-2 items-center border-b border-gray-700"
-                      >
-                        <div className="mx-2 w-24 flex flex-col items-center gap-1">
-                          <div className="w-17 h-16 border rounded border-white"></div>
-                          <div>{k}</div>
-                        </div>
-                        <div className="w-20 text-center text-2xl">{v}</div>
-                        <div
-                          className={`flex-1 text-center text-2xl ${textColor}`}
-                        >
-                          ${currencyStr(current)}
-                        </div>
-                        <div
-                          className={`flex-1 text-center text-2xl ${textColor}`}
-                        >
-                          ${currencyStr(previous)}
-                        </div>
-                        <div
-                          className={`flex flex-1 flex-col text-lg ${textColor}`}
-                        >
-                          <div>{delta ? "$" + currencyStr(delta) : "-"} </div>
-                          <div>{deltaPercent ? deltaPercent + "%" : "-"}</div>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              ))}
-          </div>
-        </div>
-
-        <Dialog open={deleteDialog} onOpenChange={setDeleteDialog}>
-          <DialogTrigger />
-          <DialogContent>
-            <VisuallyHidden>
-              <DialogHeader>
-                <DialogTitle>Delete Profile</DialogTitle>
-              </DialogHeader>
-            </VisuallyHidden>
-
-            <p className="text-center">
-              Are you sure you want to delete this profile?
-            </p>
-            <div className="flex justify-center gap-4">
-              <button
-                className="w-1/2 cursor-pointer"
-                onClick={() => {
-                  clearUserData();
-                  setIsSignUp(false);
-                }}
-              >
-                Delete
-              </button>
-              <button
-                className="w-1/2 cursor-pointer"
-                onClick={() => setDeleteDialog(false)}
-              >
-                Cancel
-              </button>
+                ))}
             </div>
-          </DialogContent>
-        </Dialog>
-      </main>
+          </div>
+
+          <Dialog open={deleteDialog} onOpenChange={setDeleteDialog}>
+            <DialogTrigger />
+            <DialogContent>
+              <VisuallyHidden>
+                <DialogHeader>
+                  <DialogTitle>Delete Profile</DialogTitle>
+                </DialogHeader>
+              </VisuallyHidden>
+
+              <p className="text-center">
+                Are you sure you want to delete this profile?
+              </p>
+              <div className="flex justify-center gap-4">
+                <button
+                  className="w-1/2 cursor-pointer"
+                  onClick={() => {
+                    clearUserData();
+                    setIsSignUp(false);
+                  }}
+                >
+                  Delete
+                </button>
+                <button
+                  className="w-1/2 cursor-pointer"
+                  onClick={() => setDeleteDialog(false)}
+                >
+                  Cancel
+                </button>
+              </div>
+            </DialogContent>
+          </Dialog>
+        </main>
+      </div>
     );
   }
 
