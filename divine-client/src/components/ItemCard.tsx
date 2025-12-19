@@ -3,6 +3,8 @@ import { OwnedItemCount } from "./item/OwnedItemCount";
 
 import { currencyStr } from "@/utils/currency.utils";
 
+import { Triangle } from "lucide-react";
+
 import { ItemApiData } from "@/types/item.type";
 
 interface ItemCardProps {
@@ -26,8 +28,13 @@ const ItemContent: React.FC<ItemContentProps> = ({ data }) => {
   const { id, name, current, previous, delta, deltaPercent } = data;
 
   let textColor = "text-[#fff]";
+  let deltaIcon = <Triangle size={16} />;
+
   if (current > previous) textColor = "text-emerald-300";
-  else if (current < previous) textColor = "text-red-300";
+  else if (current < previous) {
+    textColor = "text-red-300";
+    deltaIcon = <Triangle size={16} className="rotate-180" />;
+  }
 
   const textLabel = "text-gray-400 text-xs";
 
@@ -72,11 +79,19 @@ const ItemContent: React.FC<ItemContentProps> = ({ data }) => {
               </div>
             </div>
 
-            <div
-              className={`flex flex-col items-end justify-center ${textColor}`}
-            >
-              <div>{delta ? "$" + currencyStr(delta) : "-"}</div>
-              <div>{deltaPercent ? deltaPercent + "%" : "-"}</div>
+            <div className="flex items-center justify-end">
+              <div
+                className={`flex flex-col items-start justify-center ${textColor}`}
+              >
+                <div className="flex items-center gap-1">
+                  {deltaIcon}
+                  <span>{delta ? "$" + currencyStr(delta) : "-"}</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  {deltaIcon}
+                  <div>{deltaPercent ? deltaPercent + "%" : "-"}</div>
+                </div>
+              </div>
             </div>
           </div>
         )}

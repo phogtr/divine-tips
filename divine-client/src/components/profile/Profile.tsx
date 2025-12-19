@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 
-import { CircleCheck } from "lucide-react";
+import { CircleCheck, Triangle } from "lucide-react";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import {
   Dialog,
@@ -205,8 +205,15 @@ export const Profile = () => {
                         itemPriceMap[k];
 
                       let textColor = "text-[#fff]";
+                      let deltaIcon = <Triangle size={16} />;
+
                       if (current > previous) textColor = "text-emerald-300";
-                      else if (current < previous) textColor = "text-red-300";
+                      else if (current < previous) {
+                        textColor = "text-red-300";
+                        deltaIcon = (
+                          <Triangle size={16} className="rotate-180" />
+                        );
+                      }
 
                       return (
                         <div
@@ -231,8 +238,26 @@ export const Profile = () => {
                           <div
                             className={`flex flex-1 flex-col text-lg ${textColor}`}
                           >
-                            <div>{delta ? "$" + currencyStr(delta) : "-"} </div>
-                            <div>{deltaPercent ? deltaPercent + "%" : "-"}</div>
+                            <div className="flex items-center gap-1">
+                              {delta ? (
+                                <>
+                                  {deltaIcon}
+                                  <div>{"$" + currencyStr(delta)}</div>
+                                </>
+                              ) : (
+                                "-"
+                              )}
+                            </div>
+                            <div className="flex items-center gap-1">
+                              {deltaPercent ? (
+                                <>
+                                  {deltaIcon}
+                                  <div>{deltaPercent + "%"}</div>
+                                </>
+                              ) : (
+                                "-"
+                              )}
+                            </div>
                           </div>
                         </div>
                       );
