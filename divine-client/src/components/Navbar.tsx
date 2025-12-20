@@ -2,7 +2,7 @@ import Link from "next/link";
 
 import { ThemeToggle } from "./theme/ThemeToggle";
 
-import { UserNetWorth } from "./navbar/UserNetWorth";
+import { UserBalance } from "./navbar/UserBalance";
 
 export const Navbar = () => {
   return (
@@ -14,7 +14,7 @@ export const Navbar = () => {
       </div>
 
       <div className="flex w-full grow-2 shrink-1 items-center justify-center">
-        <UserNetWorth />
+        <UserBalance />
       </div>
 
       <div className="flex w-full grow-1 shrink-2 justify-end gap-5">

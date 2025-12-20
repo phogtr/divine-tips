@@ -6,13 +6,13 @@ import { currencyStr } from "@/utils/currency.utils";
 
 import { UserData } from "@/types/user.type";
 
-export const UserNetWorth = () => {
+export const UserBalance = () => {
   const { data: userData, isHydrated: isUserDataHydrate } =
     useLocalStorage<UserData | null>("user", null);
 
   if (isUserDataHydrate && userData !== null) {
     return (
-      <span className="text-3xl text-green-400">
+      <span className="text-3xl text-emerald-300">
         ${currencyStr(userData.balance)}
       </span>
     );
