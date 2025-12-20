@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 
-import { ItemContainer } from "@/components/ItemContainer";
+import { ItemContainer } from "@/components/item/ItemContainer";
 
 import { ItemApiData } from "@/types/item.type";
 

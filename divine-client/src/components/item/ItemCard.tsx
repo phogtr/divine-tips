@@ -1,5 +1,5 @@
 import { BuySellButton } from "@/components/item/BuySellButton";
-import { OwnedItemCount } from "./item/OwnedItemCount";
+import { OwnedItemCount } from "@/components/item/OwnedItemCount";
 
 import { currencyStr } from "@/utils/currency.utils";
 

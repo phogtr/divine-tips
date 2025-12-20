@@ -11,8 +11,8 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
-import { SideItems } from "@/components/SideItems";
-import { ItemCard } from "@/components/ItemCard";
+import { SideItems } from "@/components/item/SideItems";
+import { ItemCard } from "@/components/item/ItemCard";
 import { SignUpDialog } from "@/components/SignUpDialog";
 import { EventContent } from "@/components/event/EventContent";
 
@@ -235,6 +235,9 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
           <p className="text-xl">Buy Tax: {(BUY_TAX * 100).toFixed(1)}%</p>
           <p className="text-xl">Sell Tax: {(SELL_TAX * 100).toFixed(1)}%</p>
         </div>
+
+        <ItemCard items={items} renderMap={renderMap} />
+
         <div className="fixed right-4 bottom-2">
           <button
             className="border border-white rounded-[5px] py-1 px-2 cursor-pointer"
@@ -243,7 +246,6 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
             End day
           </button>
         </div>
-        <ItemCard items={items} renderMap={renderMap} />
       </main>
 
       {eventContent}

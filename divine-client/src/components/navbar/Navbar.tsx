@@ -1,8 +1,8 @@
 import Link from "next/link";
 
-import { ThemeToggle } from "./theme/ThemeToggle";
+import { ThemeToggle } from "../theme/ThemeToggle";
 
-import { UserBalance } from "./navbar/UserBalance";
+import { UserBalance } from "./UserBalance";
 
 export const Navbar = () => {
   return (
