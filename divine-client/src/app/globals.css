@@ -55,6 +55,14 @@
     cursor: pointer;
     position: relative;
   }
+
+  .transaction-toast {
+    display: flex;
+    align-items: center;
+    gap: calc(var(--spacing) * 2);
+    margin: 38px 0 0 0;
+    padding: calc(var(--spacing) * 2);
+  }
 }
 
 @layer utilities {

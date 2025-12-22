@@ -1,15 +1,14 @@
 "use client";
 
 import { useState } from "react";
-
 import { cn } from "@/lib/utils";
 
-import { useLocalStorage } from "@/hooks/useLocalStorage";
+import { toast } from "sonner";
 
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { rounding } from "@/utils/round.utils";
 
 import { BUY_TAX, SELL_TAX } from "@/const/index.const";
-
 import { UserData } from "@/types/user.type";
 
 interface BuySellButtonProps {
@@ -39,8 +38,8 @@ export const BuySellButton: React.FC<BuySellButtonProps> = ({
       if (cost > userData.balance) {
         return;
       }
-      const newBalance = rounding(userData.balance - cost);
 
+      const newBalance = rounding(userData.balance - cost);
       const curr = userData.assets?.[itemName];
       if (curr) {
         newItemCount = curr + buyCount;
@@ -53,6 +52,13 @@ export const BuySellButton: React.FC<BuySellButtonProps> = ({
           ...userData.assets,
           [itemName]: newItemCount,
         },
+      });
+
+      toast.success(`Buy ${buyCount} ${itemName}`, {
+        unstyled: true,
+        className: cn(
+          "transaction-toast text-emerald-300 border border-emerald-300"
+        ),
       });
     }
   };
@@ -90,6 +96,11 @@ export const BuySellButton: React.FC<BuySellButtonProps> = ({
             setSellCount(newItemCount);
           }
         }
+
+        toast.success(`Sell ${sellCount} ${itemName}`, {
+          unstyled: true,
+          className: cn("transaction-toast text-red-300 border border-red-300"),
+        });
       }
     }
   };
