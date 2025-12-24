@@ -9,7 +9,7 @@ export default function Layout({
     <div>
       <Navbar />
 
-      <Toaster expand={true} position="top-right" />
+      <Toaster expand={true} position="top-right" offset={{ top: "68px" }} />
 
       {children}
     </div>

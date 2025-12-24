@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 
-import { toast } from "sonner";
+import { toast, ToastClassnames } from "sonner";
 
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { rounding } from "@/utils/round.utils";
@@ -54,11 +54,8 @@ export const BuySellButton: React.FC<BuySellButtonProps> = ({
         },
       });
 
-      toast.success(`Buy ${buyCount} ${itemName}`, {
-        unstyled: true,
-        className: cn(
-          "transaction-toast text-emerald-300 border border-emerald-300"
-        ),
+      toast(<ToastContent text={`BUY ${buyCount} ${itemName}`} />, {
+        classNames: toastClassOverride,
       });
     }
   };
@@ -97,9 +94,8 @@ export const BuySellButton: React.FC<BuySellButtonProps> = ({
           }
         }
 
-        toast.success(`Sell ${sellCount} ${itemName}`, {
-          unstyled: true,
-          className: cn("transaction-toast text-red-300 border border-red-300"),
+        toast(<ToastContent text={`SELL ${sellCount} ${itemName}`} />, {
+          classNames: toastClassOverride,
         });
       }
     }
@@ -247,6 +243,19 @@ export const BuySellButton: React.FC<BuySellButtonProps> = ({
   }
 
   return <>{content}</>;
+};
+
+const ToastContent = ({ text }: { text: string }) => {
+  return (
+    <div className="flex items-center justify-between w-full">
+      <div className="w-17 h-16 border rounded border-white"></div>
+      <div className="text-xl">{text}</div>
+    </div>
+  );
+};
+const toastClassOverride: ToastClassnames = {
+  toast: "toast-override",
+  content: "toast-override-content",
 };
 
 // base tax = 4.5%

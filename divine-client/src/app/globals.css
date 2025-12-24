@@ -56,12 +56,14 @@
     position: relative;
   }
 
-  .transaction-toast {
-    display: flex;
-    align-items: center;
-    gap: calc(var(--spacing) * 2);
-    margin: 38px 0 0 0;
-    padding: calc(var(--spacing) * 2);
+  .toast-override {
+    width: 288px !important;
+    border: 1px solid #fff !important;
+    border-radius: 0.25rem /* 4px */ !important;
+  }
+
+  .toast-override-content {
+    width: 100% !important;
   }
 }
 
