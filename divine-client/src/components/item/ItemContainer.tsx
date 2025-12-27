@@ -276,7 +276,9 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
           </button>
         </div>
 
-        <ItemCard items={items} renderMap={renderMap} />
+        <div className="mx-12 mt-22 mb-14 flex justify-center">
+          <ItemCard items={items} renderMap={renderMap} />
+        </div>
 
         <div className="fixed right-4 bottom-2">
           <button

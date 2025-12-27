@@ -155,9 +155,8 @@ export const BuySellButton: React.FC<BuySellButtonProps> = ({
     isSellIncHidden = false;
   }
 
-  let content = null;
   if (isUserDataHydrate && userData !== null) {
-    content = (
+    return (
       <div className="mt-6 flex w-full justify-around gap-4">
         <div className="group flex items-center text-emerald-300">
           <button
@@ -242,7 +241,7 @@ export const BuySellButton: React.FC<BuySellButtonProps> = ({
     );
   }
 
-  return <>{content}</>;
+  return null;
 };
 
 const ToastContent = ({ text }: { text: string }) => {
