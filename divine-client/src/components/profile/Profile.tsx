@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 
 import { CircleCheck, Triangle } from "lucide-react";
@@ -44,7 +44,13 @@ export const Profile = () => {
   const [signUpDialog, setSignUpDialog] = useState(false);
   const [signUpInput, setSignUpInput] = useState("");
 
-  const [nameChange, setNameChange] = useState("");
+  const [nameChange, setNameChange] = useState<string | null>(null);
+  let displayName = "";
+  if (nameChange !== null) {
+    displayName = nameChange;
+  } else if (isUserDataHydrate && userData !== null) {
+    displayName = userData.name;
+  }
 
   const [deleteDialog, setDeleteDialog] = useState(false);
 
@@ -70,12 +76,6 @@ export const Profile = () => {
     }
     setSignUpDialog(false);
   };
-
-  useEffect(() => {
-    if (isUserDataHydrate && userData !== null) {
-      setNameChange(userData.name);
-    }
-  }, [isUserDataHydrate]);
 
   let signUpContent = null;
   if (isUserDataHydrate && userData === null) {
@@ -131,24 +131,26 @@ export const Profile = () => {
                     type="text"
                     placeholder={userData.name}
                     className="mb-1 px-2 text-center hover:border border-gray-700 rounded-lg font-semibold"
-                    value={nameChange}
+                    value={displayName}
                     onChange={(e) => {
                       setNameChange(e.target.value);
                     }}
                     name="username"
                     autoComplete="username"
                   />
-                  {nameChange !== "" && nameChange !== userData.name && (
-                    <CircleCheck
-                      className="absolute right-[-36px] mx-2 text-green-400 cursor-pointer"
-                      onClick={() =>
-                        setUserData({
-                          ...userData,
-                          name: nameChange,
-                        })
-                      }
-                    />
-                  )}
+                  {nameChange &&
+                    nameChange !== "" &&
+                    nameChange !== userData.name && (
+                      <CircleCheck
+                        className="absolute right-[-36px] mx-2 text-green-400 cursor-pointer"
+                        onClick={() =>
+                          setUserData({
+                            ...userData,
+                            name: nameChange,
+                          })
+                        }
+                      />
+                    )}
                 </div>
 
                 <button
