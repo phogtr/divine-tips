@@ -15,14 +15,13 @@ import { SideItems } from "@/components/item/SideItems";
 import { ItemCard } from "@/components/item/ItemCard";
 import { SignUpDialog } from "@/components/SignUpDialog";
 import { EventContent } from "@/components/event/EventContent";
+import { TaxInfo } from "./TaxInfo";
 
 import { getItemsApi } from "@/api/item.api";
 
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 
-import { BUY_TAX, SELL_TAX, USER_INITIAL_BALANCE } from "@/const/index.const";
-
-import { Triangle } from "lucide-react";
+import { USER_INITIAL_BALANCE } from "@/const/index.const";
 
 import type { ItemApiData } from "@/types/item.type";
 import type { EventApiData, EventItem } from "@/types/event.type";
@@ -72,7 +71,6 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
   );
   const [isToggleAll, setIsToggleAll] = useState(false);
 
-  const [isToggleTaxInfo, setIsToggleTaxInfo] = useState(false);
 
   ///////////////////////////////////////////////////////////////////////////
   const { data: initEventData } = useQuery({
@@ -236,44 +234,7 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
 
       <main className="home-main-w overflow-auto">
         <div className="fixed flex mx-0.5">
-          <div
-            className="p-2 w-38 border border-l-0 border-t-0 border-white transition-all duration-150 ease-in-out"
-            style={
-              isToggleTaxInfo
-                ? { transform: "translate(0)", opacity: 1 }
-                : {
-                    transform: "translate(-100%)",
-                    opacity: 0,
-                  }
-            }
-          >
-            <p className="text-xl">Buy Tax: {(BUY_TAX * 100).toFixed(1)}%</p>
-            <p className="text-xl">Sell Tax: {(SELL_TAX * 100).toFixed(1)}%</p>
-          </div>
-          <button
-            className="w-10 h-10 rounded-tr-sm rounded-br-sm bg-white cursor-pointer transition-all duration-150 ease-in-out"
-            style={
-              isToggleTaxInfo
-                ? {
-                    transform: "translate(0)",
-                  }
-                : {
-                    transform:
-                      "translate(calc(100% - calc(var(--spacing) * 10) - var(--spacing) * 38))",
-                  }
-            }
-            onClick={() => setIsToggleTaxInfo(!isToggleTaxInfo)}
-          >
-            <Triangle
-              className="relative left-3 transition-all duration-200 ease-in"
-              fill="#000"
-              stroke="#000"
-              size={16}
-              style={{
-                rotate: isToggleTaxInfo ? "270deg" : "90deg",
-              }}
-            />
-          </button>
+          <TaxInfo />
         </div>
 
         <div className="mx-12 mt-22 mb-14 flex justify-center">
