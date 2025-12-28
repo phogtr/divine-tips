@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { memo, useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 
 import { CircleCheck, Triangle } from "lucide-react";
@@ -192,79 +192,10 @@ export const Profile = () => {
                 (Object.keys(userData.assets).length === 0 ? (
                   <></>
                 ) : (
-                  <div className="w-full">
-                    <div className="py-2 flex w-full border-b border-gray-700">
-                      <div className="mx-2 w-24"></div>
-                      <div className="w-20 text-center text-lg">Owns</div>
-                      <div className="flex-1 text-center text-lg">Now</div>
-                      <div className="flex-1 text-center text-lg">Past</div>
-                      <div className="flex-1 text-center"></div>
-                      <div></div>
-                    </div>
-
-                    {Object.entries(userData.assets).map(([k, v]) => {
-                      const { current, previous, delta, deltaPercent } =
-                        itemPriceMap[k];
-
-                      let textColor = "text-[#fff]";
-                      let deltaIcon = <Triangle size={16} />;
-
-                      if (current > previous) textColor = "text-emerald-300";
-                      else if (current < previous) {
-                        textColor = "text-red-300";
-                        deltaIcon = (
-                          <Triangle size={16} className="rotate-180" />
-                        );
-                      }
-
-                      return (
-                        <div
-                          key={k}
-                          className="flex w-full my-4 pb-2 items-center border-b border-gray-700"
-                        >
-                          <div className="mx-2 w-24 flex flex-col items-center gap-1">
-                            <div className="w-17 h-16 border rounded border-white"></div>
-                            <div>{k}</div>
-                          </div>
-                          <div className="w-20 text-center text-2xl">{v}</div>
-                          <div
-                            className={`flex-1 text-center text-2xl ${textColor}`}
-                          >
-                            ${currencyStr(current)}
-                          </div>
-                          <div
-                            className={`flex-1 text-center text-2xl ${textColor}`}
-                          >
-                            ${currencyStr(previous)}
-                          </div>
-                          <div
-                            className={`flex flex-1 flex-col text-lg ${textColor}`}
-                          >
-                            <div className="flex items-center gap-1">
-                              {delta ? (
-                                <>
-                                  {deltaIcon}
-                                  <div>{"$" + currencyStr(delta)}</div>
-                                </>
-                              ) : (
-                                "-"
-                              )}
-                            </div>
-                            <div className="flex items-center gap-1">
-                              {deltaPercent ? (
-                                <>
-                                  {deltaIcon}
-                                  <div>{deltaPercent + "%"}</div>
-                                </>
-                              ) : (
-                                "-"
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
+                  <AssetsTable
+                    userData={userData}
+                    itemPriceMap={itemPriceMap}
+                  />
                 ))}
             </div>
           </div>
@@ -312,3 +243,78 @@ export const Profile = () => {
     </>
   );
 };
+
+///////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////
+const AssetsTable = memo<AssetsTableProps>(({ userData, itemPriceMap }) => {
+  return (
+    <div className="w-full">
+      <div className="py-2 flex w-full border-b border-gray-700">
+        <div className="mx-2 w-24"></div>
+        <div className="w-20 text-center text-lg">Owns</div>
+        <div className="flex-1 text-center text-lg">Now</div>
+        <div className="flex-1 text-center text-lg">Past</div>
+        <div className="flex-1 text-center"></div>
+        <div></div>
+      </div>
+
+      {Object.entries(userData.assets!).map(([k, v]) => {
+        const { current, previous, delta, deltaPercent } = itemPriceMap[k];
+
+        let textColor = "text-[#fff]";
+        let deltaIcon = <Triangle size={16} />;
+
+        if (current > previous) textColor = "text-emerald-300";
+        else if (current < previous) {
+          textColor = "text-red-300";
+          deltaIcon = <Triangle size={16} className="rotate-180" />;
+        }
+
+        return (
+          <div
+            key={k}
+            className="flex w-full my-4 pb-2 items-center border-b border-gray-700"
+          >
+            <div className="mx-2 w-24 flex flex-col items-center gap-1">
+              <div className="w-17 h-16 border rounded border-white"></div>
+              <div>{k}</div>
+            </div>
+            <div className="w-20 text-center text-2xl">{v}</div>
+            <div className={`flex-1 text-center text-2xl ${textColor}`}>
+              ${currencyStr(current)}
+            </div>
+            <div className={`flex-1 text-center text-2xl ${textColor}`}>
+              ${currencyStr(previous)}
+            </div>
+            <div className={`flex flex-1 flex-col text-lg ${textColor}`}>
+              <div className="flex items-center gap-1">
+                {delta ? (
+                  <>
+                    {deltaIcon}
+                    <div>{"$" + currencyStr(delta)}</div>
+                  </>
+                ) : (
+                  "-"
+                )}
+              </div>
+              <div className="flex items-center gap-1">
+                {deltaPercent ? (
+                  <>
+                    {deltaIcon}
+                    <div>{deltaPercent + "%"}</div>
+                  </>
+                ) : (
+                  "-"
+                )}
+              </div>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+});
+interface AssetsTableProps {
+  userData: UserData;
+  itemPriceMap: Record<string, ItemApiData>;
+}
