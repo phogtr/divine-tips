@@ -22,6 +22,11 @@ import { getItemsApi } from "@/api/item.api";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 
 import { USER_INITIAL_BALANCE } from "@/const/index.const";
+import {
+  EVENT_QUERY_KEY,
+  END_DAY_QUERY_KEY,
+  ITEM_QUERY_KEY,
+} from "@/const/query-key.const";
 
 import type { ItemApiData } from "@/types/item.type";
 import type { EventApiData, EventItem } from "@/types/event.type";
@@ -55,7 +60,6 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
   const [eventDialog, setEventDialog] = useState(false);
   const [startInitialEvent, setStartInitialEvent] = useState(false);
 
-  const [endingDay, setEndingDay] = useState(0); // to invalidate query-cache
   const [startFetchEndDay, setStartFetchEndDay] = useState(false);
 
   const [items, setItems] = useState(initItemData);
@@ -74,20 +78,20 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
 
   ///////////////////////////////////////////////////////////////////////////
   const { data: initEventData } = useQuery({
-    queryKey: ["init-event"],
+    queryKey: [EVENT_QUERY_KEY],
     queryFn: fetchEventData,
     enabled: startInitialEvent === true,
     select: (d) => d[0].data,
   });
 
   const { data: nextDayEventData } = useQuery({
-    queryKey: ["end-day", endingDay],
+    queryKey: [END_DAY_QUERY_KEY],
     queryFn: endDayApi,
     enabled: startFetchEndDay === true,
   });
 
   const { data: itemData } = useQuery({
-    queryKey: ["items"],
+    queryKey: [ITEM_QUERY_KEY],
     queryFn: getItemsApi,
     enabled: !!nextDayEventData,
   });
@@ -147,11 +151,11 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
   const onClickEndDay = () => {
     // ensure initEventData is null
     // else eventData below might flash-render this data, then render next-day data
-    queryClient.removeQueries({ queryKey: ["init-event"] });
+    queryClient.removeQueries({ queryKey: [EVENT_QUERY_KEY] });
 
-    queryClient.removeQueries({ queryKey: ["items"] });
+    queryClient.removeQueries({ queryKey: [END_DAY_QUERY_KEY] });
+    queryClient.removeQueries({ queryKey: [ITEM_QUERY_KEY] });
 
-    setEndingDay((prev) => prev + 1);
     setStartFetchEndDay(true);
   };
 
