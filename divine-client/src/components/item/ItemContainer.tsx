@@ -20,6 +20,7 @@ import { TaxInfo } from "./TaxInfo";
 import { getItemsApi } from "@/api/item.api";
 
 import { useLocalStorage } from "@/hooks/useLocalStorage";
+import { useQueryEvent } from "@/hooks/useQueryEvent";
 
 import { USER_INITIAL_BALANCE } from "@/const/index.const";
 import {
@@ -29,7 +30,7 @@ import {
 } from "@/const/query-key.const";
 
 import type { ItemApiData } from "@/types/item.type";
-import type { EventApiData, EventItem } from "@/types/event.type";
+import type { EventItem } from "@/types/event.type";
 import type { UserData } from "@/types/user.type";
 
 interface ItemContainerProps {
@@ -77,11 +78,8 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
 
 
   ///////////////////////////////////////////////////////////////////////////
-  const { data: initEventData } = useQuery({
-    queryKey: [EVENT_QUERY_KEY],
-    queryFn: fetchEventData,
-    enabled: startInitialEvent === true,
-    select: (d) => d[0].data,
+  const { data: initEventData } = useQueryEvent({
+    isEnable: startInitialEvent === true,
   });
 
   const { data: nextDayEventData } = useQuery({
@@ -198,7 +196,7 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
   if (nextDayEventData) {
     eventData = nextDayEventData;
   } else if (initEventData) {
-    eventData = initEventData;
+    eventData = initEventData[0].data;
   }
 
   let eventContent = null;
@@ -269,13 +267,6 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
 };
 
 ///////////////////////////////////////////////////////////////////////////
-const fetchEventData = async (): Promise<EventApiData[]> => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/event`);
-  if (!res.ok) throw new Error("failed to fetch event data");
-
-  return res.json();
-};
-
 const endDayApi = async (): Promise<EventItem[]> => {
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/day/advance`,
