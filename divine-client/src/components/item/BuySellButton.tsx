@@ -30,6 +30,13 @@ export const BuySellButton: React.FC<BuySellButtonProps> = ({
 
   const [sellCount, setSellCount] = useState(1);
 
+  const subBtnClass = cn(
+    "sub-btn scale-feedback",
+    "border duration-200 ease-out",
+    "invisible",
+    "group-hover:visible"
+  );
+
   const onClickBuy = () => {
     if (isUserDataHydrate && userData) {
       let newItemCount = buyCount;
@@ -66,8 +73,8 @@ export const BuySellButton: React.FC<BuySellButtonProps> = ({
       if (curr) {
         const newItemCount = curr - sellCount;
 
-        const transc = transaction("sell", price, sellCount);
-        const newBalance = rounding(transc + userData.balance);
+        const amount = transaction("sell", price, sellCount);
+        const newBalance = rounding(amount + userData.balance);
 
         if (newItemCount === 0) {
           const newAssets = { ...userData.assets };
@@ -161,12 +168,9 @@ export const BuySellButton: React.FC<BuySellButtonProps> = ({
         <div className="group flex items-center text-emerald-300">
           <button
             className={cn(
-              "sub-btn scale-feedback",
-              "border border-emerald-300",
-              "invisible group-has-[:hover]:visible",
-              "group-has-[:hover]:transition-all duration-200 ease-out",
-              "left-[12px]",
-              "group-has-[:hover]:translate-x-[-13px]"
+              subBtnClass,
+              "left-[12px] border-emerald-300",
+              "group-hover:translate-x-[-13px]"
             )}
             onClick={() => onClickDecrement("buy")}
             style={buyCount < 2 ? { visibility: "hidden" } : {}}
@@ -181,12 +185,9 @@ export const BuySellButton: React.FC<BuySellButtonProps> = ({
           </button>
           <button
             className={cn(
-              "sub-btn scale-feedback",
-              "border border-emerald-300",
-              "invisible group-has-[:hover]:visible",
-              "group-has-[:hover]:transition-all duration-200 ease-out",
-              "left-[-12px]",
-              "group-has-[:hover]:translate-x-[13px]"
+              subBtnClass,
+              "left-[-12px] border-emerald-300",
+              "group-hover:translate-x-[13px]"
             )}
             onClick={() => onClickIncrement("buy")}
             style={buyCount > 9 ? { visibility: "hidden" } : {}}
@@ -198,12 +199,9 @@ export const BuySellButton: React.FC<BuySellButtonProps> = ({
         <div className="group flex items-center text-red-300">
           <button
             className={cn(
-              "sub-btn scale-feedback",
-              "border border-red-300",
-              "invisible group-has-[:hover]:visible",
-              "group-has-[:hover]:transition-all duration-200 ease-out",
-              "left-[12px]",
-              "group-has-[:hover]:translate-x-[-13px]"
+              subBtnClass,
+              "left-[12px] border-red-300",
+              "group-hover:translate-x-[-13px]"
             )}
             onClick={() => onClickDecrement("sell")}
             style={isSellDecHidden ? { visibility: "hidden" } : {}}
@@ -218,12 +216,9 @@ export const BuySellButton: React.FC<BuySellButtonProps> = ({
           </button>
           <button
             className={cn(
-              "sub-btn scale-feedback",
-              "border border-red-300",
-              "invisible group-has-[:hover]:visible",
-              "group-has-[:hover]:transition-all duration-200 ease-out",
-              "left-[-12px]",
-              "group-has-[:hover]:translate-x-[13px]"
+              subBtnClass,
+              "left-[-12px] border-red-300",
+              "group-hover:translate-x-[13px]"
             )}
             onClick={() => onClickIncrement("sell")}
             style={
