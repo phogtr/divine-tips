@@ -16,7 +16,7 @@ export const SideItems: React.FC<SideItemsProps> = ({
   onClickToggleAll,
 }) => {
   return (
-    <div className="w-(--side-item-w) mt-1 border border-white overflow-y-auto overflow-x-hidden">
+    <div className="w-(--side-item-w) mt-1 border border-white overflow-y-auto overflow-x-hidden z-3">
       <div className="flex flex-col items-center">
         <button
           className={`w-17 h-16 border rounded my-2 text-center cursor-pointer ${
