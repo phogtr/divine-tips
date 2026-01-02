@@ -1,0 +1,47 @@
+"use client";
+
+import { useState } from "react";
+
+import { EventDrawerContent } from "./EventDrawerContent";
+
+import { useQueryEvent } from "@/hooks/useQueryEvent";
+
+import { Triangle } from "lucide-react";
+
+export const EventDrawer = ({}) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const { data: eventData } = useQueryEvent({});
+
+  return (
+    <>
+      <button
+        className="h-10 w-10 cursor-pointer rounded-tl-sm rounded-bl-sm bg-white"
+        style={{
+          transform: isOpen ? "translate(-384px)" : "translate(0)",
+          // sync w/ drawer animation
+          transition: "transform .5s cubic-bezier(.32, .72, 0, 1)",
+          animationDuration: "0.5s",
+          animationTimingFunction: "cubic-bezier(0.32, 0.72, 0, 1)",
+        }}
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        <Triangle
+          className="relative left-3 duration-250 ease-in"
+          fill="#000"
+          stroke="#000"
+          size={16}
+          style={{
+            rotate: isOpen ? "90deg" : "270deg",
+          }}
+        />
+      </button>
+
+      <EventDrawerContent
+        data={eventData}
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+      />
+    </>
+  );
+};

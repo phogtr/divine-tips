@@ -15,6 +15,7 @@ import { SideItems } from "@/components/item/SideItems";
 import { ItemCard } from "@/components/item/ItemCard";
 import { SignUpDialog } from "@/components/SignUpDialog";
 import { EventContent } from "@/components/event/EventContent";
+import { EventDrawer } from "@/components/event/EventDrawer";
 import { TaxInfo } from "./TaxInfo";
 
 import { getItemsApi } from "@/api/item.api";
@@ -237,6 +238,10 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
       <main className="home-main-w overflow-auto">
         <div className="fixed flex mx-0.5">
           <TaxInfo />
+        </div>
+
+        <div className="fixed mx-0.5 right-0">
+          <EventDrawer />
         </div>
 
         <div className="mx-12 mt-22 mb-14 flex justify-center">
