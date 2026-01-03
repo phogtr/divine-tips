@@ -8,10 +8,18 @@ import { useQueryEvent } from "@/hooks/useQueryEvent";
 
 import { Triangle } from "lucide-react";
 
-export const EventDrawer = ({}) => {
+interface EventDrawerProps {
+  startFetchEventData: boolean;
+}
+
+export const EventDrawer: React.FC<EventDrawerProps> = ({
+  startFetchEventData,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const { data: eventData } = useQueryEvent({});
+  const { data: eventData } = useQueryEvent({
+    isEnable: startFetchEventData,
+  });
 
   return (
     <>

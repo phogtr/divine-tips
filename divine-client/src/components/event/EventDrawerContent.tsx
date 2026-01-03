@@ -52,7 +52,7 @@ export const EventDrawerContent: React.FC<EventDrawerContentProps> = ({
               <h2 className="text-xl">{labelMap[idx]}</h2>
 
               {data.map((d) => (
-                <EventContent key={d.type} data={d} maxWidth="50%" />
+                <EventContent key={d.type} data={d} maxWidth="55%" />
               ))}
             </div>
           ))}

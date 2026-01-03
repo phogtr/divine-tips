@@ -60,8 +60,8 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
   const [signUpInput, setSignUpInput] = useState("");
 
   const [eventDialog, setEventDialog] = useState(false);
-  const [startInitialEvent, setStartInitialEvent] = useState(false);
 
+  const [startInitialEvent, setStartInitialEvent] = useState(true);
   const [startFetchEndDay, setStartFetchEndDay] = useState(false);
 
   const [items, setItems] = useState(initItemData);
@@ -79,14 +79,15 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
 
 
   ///////////////////////////////////////////////////////////////////////////
-  const { data: initEventData } = useQueryEvent({
-    isEnable: startInitialEvent === true,
-  });
-
   const { data: nextDayEventData } = useQuery({
     queryKey: [END_DAY_QUERY_KEY],
     queryFn: endDayApi,
     enabled: startFetchEndDay === true,
+  });
+
+  const startFetchEventData = startInitialEvent === true || !!nextDayEventData;
+  const { data: initEventData } = useQueryEvent({
+    isEnable: startFetchEventData,
   });
 
   const { data: itemData } = useQuery({
@@ -121,8 +122,7 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
   const closeSignUpDialog = () => {
     setSignUpDialog(false);
     setIsSignUp(true);
-
-    setStartInitialEvent(true);
+    setEventDialog(true);
   };
 
   const onClickSubmitSignUp = () => {
@@ -148,8 +148,14 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
   ///////////////////////////////////////////////////////////////////////////
   // end day
   const onClickEndDay = () => {
-    // ensure initEventData is null
-    // else eventData below might flash-render this data, then render next-day data
+    setStartInitialEvent(false);
+
+    /**
+     * eventData might flash-render initEventData, then render nextDayEventData
+     * invalidateQueries seems to cause race-condition between initEventData & nextDayEventData
+     * removeQueries guarantee initEventData is null & eventData is using nextDayEventData
+     * initEventData is re-fetched after nextDayEventData, but it's ok since eventData already set
+     */
     queryClient.removeQueries({ queryKey: [EVENT_QUERY_KEY] });
 
     queryClient.removeQueries({ queryKey: [END_DAY_QUERY_KEY] });
@@ -159,7 +165,6 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
   };
 
   ///////////////////////////////////////////////////////////////////////////
-  // useEffect
   useEffect(() => {
     if (
       isSignUpHydrate &&
@@ -172,10 +177,10 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
   }, [isSignUpHydrate, isUserDataHydrate]);
 
   useEffect(() => {
-    if (startInitialEvent || startFetchEndDay) {
+    if (nextDayEventData) {
       setEventDialog(true);
     }
-  }, [startInitialEvent, startFetchEndDay]);
+  }, [nextDayEventData]);
 
   useEffect(() => {
     if (itemData) {
@@ -241,7 +246,7 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
         </div>
 
         <div className="fixed mx-0.5 right-0">
-          <EventDrawer />
+          <EventDrawer startFetchEventData={startFetchEventData} />
         </div>
 
         <div className="mx-12 mt-22 mb-14 flex justify-center">
