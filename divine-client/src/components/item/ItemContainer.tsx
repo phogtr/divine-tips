@@ -16,6 +16,7 @@ import { ItemCard } from "@/components/item/ItemCard";
 import { SignUpDialog } from "@/components/SignUpDialog";
 import { EventContent } from "@/components/event/EventContent";
 import { EventDrawer } from "@/components/event/EventDrawer";
+import { ProgressDialog } from "@/components/ProgressDialog";
 import { TaxInfo } from "./TaxInfo";
 
 import { getItemsApi } from "@/api/item.api";
@@ -58,6 +59,8 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
   ///////////////////////////////////////////////////////////////////////////
   const [signUpDialog, setSignUpDialog] = useState(false);
   const [signUpInput, setSignUpInput] = useState("");
+
+  const [progressDialog, setProgressDialog] = useState(false);
 
   const [eventDialog, setEventDialog] = useState(false);
 
@@ -162,6 +165,7 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
     queryClient.removeQueries({ queryKey: [ITEM_QUERY_KEY] });
 
     setStartFetchEndDay(true);
+    setProgressDialog(true);
   };
 
   ///////////////////////////////////////////////////////////////////////////
@@ -177,10 +181,10 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
   }, [isSignUpHydrate, isUserDataHydrate]);
 
   useEffect(() => {
-    if (nextDayEventData) {
+    if (nextDayEventData && !progressDialog) {
       setEventDialog(true);
     }
-  }, [nextDayEventData]);
+  }, [nextDayEventData, progressDialog]);
 
   useEffect(() => {
     if (itemData) {
@@ -262,6 +266,12 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
           </button>
         </div>
       </main>
+
+      <ProgressDialog
+        isOpen={progressDialog}
+        setIsOpen={setProgressDialog}
+        isComplete={!!nextDayEventData}
+      />
 
       {eventContent}
 
