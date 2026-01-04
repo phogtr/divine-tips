@@ -1,7 +1,7 @@
 package item
 
 import (
-	"math/rand"
+	"math/rand/v2"
 
 	"github.com/phogtr/divine-tips/utils"
 )
@@ -25,9 +25,9 @@ func Update(items []*Item, nameMap map[string]int) []*Item {
 
 		// 0: decrease, 1: increase, 2: no change
 		// if item in map, no need to rand, use value in map to modify change
-		ctype, ok := nameMap[item.Name]
+		changeType, ok := nameMap[item.Name]
 		if ok {
-			switch ctype {
+			switch changeType {
 			case 0:
 				change = change * -1
 
@@ -35,11 +35,11 @@ func Update(items []*Item, nameMap map[string]int) []*Item {
 				change = 0
 			}
 		} else {
-			changeType := rand.Intn(3)
-			if changeType == 2 {
+			newChangeType := rand.IntN(3)
+			if newChangeType == 2 {
 				change = 0
 			}
-			if changeType == 0 {
+			if newChangeType == 0 {
 				change = change * -1
 			}
 		}

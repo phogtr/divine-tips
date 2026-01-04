@@ -1,7 +1,7 @@
 package event
 
 import (
-	"math/rand"
+	"math/rand/v2"
 
 	"github.com/phogtr/divine-tips/services/item"
 )
@@ -27,12 +27,12 @@ var noChangeDesc = [3]string{
 }
 
 func Create(items []*item.Item) []*EventItem {
-	count := rand.Intn(eventItemCount) + 1
+	count := rand.IntN(eventItemCount) + 1
 	itemMap := make(map[int][]string)
 	indexMap := make(map[int]bool)
 
 	for len(indexMap) < count {
-		index := rand.Intn(len(items))
+		index := rand.IntN(len(items))
 		if indexMap[index] {
 			// item already picked
 			continue
@@ -40,8 +40,8 @@ func Create(items []*item.Item) []*EventItem {
 		indexMap[index] = true
 
 		item := items[index]
-		ctype := rand.Intn(3)
-		itemMap[ctype] = append(itemMap[ctype], item.Name)
+		changeType := rand.IntN(3)
+		itemMap[changeType] = append(itemMap[changeType], item.Name)
 	}
 
 	var eventItem []*EventItem
@@ -52,13 +52,13 @@ func Create(items []*item.Item) []*EventItem {
 
 		switch ei.Type {
 		case 0:
-			idx := rand.Intn(3)
+			idx := rand.IntN(3)
 			ei.TypeDescription = decreaseDesc[idx]
 		case 1:
-			idx := rand.Intn(3)
+			idx := rand.IntN(3)
 			ei.TypeDescription = increaseDesc[idx]
 		case 2:
-			idx := rand.Intn(3)
+			idx := rand.IntN(3)
 			ei.TypeDescription = noChangeDesc[idx]
 		}
 
