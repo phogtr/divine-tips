@@ -17,6 +17,7 @@ import { SignUpDialog } from "@/components/SignUpDialog";
 import { EventContent } from "@/components/event/EventContent";
 import { EventDrawer } from "@/components/event/EventDrawer";
 import { ProgressDialog } from "@/components/ProgressDialog";
+import { EndingDayButton } from "@/components/day/EndingDayButton";
 import { TaxInfo } from "./TaxInfo";
 
 import { getItemsApi } from "@/api/item.api";
@@ -60,12 +61,14 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
   const [signUpDialog, setSignUpDialog] = useState(false);
   const [signUpInput, setSignUpInput] = useState("");
 
+  const [startInitialEvent, setStartInitialEvent] = useState(true);
+  const [startFetchEndDay, setStartFetchEndDay] = useState(false);
+
   const [progressDialog, setProgressDialog] = useState(false);
 
   const [eventDialog, setEventDialog] = useState(false);
 
-  const [startInitialEvent, setStartInitialEvent] = useState(true);
-  const [startFetchEndDay, setStartFetchEndDay] = useState(false);
+  const [endDayAnimate, setEndDayAnimate] = useState(false);
 
   const [items, setItems] = useState(initItemData);
 
@@ -146,6 +149,7 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
     setEventDialog(false);
     setStartInitialEvent(false);
     setStartFetchEndDay(false);
+    setEndDayAnimate(true);
   };
 
   ///////////////////////////////////////////////////////////////////////////
@@ -166,6 +170,10 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
 
     setStartFetchEndDay(true);
     setProgressDialog(true);
+  };
+
+  const updateEndDayAnimate = (state: boolean) => {
+    setEndDayAnimate(state);
   };
 
   ///////////////////////////////////////////////////////////////////////////
@@ -257,13 +265,12 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
           <ItemCard items={items} renderMap={renderMap} />
         </div>
 
-        <div className="fixed right-4 bottom-2">
-          <button
-            className="border border-white rounded-[5px] py-1 px-2 cursor-pointer"
-            onClick={onClickEndDay}
-          >
-            End day
-          </button>
+        <div className="fixed right-11 bottom-10">
+          <EndingDayButton
+            onClickEndDay={onClickEndDay}
+            isAnimated={endDayAnimate}
+            completedCallback={updateEndDayAnimate}
+          />
         </div>
       </main>
 
