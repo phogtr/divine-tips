@@ -172,6 +172,11 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
     setProgressDialog(true);
   };
 
+  const updateProgressDialog = () => {
+    setProgressDialog(false);
+    setEventDialog(true);
+  };
+
   const updateEndDayAnimate = (state: boolean) => {
     setEndDayAnimate(state);
   };
@@ -187,12 +192,6 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
       setSignUpDialog(true);
     }
   }, [isSignUpHydrate, isUserDataHydrate]);
-
-  useEffect(() => {
-    if (nextDayEventData && !progressDialog) {
-      setEventDialog(true);
-    }
-  }, [nextDayEventData, progressDialog]);
 
   useEffect(() => {
     if (itemData) {
@@ -276,7 +275,7 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
 
       <ProgressDialog
         isOpen={progressDialog}
-        setIsOpen={setProgressDialog}
+        closeDialogCallback={updateProgressDialog}
         isComplete={!!nextDayEventData}
       />
 
@@ -299,7 +298,7 @@ const endDayApi = async (): Promise<EventItem[]> => {
     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/day/advance`,
     {
       method: "POST",
-    }
+    },
   );
   if (!res.ok) throw new Error("failed to end day");
 

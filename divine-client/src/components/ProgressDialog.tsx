@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import type { Dispatch, SetStateAction } from "react";
 
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import {
@@ -16,13 +15,13 @@ import { Progress } from "@/components/ui/progress";
 
 interface ProgressDialogProps {
   isOpen: boolean;
-  setIsOpen: Dispatch<SetStateAction<boolean>>;
+  closeDialogCallback: () => void;
   isComplete: boolean;
 }
 
 export const ProgressDialog: React.FC<ProgressDialogProps> = ({
   isOpen,
-  setIsOpen,
+  closeDialogCallback,
   isComplete,
 }) => {
   const [progress, setProgress] = useState(0);
@@ -38,7 +37,7 @@ export const ProgressDialog: React.FC<ProgressDialogProps> = ({
   }, [isOpen, progress]);
 
   useEffect(() => {
-    if (isComplete) {
+    if (isOpen && isComplete) {
       const progressOne = setTimeout(() => {
         setProgress(() => generateProgress(6, 9));
 
@@ -51,21 +50,21 @@ export const ProgressDialog: React.FC<ProgressDialogProps> = ({
 
       return () => clearTimeout(progressOne);
     }
-  }, [isComplete]);
+  }, [isOpen, isComplete]);
 
   useEffect(() => {
-    if (progress === 100) {
+    if (isOpen && progress === 100) {
       const timer = setTimeout(() => {
-        setIsOpen(false);
+        closeDialogCallback();
         setProgress(0);
       }, 500);
 
       return () => clearTimeout(timer);
     }
-  }, [progress]);
+  }, [isOpen, progress]);
 
   return (
-    <Dialog open={isOpen} onOpenChange={() => setIsOpen(false)}>
+    <Dialog open={isOpen} onOpenChange={closeDialogCallback}>
       <DialogTrigger />
       <DialogContent
         showCloseButton={false}
@@ -83,7 +82,7 @@ export const ProgressDialog: React.FC<ProgressDialogProps> = ({
 
         <Progress
           value={progress}
-          className=" h-5 border-white bg-gray-500 [&>div]:bg-white"
+          className="h-5 border-white bg-gray-500 [&>div]:bg-white"
         />
       </DialogContent>
     </Dialog>
