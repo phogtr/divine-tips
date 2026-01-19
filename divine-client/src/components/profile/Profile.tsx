@@ -71,6 +71,7 @@ export const Profile = () => {
         name: signUpInput,
         balance: USER_INITIAL_BALANCE,
         assets: null,
+        day: 1,
       });
       setNameChange(signUpInput);
     }

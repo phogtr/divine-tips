@@ -18,6 +18,7 @@ import { EventContent } from "@/components/event/EventContent";
 import { EventDrawer } from "@/components/event/EventDrawer";
 import { ProgressDialog } from "@/components/ProgressDialog";
 import { EndingDayButton } from "@/components/day/EndingDayButton";
+import { DayCount } from "@/components/day/DayCount";
 import { TaxInfo } from "./TaxInfo";
 
 import { getItemsApi } from "@/api/item.api";
@@ -137,6 +138,7 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
         name: signUpInput,
         balance: USER_INITIAL_BALANCE,
         assets: null,
+        day: 1,
       });
     }
 
@@ -270,6 +272,10 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
             isAnimated={endDayAnimate}
             completedCallback={updateEndDayAnimate}
           />
+        </div>
+
+        <div className="fixed right-30 bottom-0">
+          <DayCount isAnimated={endDayAnimate} />
         </div>
       </main>
 
