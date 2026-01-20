@@ -34,7 +34,7 @@ export const BuySellButton: React.FC<BuySellButtonProps> = ({
     "sub-btn scale-feedback",
     "border duration-200 ease-out",
     "invisible",
-    "group-hover:visible"
+    "group-hover:visible",
   );
 
   const onClickBuy = () => {
@@ -111,11 +111,16 @@ export const BuySellButton: React.FC<BuySellButtonProps> = ({
   const onClickIncrement = (type: "buy" | "sell") => {
     switch (type) {
       case "buy":
-        setBuyCount((prev) => prev + 1);
+        if (buyCount < 10) {
+          setBuyCount((prev) => prev + 1);
+        }
         break;
 
       case "sell":
-        setSellCount((prev) => prev + 1);
+        if (!isSellIncHidden) {
+          setSellCount((prev) => prev + 1);
+        }
+
         break;
 
       default:
@@ -170,7 +175,7 @@ export const BuySellButton: React.FC<BuySellButtonProps> = ({
             className={cn(
               subBtnClass,
               "left-[12px] border-emerald-300",
-              "group-hover:translate-x-[-13px]"
+              "group-hover:translate-x-[-13px]",
             )}
             onClick={() => onClickDecrement("buy")}
             style={buyCount < 2 ? { visibility: "hidden" } : {}}
@@ -187,7 +192,7 @@ export const BuySellButton: React.FC<BuySellButtonProps> = ({
             className={cn(
               subBtnClass,
               "left-[-12px] border-emerald-300",
-              "group-hover:translate-x-[13px]"
+              "group-hover:translate-x-[13px]",
             )}
             onClick={() => onClickIncrement("buy")}
             style={buyCount > 9 ? { visibility: "hidden" } : {}}
@@ -201,7 +206,7 @@ export const BuySellButton: React.FC<BuySellButtonProps> = ({
             className={cn(
               subBtnClass,
               "left-[12px] border-red-300",
-              "group-hover:translate-x-[-13px]"
+              "group-hover:translate-x-[-13px]",
             )}
             onClick={() => onClickDecrement("sell")}
             style={isSellDecHidden ? { visibility: "hidden" } : {}}
@@ -218,7 +223,7 @@ export const BuySellButton: React.FC<BuySellButtonProps> = ({
             className={cn(
               subBtnClass,
               "left-[-12px] border-red-300",
-              "group-hover:translate-x-[13px]"
+              "group-hover:translate-x-[13px]",
             )}
             onClick={() => onClickIncrement("sell")}
             style={
@@ -241,8 +246,8 @@ export const BuySellButton: React.FC<BuySellButtonProps> = ({
 
 const ToastContent = ({ text }: { text: string }) => {
   return (
-    <div className="flex items-center justify-between w-full">
-      <div className="w-17 h-16 border rounded border-white"></div>
+    <div className="flex w-full items-center justify-between">
+      <div className="h-16 w-17 rounded border border-white"></div>
       <div className="text-xl">{text}</div>
     </div>
   );
