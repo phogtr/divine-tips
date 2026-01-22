@@ -77,13 +77,14 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
     initItemData.reduce(
       (acc, val) => ({
         ...acc,
-        [val.id]: false,
+        [val.id]: true,
       }),
-      {}
-    )
+      {},
+    ),
   );
-  const [isToggleAll, setIsToggleAll] = useState(false);
 
+  let isToggleAll = true;
+  isToggleAll = Object.values(renderMap).every((v) => v);
 
   ///////////////////////////////////////////////////////////////////////////
   const { data: nextDayEventData } = useQuery({
@@ -113,8 +114,6 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
   };
 
   const onClickToggleAll = (state: boolean) => {
-    setIsToggleAll(!state);
-
     setRenderMap((prev) => {
       const newRenderMap: Record<number, boolean> = {};
       for (const key in prev) {
@@ -200,14 +199,6 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
       setItems(itemData);
     }
   }, [itemData]);
-
-  useEffect(() => {
-    if (Object.values(renderMap).every((v) => v)) {
-      setIsToggleAll(true);
-    } else {
-      setIsToggleAll(false);
-    }
-  }, [renderMap]);
 
   ///////////////////////////////////////////////////////////////////////////
 
