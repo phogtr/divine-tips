@@ -1,8 +1,10 @@
 import type { ChangeEvent, MouseEvent } from "react";
 
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -31,6 +33,10 @@ export const SignUpDialog: React.FC<SignUpDialogProps> = ({
           <DialogTitle className="text-center">
             Welcome to Divine Tips!
           </DialogTitle>
+
+          <VisuallyHidden>
+            <DialogDescription>Welcoming</DialogDescription>
+          </VisuallyHidden>
         </DialogHeader>
 
         <div>

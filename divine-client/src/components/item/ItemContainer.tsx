@@ -3,9 +3,11 @@
 import { useEffect, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -217,6 +219,10 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
         <DialogContent>
           <DialogHeader>
             <DialogTitle className="text-center">Tomorrow</DialogTitle>
+
+            <VisuallyHidden>
+              <DialogDescription>Event for the next day</DialogDescription>
+            </VisuallyHidden>
           </DialogHeader>
 
           <div>

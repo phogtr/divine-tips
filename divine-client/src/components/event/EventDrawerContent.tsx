@@ -3,6 +3,7 @@ import type { Dispatch, SetStateAction } from "react";
 import {
   Drawer,
   DrawerContent,
+  DrawerDescription,
   DrawerHeader,
   DrawerTitle,
 } from "@/components/ui/drawer";
@@ -40,6 +41,7 @@ export const EventDrawerContent: React.FC<EventDrawerContentProps> = ({
         <VisuallyHidden>
           <DrawerHeader>
             <DrawerTitle>Event Information</DrawerTitle>
+            <DrawerDescription>Event information</DrawerDescription>
           </DrawerHeader>
         </VisuallyHidden>
 
