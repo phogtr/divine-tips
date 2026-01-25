@@ -130,7 +130,6 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
   const closeSignUpDialog = () => {
     setSignUpDialog(false);
     setIsSignUp(true);
-    setEventDialog(true);
   };
 
   const onClickSubmitSignUp = () => {
@@ -216,7 +215,7 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
     eventContent = (
       <Dialog open={eventDialog} onOpenChange={closeEventDialog}>
         <DialogTrigger />
-        <DialogContent>
+        <DialogContent overlayClassname="bg-transparent">
           <DialogHeader>
             <DialogTitle className="text-center">Tomorrow</DialogTitle>
 
