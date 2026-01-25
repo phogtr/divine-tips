@@ -21,7 +21,7 @@ export const EventContent: React.FC<EventContentProps> = ({
 
   let descElem = <em>{desc}</em>;
   if (isTextStream) {
-    descElem = <TextStream text={desc} streamInterval={35} elem="em" />;
+    descElem = <TextStream text={desc} elem="em" />;
   }
 
   return (
@@ -41,7 +41,7 @@ export const EventContent: React.FC<EventContentProps> = ({
                 key={n}
                 text={n}
                 className={`${textColor}`}
-                streamInterval={75}
+                speed={30}
                 elem="li"
               />
             );
