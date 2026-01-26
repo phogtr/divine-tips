@@ -37,7 +37,7 @@ export const EventDrawerContent: React.FC<EventDrawerContentProps> = ({
 
   return (
     <Drawer open={isOpen} onOpenChange={setIsOpen} direction="right">
-      <DrawerContent>
+      <DrawerContent overlayClassname="bg-transparent">
         <VisuallyHidden>
           <DrawerHeader>
             <DrawerTitle>Event Information</DrawerTitle>
@@ -45,7 +45,7 @@ export const EventDrawerContent: React.FC<EventDrawerContentProps> = ({
           </DrawerHeader>
         </VisuallyHidden>
 
-        <div className="px-6 pb-8">
+        <div className="overflow-y-auto px-6 pb-8">
           {data.map(({ id, data }, idx) => (
             <div
               key={id}
