@@ -7,8 +7,8 @@ import { useCallback, useEffect, useState } from "react";
 
 import type { Dispatch, SetStateAction } from "react";
 
-import { useEventCallback } from "@/hooks/lib/useEventCallback";
-import { useEventListener } from "@/hooks/lib/useEventListener";
+import { useEventCallback } from "@/lib/hooks/useEventCallback";
+import { useEventListener } from "@/lib/hooks/useEventListener";
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
@@ -19,7 +19,7 @@ declare global {
 
 export const useLocalStorage = <T>(
   key: string,
-  initialValue: T
+  initialValue: T,
 ): {
   data: T;
   setData: Dispatch<SetStateAction<T>>;
@@ -41,7 +41,7 @@ export const useLocalStorage = <T>(
       } catch (error) {
         console.error(`error setting localStorage key - ${key}:`, error);
       }
-    }
+    },
   );
 
   const clear = useEventCallback(() => {
@@ -65,7 +65,7 @@ export const useLocalStorage = <T>(
 
       return parsed as T;
     },
-    [initialValue]
+    [initialValue],
   );
 
   const read = useCallback((): T => {
@@ -90,7 +90,7 @@ export const useLocalStorage = <T>(
       }
       setData(read());
     },
-    [key, read]
+    [key, read],
   );
 
   // this only works for other documents, not the current one
