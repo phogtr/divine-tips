@@ -7,8 +7,66 @@
   --navbar-h: 50px;
   --side-item-w: 100px;
 
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
+  --background: #050606;
+  --foreground: ##eaedef;
+
+  --blue-1: #6ba9d7;
+  --red-1: #ff6a7a;
+  --red-ln: #ff6158;
+  --green-1: #69fea1;
+  --green-ln: #6cd594;
+  --yellow-1: #dfc957;
+
+  --primary-50: #040f15;
+  --primary-100: #091e2a;
+  --primary-200: #113c55;
+  --primary-300: #1a5a7f;
+  --primary-400: #2378a9;
+  --primary-500: #2b96d4;
+  --primary-600: #56abdc;
+  --primary-700: #80c0e5;
+  --primary-800: #aad5ee;
+  --primary-900: #d5eaf6;
+  --primary-950: #eaf4fb;
+
+  --secondary-50: #080a11;
+  --secondary-100: #101323;
+  --secondary-200: #212645;
+  --secondary-300: #313968;
+  --secondary-400: #414c8b;
+  --secondary-500: #525fad;
+  --secondary-600: #747fbe;
+  --secondary-700: #979fce;
+  --secondary-800: #babfde;
+  --secondary-900: #dcdfef;
+  --secondary-950: #eeeff7;
+
+  --accent-50: #0d0a10;
+  --accent-100: #1b1320;
+  --accent-200: #362640;
+  --accent-300: #513960;
+  --accent-400: #6c4d80;
+  --accent-500: #87609f;
+  --accent-600: #9f80b3;
+  --accent-700: #b79fc6;
+  --accent-800: #cfbfd9;
+  --accent-900: #e7dfec;
+  --accent-950: #f3eff5;
+
+  --destructive: #ff6675;
+  --destructive-foreground: #ff001a;
+  /* --border: oklch(1 0 0 / 10%); */
+  /* --input: oklch(1 0 0 / 15%); */
+  /* --ring: oklch(0.556 0 0); */
+
+  --popover: var(--primary-50);
+  --popover-foreground: var(--foreground);
+
+  --chart-1: oklch(0.809 0.105 251.813);
+  --chart-2: oklch(0.623 0.214 259.815);
+  --chart-3: oklch(0.546 0.245 262.881);
+  --chart-4: oklch(0.488 0.243 264.376);
+  --chart-5: oklch(0.424 0.199 265.638);
 
   --font-sans: Inter, sans-serif;
   --font-serif: Lora, serif;
@@ -19,14 +77,67 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
 
+  --color-blue-1: var(--blue-1);
+  --color-red-1: var(--red-1);
+  --color-red-ln: var(--red-ln);
+  --color-green-1: var(--green-1);
+  --color-green-ln: var(--green-ln);
+  --color-yellow-1: var(--yellow-1);
+
+  --color-primary-50: var(--primary-50);
+  --color-primary-100: var(--primary-100);
+  --color-primary-200: var(--primary-200);
+  --color-primary-300: var(--primary-300);
+  --color-primary-400: var(--primary-400);
+  --color-primary-500: var(--primary-500);
+  --color-primary-600: var(--primary-600);
+  --color-primary-700: var(--primary-700);
+  --color-primary-800: var(--primary-800);
+  --color-primary-900: var(--primary-900);
+  --color-primary-950: var(--primary-950);
+
+  --color-secondary-50: var(--secondary-50);
+  --color-secondary-100: var(--secondary-100);
+  --color-secondary-200: var(--secondary-200);
+  --color-secondary-300: var(--secondary-300);
+  --color-secondary-400: var(--secondary-400);
+  --color-secondary-500: var(--secondary-500);
+  --color-secondary-600: var(--secondary-600);
+  --color-secondary-700: var(--secondary-700);
+  --color-secondary-800: var(--secondary-800);
+  --color-secondary-900: var(--secondary-900);
+  --color-secondary-950: var(--secondary-950);
+
+  --color-accent-50: var(--accent-50);
+  --color-accent-100: var(--accent-100);
+  --color-accent-200: var(--accent-200);
+  --color-accent-300: var(--accent-300);
+  --color-accent-400: var(--accent-400);
+  --color-accent-500: var(--accent-500);
+  --color-accent-600: var(--accent-600);
+  --color-accent-700: var(--accent-700);
+  --color-accent-800: var(--accent-800);
+  --color-accent-900: var(--accent-900);
+  --color-accent-950: var(--accent-950);
+
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  /* --color-border: var(--border); */
+  /* --color-input: var(--input); */
+  /* --color-ring: var(--ring); */
+
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
   --font-sans: var(--font-sans);
   --font-mono: var(--font-mono);
   --font-serif: var(--font-serif);
-}
-
-.dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
 }
 
 @layer base {
@@ -58,7 +169,7 @@
 
   .toast-override {
     width: 288px !important;
-    border: 1px solid #fff !important;
+    border: 1px solid var(--primary-900) !important;
     border-radius: 0.25rem /* 4px */ !important;
   }
 

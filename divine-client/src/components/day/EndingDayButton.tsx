@@ -30,7 +30,7 @@ export const EndingDayButton: React.FC<EndingDayButtonProps> = ({
   return (
     <button onClick={onClickEndDay}>
       <Hourglass
-        className="scale-400 cursor-pointer duration-750 ease-linear"
+        className="scale-400 cursor-pointer text-yellow-1 duration-750 ease-linear"
         style={{
           rotate: "20deg",
           transform: `rotateX(${rotate}deg)`,

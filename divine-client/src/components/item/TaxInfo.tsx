@@ -12,7 +12,7 @@ export const TaxInfo = () => {
   return (
     <>
       <div
-        className="w-38 border border-t-0 border-l-0 border-white p-2 duration-150 ease-in-out"
+        className="w-38 p-2 bg-primary-50 rounded-sm border border-t-0 border-l-0 border-primary-900 duration-150 ease-in-out"
         style={
           isToggleTaxInfo
             ? { transform: "translate(0)", opacity: 1 }
@@ -25,8 +25,9 @@ export const TaxInfo = () => {
         <p className="text-xl">Buy Tax: {(BUY_TAX * 100).toFixed(1)}%</p>
         <p className="text-xl">Sell Tax: {(SELL_TAX * 100).toFixed(1)}%</p>
       </div>
+
       <button
-        className="h-10 w-10 cursor-pointer rounded-tr-sm rounded-br-sm bg-white duration-150 ease-in-out"
+        className="h-10 w-10 bg-accent-900 cursor-pointer rounded-tr-sm rounded-br-sm duration-150 ease-in-out"
         style={
           isToggleTaxInfo
             ? {
@@ -41,9 +42,7 @@ export const TaxInfo = () => {
         onClick={() => setIsToggleTaxInfo(!isToggleTaxInfo)}
       >
         <Triangle
-          className="relative left-3 duration-250 ease-in"
-          fill="#000"
-          stroke="#000"
+          className="relative left-3 fill-accent-500 stroke-accent-500 duration-250 ease-in"
           size={16}
           style={{
             rotate: isToggleTaxInfo ? "270deg" : "90deg",
