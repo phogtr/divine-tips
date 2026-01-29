@@ -37,7 +37,10 @@ export const EventDrawerContent: React.FC<EventDrawerContentProps> = ({
 
   return (
     <Drawer open={isOpen} onOpenChange={setIsOpen} direction="right">
-      <DrawerContent overlayClassname="bg-transparent">
+      <DrawerContent
+        className="bg-primary-50"
+        overlayClassname="bg-transparent"
+      >
         <VisuallyHidden>
           <DrawerHeader>
             <DrawerTitle>Event Information</DrawerTitle>
@@ -49,7 +52,7 @@ export const EventDrawerContent: React.FC<EventDrawerContentProps> = ({
           {data.map(({ id, data }, idx) => (
             <div
               key={id}
-              className="max-w-2xl p-4 mt-8 border border-white rounded"
+              className="max-w-2xl p-4 mt-8 rounded border border-primary-900"
             >
               <h2 className="text-xl">{labelMap[idx]}</h2>
 

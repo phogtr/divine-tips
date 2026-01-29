@@ -24,7 +24,7 @@ export const EventDrawer: React.FC<EventDrawerProps> = ({
   return (
     <>
       <button
-        className="h-10 w-10 cursor-pointer rounded-tl-sm rounded-bl-sm bg-white"
+        className="h-10 w-10 bg-accent-900 cursor-pointer rounded-tl-sm rounded-bl-sm"
         style={{
           transform: isOpen ? "translate(-384px)" : "translate(0)",
           // sync w/ drawer animation
@@ -35,9 +35,7 @@ export const EventDrawer: React.FC<EventDrawerProps> = ({
         onClick={() => setIsOpen(!isOpen)}
       >
         <Triangle
-          className="relative left-3 duration-250 ease-in"
-          fill="#000"
-          stroke="#000"
+          className="relative left-3 fill-accent-500 stroke-accent-500 duration-250 ease-in"
           size={16}
           style={{
             rotate: isOpen ? "90deg" : "270deg",

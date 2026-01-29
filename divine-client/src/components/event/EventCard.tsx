@@ -19,7 +19,7 @@ export const EventCard: React.FC<EventCardProps> = ({ eventApiData }) => {
       {eventApiData.map(({ id, data }, idx) => (
         <div
           key={id}
-          className="max-w-2xl p-4 mt-8 border border-white rounded"
+          className="max-w-2xl p-4 mt-8 border border-primary-900 rounded"
         >
           <h2 className="text-xl">{labelMap[idx]}</h2>
 

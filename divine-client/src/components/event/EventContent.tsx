@@ -15,9 +15,9 @@ export const EventContent: React.FC<EventContentProps> = ({
 }) => {
   const { desc, name, type } = data;
 
-  let textColor = "text-gray-300";
-  if (type === 1) textColor = "text-emerald-300";
-  else if (type === 0) textColor = "text-red-300";
+  let textColor = "opacity-60";
+  if (type === 1) textColor = "text-green-1";
+  else if (type === 0) textColor = "text-red-1";
 
   let descElem = <em>{desc}</em>;
   if (isTextStream) {
@@ -26,7 +26,7 @@ export const EventContent: React.FC<EventContentProps> = ({
 
   return (
     <div
-      className="mt-4 pt-1.5 max-sm:max-w-[55%] border-t border-gray-700"
+      className="mt-4 pt-1.5 max-sm:max-w-[55%] border-t border-primary-200"
       style={{
         maxWidth: maxWidth,
       }}
