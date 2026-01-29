@@ -6,10 +6,10 @@ import { UserBalance } from "./UserBalance";
 
 export const Navbar = () => {
   const linkUnderlineClass =
-    "h-0.5 w-0 bg-white duration-400 ease-in-out group-hover:w-full";
+    "h-0.5 w-0 bg-accent-700 duration-400 ease-in-out group-hover:w-full";
 
   return (
-    <nav className="h-(--navbar-h) flex items-center px-2 border border-white">
+    <nav className="h-(--navbar-h) px-2 flex items-center border border-primary-900">
       <div className="flex w-full grow-1 shrink-2 justify-start">
         <Link href={"/"}>
           <h2 className="text-xl">Divide Tips</h2>

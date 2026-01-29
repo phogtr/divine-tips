@@ -28,7 +28,7 @@ export const SignUpDialog: React.FC<SignUpDialogProps> = ({
   return (
     <Dialog open={isOpenDialog} onOpenChange={onDialogChange}>
       <DialogTrigger />
-      <DialogContent>
+      <DialogContent className="bg-primary-50">
         <DialogHeader>
           <DialogTitle className="text-center">
             Welcome to Divine Tips!
@@ -45,7 +45,7 @@ export const SignUpDialog: React.FC<SignUpDialogProps> = ({
           <input
             type="text"
             placeholder="Username"
-            className="border border-white rounded w-full h-10 p-2 mb-5"
+            className="w-full h-10 p-2 mb-5 bg-primary-50 rounded border border-primary-900"
             value={signUpInput}
             onChange={onChangeSignUpInput}
             name="username"
@@ -64,7 +64,7 @@ export const SignUpDialog: React.FC<SignUpDialogProps> = ({
 
           <div className="text-center">
             <button
-              className="border border-white rounded-[5px] py-2 px-4 cursor-pointer disabled:cursor-not-allowed disabled:border-gray-600"
+              className="py-2 px-4 bg-primary-600 text-background border border-primary-900 rounded-[5px] cursor-pointer hover:bg-primary-700 disabled:cursor-not-allowed disabled:opacity-50"
               onClick={onClickSubmitSignUp}
               disabled={signUpInput === ""}
             >

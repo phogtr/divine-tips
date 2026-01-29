@@ -67,7 +67,7 @@ export const ProgressDialog: React.FC<ProgressDialogProps> = ({
     <Dialog open={isOpen} onOpenChange={closeDialogCallback}>
       <DialogTrigger />
       <DialogContent
-        className="top-auto bottom-1/12 translate-y-0"
+        className="top-auto bottom-1/12 translate-y-0 bg-primary-50"
         showCloseButton={false}
         onPointerDownOutside={(e) => e.preventDefault()}
         overlayClassname="bg-transparent"
@@ -84,7 +84,7 @@ export const ProgressDialog: React.FC<ProgressDialogProps> = ({
 
         <Progress
           value={progress}
-          className="h-5 border-white bg-gray-500 [&>div]:bg-white"
+          className="h-5 border-primary-900 bg-primary-200 [&>div]:bg-primary-700"
         />
         <div className="text-xl text-center">Passing time...</div>
       </DialogContent>
