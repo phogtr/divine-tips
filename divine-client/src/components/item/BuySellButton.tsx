@@ -170,11 +170,11 @@ export const BuySellButton: React.FC<BuySellButtonProps> = ({
   if (isUserDataHydrate && userData !== null) {
     return (
       <div className="mt-6 flex w-full justify-around gap-4">
-        <div className="group flex items-center text-emerald-300">
+        <div className="group flex items-center text-green-1">
           <button
             className={cn(
               subBtnClass,
-              "left-[12px] border-emerald-300",
+              "left-[12px] border-green-ln",
               "group-hover:translate-x-[-13px]",
             )}
             onClick={() => onClickDecrement("buy")}
@@ -183,7 +183,7 @@ export const BuySellButton: React.FC<BuySellButtonProps> = ({
             {"-"}
           </button>
           <button
-            className="transaction-btn scale-feedback border border-emerald-300"
+            className="transaction-btn scale-feedback border border-green-ln"
             onClick={onClickBuy}
           >
             BUY {buyCount > 1 && buyCount}
@@ -191,7 +191,7 @@ export const BuySellButton: React.FC<BuySellButtonProps> = ({
           <button
             className={cn(
               subBtnClass,
-              "left-[-12px] border-emerald-300",
+              "left-[-12px] border-green-ln",
               "group-hover:translate-x-[13px]",
             )}
             onClick={() => onClickIncrement("buy")}
@@ -201,11 +201,11 @@ export const BuySellButton: React.FC<BuySellButtonProps> = ({
           </button>
         </div>
 
-        <div className="group flex items-center text-red-300">
+        <div className="group flex items-center text-red-1">
           <button
             className={cn(
               subBtnClass,
-              "left-[12px] border-red-300",
+              "left-[12px] border-red-ln",
               "group-hover:translate-x-[-13px]",
             )}
             onClick={() => onClickDecrement("sell")}
@@ -214,7 +214,7 @@ export const BuySellButton: React.FC<BuySellButtonProps> = ({
             {"-"}
           </button>
           <button
-            className="transaction-btn scale-feedback border border-red-300"
+            className="transaction-btn scale-feedback border border-red-ln"
             onClick={onClickSell}
           >
             SELL {sellCount > 1 && sellCount}
@@ -222,7 +222,7 @@ export const BuySellButton: React.FC<BuySellButtonProps> = ({
           <button
             className={cn(
               subBtnClass,
-              "left-[-12px] border-red-300",
+              "left-[-12px] border-red-ln",
               "group-hover:translate-x-[13px]",
             )}
             onClick={() => onClickIncrement("sell")}

@@ -16,7 +16,7 @@ export const ItemCard: React.FC<ItemCardProps> = ({ items, renderMap }) => {
   return (
     <div className="flex flex-wrap gap-8">
       {items.map((i) =>
-        renderMap[i.id] ? <ItemContent key={i.id} data={i} /> : null
+        renderMap[i.id] ? <ItemContent key={i.id} data={i} /> : null,
       )}
     </div>
   );
@@ -25,24 +25,24 @@ export const ItemCard: React.FC<ItemCardProps> = ({ items, renderMap }) => {
 const ItemContent: React.FC<ItemContentProps> = ({ data }) => {
   const { id, name, current, previous, delta, deltaPercent } = data;
 
-  let textColor = "text-[#fff]";
+  let textColor = "text-foreground";
   let deltaIcon = <Triangle size={16} />;
 
-  if (current > previous) textColor = "text-emerald-300";
+  if (current > previous) textColor = "text-green-1";
   else if (current < previous) {
-    textColor = "text-red-300";
+    textColor = "text-red-1";
     deltaIcon = <Triangle size={16} className="rotate-180" />;
   }
 
-  const textLabel = "text-gray-400 text-xs";
+  const textLabel = "text-xs opacity-50";
 
   return (
     <>
       <div
         key={id}
-        className="w-78 px-2 pt-2 pb-4 flex flex-col items-center border border-white rounded-sm"
+        className="w-78 px-2 pt-2 pb-4 flex flex-col items-center bg-primary-50 rounded-sm border border-primary-900"
       >
-        <div className="relative p-2 w-full border-b border-gray-700">
+        <div className="w-full p-2 relative border-b border-primary-200">
           <OwnedItemCount name={name} />
 
           <div className="flex justify-center items-center">
@@ -50,9 +50,7 @@ const ItemContent: React.FC<ItemContentProps> = ({ data }) => {
           </div>
         </div>
 
-        <h2 className="mt-1 mb-4 flex justify-center text-blue-300 text-lg">
-          {name}
-        </h2>
+        <h2 className="mt-1 mb-4 flex justify-center text-lg">{name}</h2>
 
         {current === previous ? (
           <div className="px-4 flex w-full h-full items-center justify-between">
