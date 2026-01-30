@@ -83,7 +83,7 @@ export const Profile = () => {
     signUpContent = (
       <main className="flex h-full justify-center items-center">
         <button
-          className="border border-white rounded-[5px] py-3 px-4 cursor-pointer"
+          className="py-3 px-4 rounded-[5px] bg-primary-600 text-primary-100 hover:bg-primary-700 cursor-pointer"
           onClick={() => {
             setSignUpDialog(true);
             setDeleteDialog(false);
@@ -119,19 +119,19 @@ export const Profile = () => {
     profileContent = (
       <div className="h-full overflow-auto">
         <main className="my-6 flex flex-col w-3/4 m-auto">
-          <div className="py-2 px-4 border border-white rounded-lg">
+          <div className="py-2 px-4 bg-primary-50 border border-primary-900 rounded-lg">
             <div className="pt-6 flex items-center flex-col">
               <p className="text-3xl font-bold">Profile</p>
-              <div className="mt-6 w-full border border-gray-700 text-center" />
+              <div className="mt-6 w-full border border-primary-200 text-center" />
             </div>
 
-            <div className="grid grid-cols-[1fr_2fr] py-2">
-              <div className="flex flex-col justify-center items-center border-r border-gray-700">
+            <div className="py-2 grid grid-cols-[1fr_2fr] bg-primary-50">
+              <div className="flex flex-col justify-center items-center border-r border-primary-200">
                 <div className="flex relative">
                   <input
                     type="text"
                     placeholder={userData.name}
-                    className="mb-1 px-2 text-center hover:border border-gray-700 rounded-lg font-semibold"
+                    className="mb-1 px-2 text-center hover:border border-primary-200 rounded-lg font-semibold"
                     value={displayName}
                     onChange={(e) => {
                       setNameChange(e.target.value);
@@ -143,7 +143,7 @@ export const Profile = () => {
                     nameChange !== "" &&
                     nameChange !== userData.name && (
                       <CircleCheck
-                        className="absolute right-[-36px] mx-2 text-green-400 cursor-pointer"
+                        className="absolute right-[-36px] mx-2 text-green-1 cursor-pointer"
                         onClick={() =>
                           setUserData({
                             ...userData,
@@ -155,7 +155,7 @@ export const Profile = () => {
                 </div>
 
                 <button
-                  className="text-red-500 hover:text-red-300 cursor-pointer"
+                  className="text-destructive-foreground hover:text-destructive cursor-pointer"
                   onClick={() => setDeleteDialog(true)}
                 >
                   Delete Profile
@@ -166,16 +166,16 @@ export const Profile = () => {
                 <div className="text-4xl font-bold">${currencyStr(net)}</div>
 
                 <div className="mt-2 grid grid-cols-3">
-                  <div className="px-4 flex flex-col items-center border-r border-gray-400">
+                  <div className="px-4 flex flex-col items-center border-r border-primary-200">
                     <div className="font-semibold">{unique}</div>
                     <p>Unique Assets</p>
                   </div>
-                  <div className="px-4 flex flex-col items-center border-r border-gray-400">
+                  <div className="px-4 flex flex-col items-center border-r border-primary-200">
                     <div className="font-semibold">{totalAssets}</div>
                     <p>Total Assets</p>
                   </div>
                   <div className="px-4 flex flex-col items-center">
-                    <div className="text-emerald-300 font-semibold">
+                    <div className="text-green-1 font-semibold">
                       ${currencyStr(userData.balance)}
                     </div>
                     <p>Current Balance</p>
@@ -184,10 +184,10 @@ export const Profile = () => {
               </div>
             </div>
           </div>
-          <div className="mt-6 py-2 px-4 border border-white rounded-lg">
+          <div className="mt-6 py-2 px-4 bg-primary-50 border border-primary-900 rounded-lg">
             <div className="pt-6 flex items-center flex-col">
               <p className="text-3xl font-bold">Assets</p>
-              <div className="mt-6 w-full border border-gray-700 text-center" />
+              <div className="mt-6 w-full border border-primary-200 text-center" />
 
               {userData.assets === null ||
                 (Object.keys(userData.assets).length === 0 ? (
@@ -215,7 +215,7 @@ export const Profile = () => {
               </p>
               <div className="flex justify-center gap-4">
                 <button
-                  className="w-1/2 cursor-pointer"
+                  className="w-1/2 bg-primary-600 text-primary-50 rounded-[5px] cursor-pointer hover:bg-primary-700"
                   onClick={() => {
                     clearUserData();
                     setIsSignUp(false);
@@ -224,7 +224,7 @@ export const Profile = () => {
                   Delete
                 </button>
                 <button
-                  className="w-1/2 cursor-pointer"
+                  className="w-1/2 text-primary-600 border border-primary-600  hover:text-primary-700 hover:border-primary-700 rounded-[5px] cursor-pointer"
                   onClick={() => setDeleteDialog(false)}
                 >
                   Cancel
@@ -250,7 +250,7 @@ export const Profile = () => {
 const AssetsTable = memo<AssetsTableProps>(({ userData, itemPriceMap }) => {
   return (
     <div className="w-full">
-      <div className="py-2 flex w-full border-b border-gray-700">
+      <div className="py-2 flex w-full border-b border-primary-200">
         <div className="mx-2 w-24"></div>
         <div className="w-20 text-center text-lg">Owns</div>
         <div className="flex-1 text-center text-lg">Now</div>
@@ -262,22 +262,22 @@ const AssetsTable = memo<AssetsTableProps>(({ userData, itemPriceMap }) => {
       {Object.entries(userData.assets!).map(([k, v]) => {
         const { current, previous, delta, deltaPercent } = itemPriceMap[k];
 
-        let textColor = "text-[#fff]";
+        let textColor = "text-foreground";
         let deltaIcon = <Triangle size={16} />;
 
-        if (current > previous) textColor = "text-emerald-300";
+        if (current > previous) textColor = "text-green-1";
         else if (current < previous) {
-          textColor = "text-red-300";
+          textColor = "text-red-1";
           deltaIcon = <Triangle size={16} className="rotate-180" />;
         }
 
         return (
           <div
             key={k}
-            className="flex w-full my-4 pb-2 items-center border-b border-gray-700"
+            className="flex w-full my-4 pb-2 items-center border-b border-primary-200"
           >
             <div className="mx-2 w-24 flex flex-col items-center gap-1">
-              <div className="w-17 h-16 border rounded border-white"></div>
+              <div className="w-17 h-16 border border-primary-950 rounded"></div>
               <div>{k}</div>
             </div>
             <div className="w-20 text-center text-2xl">{v}</div>
