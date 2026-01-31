@@ -3,20 +3,10 @@
 import { useEffect, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 
-import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-
 import { SideItems } from "@/components/item/SideItems";
 import { ItemCard } from "@/components/item/ItemCard";
 import { SignUpDialog } from "@/components/SignUpDialog";
-import { EventContent } from "@/components/event/EventContent";
+import { EventDialog } from "@/components/event/EventDialog";
 import { EventDrawer } from "@/components/event/EventDrawer";
 import { ProgressDialog } from "@/components/ProgressDialog";
 import { EndingDayButton } from "@/components/day/EndingDayButton";
@@ -213,29 +203,11 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
   let eventContent = null;
   if (eventData) {
     eventContent = (
-      <Dialog open={eventDialog} onOpenChange={closeEventDialog}>
-        <DialogTrigger />
-        <DialogContent overlayClassname="bg-transparent">
-          <DialogHeader>
-            <DialogTitle className="text-center">Tomorrow</DialogTitle>
-
-            <VisuallyHidden>
-              <DialogDescription>Event for the next day</DialogDescription>
-            </VisuallyHidden>
-          </DialogHeader>
-
-          <div>
-            {eventData.map((d) => (
-              <EventContent
-                key={d.type}
-                data={d}
-                isTextStream={true}
-                maxWidth="35%"
-              />
-            ))}
-          </div>
-        </DialogContent>
-      </Dialog>
+      <EventDialog
+        isOpen={eventDialog}
+        onOpenChange={closeEventDialog}
+        eventData={eventData}
+      />
     );
   }
 
@@ -250,7 +222,7 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
       />
 
       <main className="home-main-w overflow-auto">
-        <div className="fixed flex mx-0.5">
+        <div className="z-2 fixed flex mx-0.5">
           <TaxInfo />
         </div>
 
