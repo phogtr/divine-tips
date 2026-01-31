@@ -46,7 +46,9 @@ const ItemContent: React.FC<ItemContentProps> = ({ data }) => {
           <OwnedItemCount name={name} />
 
           <div className="flex justify-center items-center">
-            <div className="w-17 h-16 border rounded border-white"></div>
+            <div className="h-16 w-17 flex items-center justify-center rounded border border-primary-900">
+              {name.slice(0, 1)}
+            </div>
           </div>
         </div>
 

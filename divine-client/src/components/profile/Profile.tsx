@@ -277,7 +277,9 @@ const AssetsTable = memo<AssetsTableProps>(({ userData, itemPriceMap }) => {
             className="flex w-full my-4 pb-2 items-center border-b border-primary-200"
           >
             <div className="mx-2 w-24 flex flex-col items-center gap-1">
-              <div className="w-17 h-16 border border-primary-950 rounded"></div>
+              <div className="w-17 h-16 flex items-center justify-center border border-primary-950 rounded">
+                {k.slice(0, 1)}
+              </div>
               <div>{k}</div>
             </div>
             <div className="w-20 text-center text-2xl">{v}</div>

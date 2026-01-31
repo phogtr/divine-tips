@@ -61,9 +61,15 @@ export const BuySellButton: React.FC<BuySellButtonProps> = ({
         },
       });
 
-      toast(<ToastContent text={`BUY ${buyCount} ${itemName}`} />, {
-        classNames: toastClassOverride,
-      });
+      toast(
+        <ToastContent
+          text={`BUY ${buyCount} ${itemName}`}
+          itemName={itemName}
+        />,
+        {
+          classNames: toastClassOverride,
+        },
+      );
     }
   };
 
@@ -101,9 +107,15 @@ export const BuySellButton: React.FC<BuySellButtonProps> = ({
           }
         }
 
-        toast(<ToastContent text={`SELL ${sellCount} ${itemName}`} />, {
-          classNames: toastClassOverride,
-        });
+        toast(
+          <ToastContent
+            text={`SELL ${sellCount} ${itemName}`}
+            itemName={itemName}
+          />,
+          {
+            classNames: toastClassOverride,
+          },
+        );
       }
     }
   };
@@ -244,10 +256,18 @@ export const BuySellButton: React.FC<BuySellButtonProps> = ({
   return null;
 };
 
-const ToastContent = ({ text }: { text: string }) => {
+const ToastContent = ({
+  text,
+  itemName,
+}: {
+  text: string;
+  itemName: string;
+}) => {
   return (
     <div className="flex w-full items-center justify-between">
-      <div className="h-16 w-17 rounded border border-white"></div>
+      <div className="h-16 w-17 flex items-center justify-center rounded border border-primary-900 text-lg">
+        {itemName.slice(0, 1)}
+      </div>
       <div className="text-xl">{text}</div>
     </div>
   );
