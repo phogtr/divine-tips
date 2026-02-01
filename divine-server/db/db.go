@@ -13,12 +13,13 @@ type Database struct {
 }
 
 func NewPostgresDB() (*Database, error) {
-	conn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
+	conn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=%s",
 		config.Env.DbHost,
 		config.Env.DbPort,
 		config.Env.DbUser,
 		config.Env.DbPassword,
 		config.Env.DbName,
+		config.Env.DbSSL,
 	)
 
 	dbConn, err := sql.Open("postgres", conn)
@@ -41,3 +42,19 @@ func (d *Database) GetDB() *sql.DB {
 func (d *Database) Close() error {
 	return d.db.Close()
 }
+
+// func (d *Database) Version() {
+// 	rows, err := d.db.Query("SELECT version()")
+// 	if err != nil {
+// 		panic(err)
+// 	}
+
+// 	for rows.Next() {
+// 		var result string
+// 		err = rows.Scan(&result)
+// 		if err != nil {
+// 			panic(err)
+// 		}
+// 		log.Printf("Version: %s\n", result)
+// 	}
+// }
