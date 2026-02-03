@@ -21,7 +21,7 @@ export const useQueryEvent = ({ isEnable = true }: Args) => {
 };
 
 const fetchEventData = async (): Promise<EventApiData[]> => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/event`);
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/v1/event`);
   if (!res.ok) throw new Error("failed to fetch event data");
 
   return res.json();

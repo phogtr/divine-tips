@@ -268,12 +268,9 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
 
 ///////////////////////////////////////////////////////////////////////////
 const endDayApi = async (): Promise<EventItem[]> => {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/day/advance`,
-    {
-      method: "POST",
-    },
-  );
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/v1/day/advance`, {
+    method: "POST",
+  });
   if (!res.ok) throw new Error("failed to end day");
 
   return res.json();
