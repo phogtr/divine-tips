@@ -125,8 +125,8 @@ export const Profile = () => {
               <div className="mt-6 w-full border border-primary-200 text-center" />
             </div>
 
-            <div className="py-2 grid grid-cols-[1fr_2fr] bg-primary-50">
-              <div className="flex flex-col justify-center items-center border-r border-primary-200">
+            <div className="py-2 sm:grid sm:grid-cols-[1fr_2fr] flex flex-col bg-primary-50">
+              <div className="py-1 sm:p-0 flex flex-col justify-center items-center sm:border-r sm:border-b-0 border-b border-primary-200">
                 <div className="flex relative">
                   <input
                     type="text"
@@ -163,22 +163,24 @@ export const Profile = () => {
               </div>
 
               <div className="my-6 flex flex-col justify-center items-center">
-                <div className="text-4xl font-bold">${currencyStr(net)}</div>
+                <div className="sm:text-4xl text-3xl font-bold">
+                  ${currencyStr(net)}
+                </div>
 
                 <div className="mt-2 grid grid-cols-3">
                   <div className="px-4 flex flex-col items-center border-r border-primary-200">
                     <div className="font-semibold">{unique}</div>
-                    <p>Unique Assets</p>
+                    <p className="text-center">Unique Assets</p>
                   </div>
                   <div className="px-4 flex flex-col items-center border-r border-primary-200">
                     <div className="font-semibold">{totalAssets}</div>
-                    <p>Total Assets</p>
+                    <p className="text-center">Total Assets</p>
                   </div>
                   <div className="px-4 flex flex-col items-center">
                     <div className="text-green-1 font-semibold">
                       ${currencyStr(userData.balance)}
                     </div>
-                    <p>Current Balance</p>
+                    <p className="text-center">Current Balance</p>
                   </div>
                 </div>
               </div>
@@ -250,7 +252,7 @@ export const Profile = () => {
 const AssetsTable = memo<AssetsTableProps>(({ userData, itemPriceMap }) => {
   return (
     <div className="w-full">
-      <div className="py-2 flex w-full border-b border-primary-200">
+      <div className="py-2 md:flex hidden w-full border-b border-primary-200">
         <div className="mx-2 w-24"></div>
         <div className="w-20 text-center text-lg">Owns</div>
         <div className="flex-1 text-center text-lg">Now</div>
@@ -274,22 +276,31 @@ const AssetsTable = memo<AssetsTableProps>(({ userData, itemPriceMap }) => {
         return (
           <div
             key={k}
-            className="flex w-full my-4 pb-2 items-center border-b border-primary-200"
+            className="flex md:flex-row flex-col w-full my-4 pb-2 items-center border-b border-primary-200"
           >
-            <div className="mx-2 w-24 flex flex-col items-center gap-1">
-              <div className="w-17 h-16 flex items-center justify-center border border-primary-950 rounded">
+            <div className="mx-2 md:mb-0 mb-2 md:w-24 w-full flex md:flex-col flex-row items-center justify-center md:gap-1 gap-4">
+              <div className="md:w-17 md:h-16 w-14 h-13 flex items-center justify-center border border-primary-950 rounded">
                 {k.slice(0, 1)}
               </div>
               <div>{k}</div>
+              <div className="text-center text-2xl md:hidden md:ml-0 ml-auto md:mr-0 mr-4">
+                {v}
+              </div>
             </div>
-            <div className="w-20 text-center text-2xl">{v}</div>
-            <div className={`flex-1 text-center text-2xl ${textColor}`}>
+            <div className="w-20 text-center text-2xl md:block hidden">{v}</div>
+            <div
+              className={`md:my-0 my-1 flex-1 text-center text-2xl ${textColor}`}
+            >
               ${currencyStr(current)}
             </div>
-            <div className={`flex-1 text-center text-2xl ${textColor}`}>
+            <div
+              className={`md:my-0 my-1 flex-1 text-center text-2xl ${textColor}`}
+            >
               ${currencyStr(previous)}
             </div>
-            <div className={`flex flex-1 flex-col text-lg ${textColor}`}>
+            <div
+              className={`md:mt-0 mt-2 flex flex-1 md:flex-col flex-row md:gap-0 gap-3 text-lg ${textColor}`}
+            >
               <div className="flex items-center gap-1">
                 {delta ? (
                   <>

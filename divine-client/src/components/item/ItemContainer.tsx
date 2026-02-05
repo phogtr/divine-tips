@@ -234,7 +234,7 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
           <ItemCard items={items} renderMap={renderMap} />
         </div>
 
-        <div className="fixed right-11 bottom-10">
+        <div className="fixed right-7 bottom-7 sm:right-11 sm:bottom-10">
           <EndingDayButton
             onClickEndDay={onClickEndDay}
             isAnimated={endDayAnimate}
@@ -242,7 +242,7 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
           />
         </div>
 
-        <div className="fixed right-30 bottom-0">
+        <div className="fixed right-20 sm:right-30 bottom-0">
           <DayCount isAnimated={endDayAnimate} />
         </div>
       </main>

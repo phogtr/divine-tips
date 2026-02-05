@@ -1,7 +1,5 @@
 import Link from "next/link";
 
-import { ThemeToggle } from "../theme/ThemeToggle";
-
 import { UserBalance } from "./UserBalance";
 
 export const Navbar = () => {
@@ -12,7 +10,7 @@ export const Navbar = () => {
     <nav className="h-(--navbar-h) px-2 flex items-center border border-primary-900">
       <div className="flex w-full grow-1 shrink-2 justify-start">
         <Link href={"/"}>
-          <h2 className="text-xl">Divide Tips</h2>
+          <h2 className="text-lg sm:text-xl text-nowrap">Divide Tips</h2>
         </Link>
       </div>
 
@@ -20,13 +18,9 @@ export const Navbar = () => {
         <UserBalance />
       </div>
 
-      <div className="flex w-full grow-1 shrink-2 justify-end gap-5">
+      <div className="flex w-full grow-1 shrink-2 justify-end gap-3 sm:gap-5">
         <Link href={"/"} className="group text-base">
           Market
-          <div className={linkUnderlineClass} />
-        </Link>
-        <Link href={"/event"} className="group text-base">
-          Event
           <div className={linkUnderlineClass} />
         </Link>
         <Link href={"/info"} className="group text-base">
@@ -37,8 +31,6 @@ export const Navbar = () => {
           Profile
           <div className={linkUnderlineClass} />
         </Link>
-
-        <ThemeToggle />
       </div>
     </nav>
   );

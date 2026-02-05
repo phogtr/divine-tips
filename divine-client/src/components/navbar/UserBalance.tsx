@@ -12,7 +12,7 @@ export const UserBalance = () => {
 
   if (isUserDataHydrate && userData !== null) {
     return (
-      <span className="text-3xl text-green-1">
+      <span className="text-2xl sm:text-3xl text-green-1">
         ${currencyStr(userData.balance)}
       </span>
     );
