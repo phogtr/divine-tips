@@ -33,7 +33,7 @@ export const BuySellButton: React.FC<BuySellButtonProps> = ({
   const subBtnClass = cn(
     "sub-btn scale-feedback",
     "border duration-200 ease-out",
-    "invisible",
+    "sm:invisible",
     "group-hover:visible",
   );
 
@@ -186,7 +186,7 @@ export const BuySellButton: React.FC<BuySellButtonProps> = ({
           <button
             className={cn(
               subBtnClass,
-              "left-[12px] border-green-ln",
+              "sm:left-[12px] left-0 border-green-ln",
               "group-hover:translate-x-[-13px]",
             )}
             onClick={() => onClickDecrement("buy")}
@@ -203,7 +203,7 @@ export const BuySellButton: React.FC<BuySellButtonProps> = ({
           <button
             className={cn(
               subBtnClass,
-              "left-[-12px] border-green-ln",
+              "sm:left-[-12px] left-0 border-green-ln",
               "group-hover:translate-x-[13px]",
             )}
             onClick={() => onClickIncrement("buy")}
@@ -217,7 +217,7 @@ export const BuySellButton: React.FC<BuySellButtonProps> = ({
           <button
             className={cn(
               subBtnClass,
-              "left-[12px] border-red-ln",
+              "sm:left-[12px] left-0 border-red-ln",
               "group-hover:translate-x-[-13px]",
             )}
             onClick={() => onClickDecrement("sell")}
@@ -234,7 +234,7 @@ export const BuySellButton: React.FC<BuySellButtonProps> = ({
           <button
             className={cn(
               subBtnClass,
-              "left-[-12px] border-red-ln",
+              "sm:left-[-12px] left-0 border-red-ln",
               "group-hover:translate-x-[13px]",
             )}
             onClick={() => onClickIncrement("sell")}
