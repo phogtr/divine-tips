@@ -249,7 +249,10 @@ export const Profile = () => {
 
 ///////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////
-const AssetsTable = memo<AssetsTableProps>(({ userData, itemPriceMap }) => {
+const AssetsTable = memo<AssetsTableProps>(function AssetsTable({
+  userData,
+  itemPriceMap,
+}) {
   return (
     <div className="w-full">
       <div className="py-2 md:flex hidden w-full border-b border-primary-200">

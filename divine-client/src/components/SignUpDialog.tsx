@@ -40,7 +40,7 @@ export const SignUpDialog: React.FC<SignUpDialogProps> = ({
         </DialogHeader>
 
         <div>
-          <p className="text-sm my-2">Let's start by entering username</p>
+          <p className="text-sm my-2">Let&apos;s start by entering username</p>
 
           <input
             type="text"
