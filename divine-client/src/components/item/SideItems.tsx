@@ -16,10 +16,10 @@ export const SideItems: React.FC<SideItemsProps> = ({
   onClickToggleAll,
 }) => {
   return (
-    <div className="w-(--side-item-w) mt-1 z-3 border border-primary-900 overflow-y-auto overflow-x-hidden">
+    <div className="sm:w-(--side-item-w) w-(--sm-side-item-w) mt-1 z-3 border border-primary-900 overflow-y-auto overflow-x-hidden">
       <div className="flex flex-col items-center">
         <button
-          className={`w-17 h-16 my-2 border rounded text-center cursor-pointer ${
+          className={`sm:w-17 w-11 sm:h-16 h-10 my-2 border rounded text-center cursor-pointer ${
             isToggleAll ? "border-primary-900" : "opacity-60"
           }`}
           onClick={() => onClickToggleAll(isToggleAll)}
@@ -36,7 +36,7 @@ export const SideItems: React.FC<SideItemsProps> = ({
 
         {items.map(({ id, name }) => (
           <button
-            className={`w-17 h-16 my-2 border rounded text-center cursor-pointer ${
+            className={`sm:w-17 w-11 sm:h-16 h-10 my-2 border rounded text-center cursor-pointer ${
               renderMap[id] ? "border-primary-900" : "opacity-60"
             }`}
             key={id}

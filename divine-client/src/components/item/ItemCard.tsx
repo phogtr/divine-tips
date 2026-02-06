@@ -14,7 +14,7 @@ interface ItemCardProps {
 
 export const ItemCard: React.FC<ItemCardProps> = ({ items, renderMap }) => {
   return (
-    <div className="flex flex-wrap gap-8">
+    <div className="flex sm:flex-wrap flex-nowrap sm:flex-row flex-col sm:gap-8 gap-4">
       {items.map((i) =>
         renderMap[i.id] ? <ItemContent key={i.id} data={i} /> : null,
       )}
@@ -40,7 +40,7 @@ const ItemContent: React.FC<ItemContentProps> = ({ data }) => {
     <>
       <div
         key={id}
-        className="w-78 px-2 pt-2 pb-4 flex flex-col items-center bg-primary-50 rounded-sm border border-primary-900"
+        className="sm:w-78 w-68 px-2 pt-2 pb-4 flex flex-col items-center bg-primary-50 rounded-sm border border-primary-900"
       >
         <div className="w-full p-2 relative border-b border-primary-200">
           <OwnedItemCount name={name} />

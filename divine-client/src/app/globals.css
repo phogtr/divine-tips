@@ -6,6 +6,7 @@
 :root {
   --navbar-h: 50px;
   --side-item-w: 100px;
+  --sm-side-item-w: 67px;
 
   --background: #050606;
   --foreground: ##eaedef;
@@ -151,14 +152,26 @@
 
 @layer components {
   .transaction-btn {
-    width: 88px;
-    padding: calc(var(--spacing) * 2) /* 0.5rem = 8px */;
+    width: 77px;
+    padding: calc(var(--spacing) * 1) /* 0.5rem = 8px */;
     cursor: pointer;
-    font-size: var(--text-lg) /* 1.125rem = 18px */;
+    font-size: var(--text-md) /* 1.125rem = 18px */;
     line-height: var(
       --tw-leading,
-      var(--text-lg--line-height) /* calc(1.75 / 1.125) ≈ 1.555556 */
+      var(--text-md--line-height) /* calc(1.75 / 1.125) ≈ 1.555556 */
     );
+  }
+
+  @media (width >= 40rem /* 640px */) {
+    .transaction-btn {
+      width: 88px;
+      padding: calc(var(--spacing) * 2) /* 0.5rem = 8px */;
+      font-size: var(--text-lg) /* 1.125rem = 18px */;
+      line-height: var(
+        --tw-leading,
+        var(--text-lg--line-height) /* calc(1.75 / 1.125) ≈ 1.555556 */
+      );
+    }
   }
 
   .sub-btn {
@@ -185,6 +198,10 @@
 
   .home-main-w {
     width: calc(100dvw - var(--side-item-w));
+  }
+
+  .sm-home-main-w {
+    width: calc(100dvw - var(--sm-side-item-w));
   }
 
   .scale-feedback {

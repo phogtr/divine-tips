@@ -221,7 +221,7 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
         onClickToggleAll={onClickToggleAll}
       />
 
-      <main className="home-main-w overflow-auto">
+      <main className="sm:home-main-w sm-home-main-w overflow-auto">
         <div className="z-2 fixed flex mx-0.5">
           <TaxInfo />
         </div>
