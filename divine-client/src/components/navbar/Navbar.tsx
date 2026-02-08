@@ -23,10 +23,10 @@ export const Navbar = () => {
           Market
           <div className={linkUnderlineClass} />
         </Link>
-        <Link href={"/info"} className="group text-base">
+        {/* <Link href={"/info"} className="group text-base">
           Info
           <div className={linkUnderlineClass} />
-        </Link>
+        </Link> */}
         <Link href={"/profile"} className="group text-base">
           Profile
           <div className={linkUnderlineClass} />
