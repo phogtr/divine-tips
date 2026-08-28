@@ -16,9 +16,7 @@ func (a *ApiServer) registerRoutes() {
 	router := chi.NewRouter()
 
 	cors := cors.Handler(cors.Options{
-		AllowedOrigins: []string{
-			config.Env.AllowOrigin,
-		},
+		AllowedOrigins: config.Env.AllowOrigins,
 		AllowedMethods: []string{
 			http.MethodGet,
 			http.MethodPost,
