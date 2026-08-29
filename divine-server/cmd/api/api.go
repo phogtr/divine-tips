@@ -7,17 +7,22 @@ import (
 	"net/http"
 
 	"github.com/phogtr/divine-tips/config"
+	"github.com/phogtr/divine-tips/services/ws"
 )
 
 type ApiServer struct {
 	router http.Handler
 	db     *sql.DB
+	wsHub  *ws.Hub
 }
 
 func New(db *sql.DB) *ApiServer {
 	apiServer := &ApiServer{
-		db: db,
+		db:    db,
+		wsHub: ws.NewHub(),
 	}
+
+	go apiServer.wsHub.Run()
 
 	apiServer.registerRoutes()
 

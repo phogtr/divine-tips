@@ -10,6 +10,7 @@ import (
 	"github.com/phogtr/divine-tips/services/day"
 	"github.com/phogtr/divine-tips/services/event"
 	"github.com/phogtr/divine-tips/services/item"
+	"github.com/phogtr/divine-tips/services/ws"
 )
 
 func (a *ApiServer) registerRoutes() {
@@ -54,8 +55,15 @@ func (a *ApiServer) v1Router() http.Handler {
 	r.Route("/day", a.dayRoutes)
 	r.Route("/event", a.eventRoutes)
 	r.Route("/item", a.itemRoutes)
+	r.Route("/ws", a.wsRoutes)
 
 	return r
+}
+
+func (a *ApiServer) wsRoutes(r chi.Router) {
+	wsHandler := ws.NewHandler(a.wsHub)
+
+	r.Get("/", wsHandler.Connect)
 }
 
 func (a *ApiServer) dayRoutes(r chi.Router) {
