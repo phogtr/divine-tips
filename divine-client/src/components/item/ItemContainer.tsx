@@ -17,6 +17,7 @@ import { getItemsApi } from "@/api/item.api";
 
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { useQueryEvent } from "@/hooks/useQueryEvent";
+import { useWebSocket } from "@/hooks/useWebSocket";
 
 import { USER_INITIAL_BALANCE } from "@/const/index.const";
 import {
@@ -37,6 +38,8 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
   initItemData,
 }) => {
   const queryClient = useQueryClient();
+
+  useWebSocket();
 
   const {
     data: userData,
