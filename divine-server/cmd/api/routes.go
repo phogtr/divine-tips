@@ -70,7 +70,7 @@ func (a *ApiServer) dayRoutes(r chi.Router) {
 	dayStore := day.NewStore(a.db)
 	itemStore := item.NewStore(a.db)
 	eventStore := event.NewStore(a.db)
-	dayHandler := day.NewHandler(dayStore, itemStore, eventStore)
+	dayHandler := day.NewHandler(dayStore, itemStore, eventStore, a.wsHub)
 
 	r.Get("/", dayHandler.Get)
 	r.Put("/update", dayHandler.Update)

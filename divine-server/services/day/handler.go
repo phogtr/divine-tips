@@ -6,6 +6,7 @@ import (
 
 	"github.com/phogtr/divine-tips/services/event"
 	"github.com/phogtr/divine-tips/services/item"
+	"github.com/phogtr/divine-tips/services/ws"
 	"github.com/phogtr/divine-tips/utils"
 )
 
@@ -13,17 +14,24 @@ type DayHandler struct {
 	store      *DayStore
 	itemStore  *item.ItemStore
 	eventStore *event.EventStore
+	hub        *ws.Hub
 }
 
 // max amount of events store in db
 const maxEventStore = 3
 
-func NewHandler(store *DayStore, itemStore *item.ItemStore, eventStore *event.EventStore) *DayHandler {
+func NewHandler(store *DayStore, itemStore *item.ItemStore, eventStore *event.EventStore, hub *ws.Hub) *DayHandler {
 	return &DayHandler{
 		store:      store,
 		itemStore:  itemStore,
 		eventStore: eventStore,
+		hub:        hub,
 	}
+}
+
+type dayAdvancedPayload struct {
+	Items  []*item.ItemDelta  `json:"items"`
+	Events []*event.EventItem `json:"events"`
 }
 
 func (h *DayHandler) Get(w http.ResponseWriter, r *http.Request) {
@@ -106,6 +114,14 @@ func (h *DayHandler) Advance(w http.ResponseWriter, r *http.Request) {
 			utils.ResponseErrorJson(w, http.StatusInternalServerError, "something went wrong")
 			return
 		}
+	}
+
+	msg := ws.NewMessage(ws.DayAdvancedType, dayAdvancedPayload{
+		Items:  item.Delta(updatedItem),
+		Events: eventItems,
+	})
+	if msg != nil {
+		h.hub.Broadcast(msg)
 	}
 
 	utils.EncodeJson(w, http.StatusOK, eventItems)

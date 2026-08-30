@@ -43,13 +43,10 @@ func (c *Client) readMessages() {
 	})
 
 	for {
-		_, message, err := c.conn.ReadMessage()
+		_, _, err := c.conn.ReadMessage()
 		if err != nil {
 			return
 		}
-
-		// todo: remove, only for testing
-		c.messages <- message
 	}
 }
 
