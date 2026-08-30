@@ -13,8 +13,6 @@ import { EndingDayButton } from "@/components/day/EndingDayButton";
 import { DayCount } from "@/components/day/DayCount";
 import { TaxInfo } from "./TaxInfo";
 
-import { getItemsApi } from "@/api/item.api";
-
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { useQueryEvent } from "@/hooks/useQueryEvent";
 import { useWebSocket } from "@/hooks/useWebSocket";
@@ -25,10 +23,12 @@ import {
   END_DAY_QUERY_KEY,
   ITEM_QUERY_KEY,
 } from "@/const/query-key.const";
+import { WS_MESSAGE_TYPE_DAY_ADVANCED } from "@/const/ws.const";
 
 import type { ItemApiData } from "@/types/item.type";
 import type { EventItem } from "@/types/event.type";
 import type { UserData } from "@/types/user.type";
+import type { WebSocketMessage } from "@/types/ws.type";
 
 interface ItemContainerProps {
   initItemData: ItemApiData[];
@@ -38,8 +38,6 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
   initItemData,
 }) => {
   const queryClient = useQueryClient();
-
-  useWebSocket();
 
   const {
     data: userData,
@@ -68,6 +66,16 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
 
   const [items, setItems] = useState(initItemData);
 
+  const handleWsMessage = (message: WebSocketMessage) => {
+    if (message.type !== WS_MESSAGE_TYPE_DAY_ADVANCED) return;
+
+    const data = message.data;
+    setItems(data.items);
+    queryClient.setQueryData([ITEM_QUERY_KEY], data.items);
+  };
+
+  useWebSocket({ onMessage: handleWsMessage });
+
   const [renderMap, setRenderMap] = useState<Record<number, boolean>>(() =>
     initItemData.reduce(
       (acc, val) => ({
@@ -91,12 +99,6 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
   const startFetchEventData = startInitialEvent === true || !!nextDayEventData;
   const { data: initEventData } = useQueryEvent({
     isEnable: startFetchEventData,
-  });
-
-  const { data: itemData } = useQuery({
-    queryKey: [ITEM_QUERY_KEY],
-    queryFn: getItemsApi,
-    enabled: !!nextDayEventData,
   });
 
   ///////////////////////////////////////////////////////////////////////////
@@ -187,12 +189,6 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
       setSignUpDialog(true);
     }
   }, [isSignUpHydrate, isUserDataHydrate]);
-
-  useEffect(() => {
-    if (itemData) {
-      setItems(itemData);
-    }
-  }, [itemData]);
 
   ///////////////////////////////////////////////////////////////////////////
 
