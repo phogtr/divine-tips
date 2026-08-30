@@ -61,7 +61,9 @@ export const useWebSocket = ({ onMessage }: UseWebSocketOptions = {}) => {
       };
 
       ws.onerror = () => {
-        ws?.close();
+        if (ws !== null && ws.readyState === WebSocket.OPEN) {
+          ws.close();
+        }
       };
     };
 
@@ -70,7 +72,21 @@ export const useWebSocket = ({ onMessage }: UseWebSocketOptions = {}) => {
     return () => {
       isMounted = false;
       if (reconnectTimer) clearTimeout(reconnectTimer);
-      ws?.close();
+
+      if (ws !== null) {
+        if (ws.readyState === WebSocket.CONNECTING) {
+          // capture ws value (socket object). WS completed connection in later time
+          // and execute onopen, closure use the correct captured value
+          // instead of null that was set below
+          const pendingWs = ws;
+          pendingWs.onopen = () => {
+            pendingWs.close();
+          };
+        } else {
+          ws.close();
+        }
+      }
+      ws = null;
     };
   }, []);
 
