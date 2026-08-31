@@ -1,5 +1,5 @@
 import type { ItemApiData } from "@/types/item.type";
-import type { EventItem } from "@/types/event.type";
+import type { EventApiData } from "@/types/event.type";
 
 export interface WebSocketMessage {
   type: string;
@@ -8,5 +8,5 @@ export interface WebSocketMessage {
 
 interface DayAdvancedWsData {
   items: ItemApiData[];
-  events: EventItem[];
+  event: EventApiData;
 }

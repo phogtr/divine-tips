@@ -26,7 +26,7 @@ import {
 import { WS_MESSAGE_TYPE_DAY_ADVANCED } from "@/const/ws.const";
 
 import type { ItemApiData } from "@/types/item.type";
-import type { EventItem } from "@/types/event.type";
+import type { EventApiData, EventItem } from "@/types/event.type";
 import type { UserData } from "@/types/user.type";
 import type { WebSocketMessage } from "@/types/ws.type";
 
@@ -71,7 +71,11 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
 
     const data = message.data;
     setItems(data.items);
+
     queryClient.setQueryData([ITEM_QUERY_KEY], data.items);
+    queryClient.setQueryData<EventApiData[]>([EVENT_QUERY_KEY], (old) =>
+      mergeEventData(old, data.event),
+    );
   };
 
   useWebSocket({ onMessage: handleWsMessage });
@@ -273,4 +277,15 @@ const endDayApi = async (): Promise<EventItem[]> => {
   if (!res.ok) throw new Error("failed to end day");
 
   return res.json();
+};
+
+///////////////////////////////////////////////////////////////////////////
+const mergeEventData = (
+  old: EventApiData[] | undefined,
+  newEvent: EventApiData,
+): EventApiData[] | undefined => {
+  if (!old) return undefined;
+
+  const updatedOld = old.filter((e) => e.id !== newEvent.id);
+  return [newEvent, ...updatedOld];
 };

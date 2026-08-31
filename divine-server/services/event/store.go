@@ -70,44 +70,44 @@ func (s *EventStore) Get() (*Event, error) {
 	return &event, nil
 }
 
-func (s *EventStore) Create(payload *Event) error {
+func (s *EventStore) Create(payload *Event) (*Event, error) {
 	query := `
 		INSERT INTO events (event_day, data)
 		VALUES ($1, $2::jsonb)
+		RETURNING id
 	`
 
 	jsonData, err := json.Marshal(payload.Data)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	_, err = s.db.Exec(query, payload.Day, jsonData)
-	if err != nil {
-		return err
+	if err := s.db.QueryRow(query, payload.Day, jsonData).Scan(&payload.ID); err != nil {
+		return nil, err
 	}
-	return nil
+	return payload, nil
 }
 
-func (s *EventStore) Update(payload *Event) error {
+func (s *EventStore) Update(payload *Event) (*Event, error) {
 	event, err := s.Get()
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	query := `
 		UPDATE events
 		SET event_day = $1, data = $2::jsonb
 		WHERE id = $3
+		RETURNING id
 	`
 
 	jsonData, err := json.Marshal(payload.Data)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	_, err = s.db.Exec(query, payload.Day, jsonData, event.ID)
-	if err != nil {
-		return err
+	if err := s.db.QueryRow(query, payload.Day, jsonData, event.ID).Scan(&payload.ID); err != nil {
+		return nil, err
 	}
-	return nil
+	return payload, nil
 }

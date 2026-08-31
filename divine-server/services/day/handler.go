@@ -30,8 +30,8 @@ func NewHandler(store *DayStore, itemStore *item.ItemStore, eventStore *event.Ev
 }
 
 type dayAdvancedPayload struct {
-	Items  []*item.ItemDelta  `json:"items"`
-	Events []*event.EventItem `json:"events"`
+	Items []*item.ItemDelta `json:"items"`
+	Event *event.Event      `json:"event"`
 }
 
 func (h *DayHandler) Get(w http.ResponseWriter, r *http.Request) {
@@ -102,14 +102,18 @@ func (h *DayHandler) Advance(w http.ResponseWriter, r *http.Request) {
 		Data: eventItems,
 	}
 
+	var updatedNewEvent *event.Event
+
 	if len(events) >= maxEventStore {
-		if err = h.eventStore.Update(newEvent); err != nil {
+		updatedNewEvent, err = h.eventStore.Update(newEvent)
+		if err != nil {
 			log.Println(err)
 			utils.ResponseErrorJson(w, http.StatusInternalServerError, "something went wrong")
 			return
 		}
 	} else {
-		if err = h.eventStore.Create(newEvent); err != nil {
+		updatedNewEvent, err = h.eventStore.Create(newEvent)
+		if err != nil {
 			log.Println(err)
 			utils.ResponseErrorJson(w, http.StatusInternalServerError, "something went wrong")
 			return
@@ -117,8 +121,8 @@ func (h *DayHandler) Advance(w http.ResponseWriter, r *http.Request) {
 	}
 
 	msg := ws.NewMessage(ws.DayAdvancedType, dayAdvancedPayload{
-		Items:  item.Delta(updatedItem),
-		Events: eventItems,
+		Items: item.Delta(updatedItem),
+		Event: updatedNewEvent,
 	})
 	if msg != nil {
 		h.hub.Broadcast(msg)
