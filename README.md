@@ -4,7 +4,7 @@ https://divine-tips.vercel.app
 
 ## About
 
-Divine Tips is a stock market simulation game, with daily event telling the future outcome of items in the game.
+Divine Tips is a real-time stock market simulation game, with daily event telling the future outcome of items in the game.
 
 ### Gameplay
 
@@ -24,9 +24,12 @@ An example of multi-buy with taxes: if you were to buy 10x with the base price o
 
 - React 19
 - Next.js 15
+- WebSocket
 - Tailwind
 - React Query
 - Go 1.25.0
   - Chi Router
+  - Gorilla WebSocket
 - PostgreSQL 17
+- Motion
 - Docker
